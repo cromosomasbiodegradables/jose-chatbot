@@ -22,6 +22,8 @@
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       overflow-y: auto;
       height: 400px;
+      display: flex;
+      flex-direction: column;
     }
 
     .bot-message, .user-message {
@@ -104,7 +106,6 @@
     const userInput = document.getElementById("user-input");
     const sendButton = document.getElementById("send-button");
 
-    let hasGreeted = false;
     let hasShownOptions = false;
 
     function addMessage(sender, text) {
@@ -142,26 +143,25 @@
     }
 
     // Saludo automático al cargar
-    window.onload = () => {
+    window.addEventListener("load", () => {
       addMessage("bot", "¡Bienvenido al chatbot de Jose! ¿Cómo estás?");
-      hasGreeted = true;
-    };
+    });
 
-    sendButton.onclick = () => {
+    sendButton.addEventListener("click", () => {
       const userText = userInput.value.trim();
       if (userText === "") return;
 
       addMessage("user", userText);
       userInput.value = "";
 
-      if (hasGreeted && !hasShownOptions) {
+      if (!hasShownOptions) {
         setTimeout(() => {
           addMessage("bot", "Genial. Elige entre las siguientes opciones:");
           showOptions();
           hasShownOptions = true;
         }, 1000);
       }
-    };
+    });
   </script>
 
 </body>
