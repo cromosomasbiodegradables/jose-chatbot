@@ -27,6 +27,18 @@
     #sendBtn {
       padding: 10px;
     }
+    .bot-button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      margin: 5px 5px 5px 0;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .bot-button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
@@ -48,9 +60,27 @@
       input.value = '';
 
       let botReply = "Hmm... no estoy seguro qué decir 😅";
-      if (userText.toLowerCase().includes("hola")) botReply = "¡Hola Jose! ¿Cómo estás?";
-      if (userText.toLowerCase().includes("adiós")) botReply = "¡Hasta luego! Cuídate.";
-      if (userText.toLowerCase().includes("chiste")) botReply = "¿Sabes por qué el tomate se sonrojó? ¡Porque vio al otro pelarse! 🍅";
+
+      const lowerText = userText.toLowerCase();
+
+      if (lowerText.includes("hola")) botReply = "¡Hola Jose! ¿Cómo estás?";
+      if (lowerText.includes("adiós")) botReply = "¡Hasta luego! Cuídate.";
+      if (lowerText.includes("chiste")) botReply = "¿Sabes por qué el tomate se sonrojó? ¡Porque vio al otro pelarse! 🍅";
+
+      // Mostrar opciones si el usuario pregunta "¿Qué deseas hacer?"
+      if (lowerText.includes("¿qué deseas hacer?") || lowerText.includes("que deseas hacer")) {
+        botReply = "¡Claro! Aquí tienes algunas opciones:";
+        chatbox.innerHTML += `<p><strong>Bot:</strong> ${botReply}</p>`;
+        chatbox.innerHTML += `
+          <div>
+            <button class="bot-button" onclick="window.open('https://tupagina.com/portfolio', '_blank')">Ver mi portfolio</button>
+            <button class="bot-button" onclick="window.open('https://tupagina.com/articulos', '_blank')">Leer artículos</button>
+            <button class="bot-button" onclick="window.open('https://tupagina.com/contacto', '_blank')">Contactar conmigo</button>
+          </div>
+        `;
+        chatbox.scrollTop = chatbox.scrollHeight;
+        return;
+      }
 
       chatbox.innerHTML += `<p><strong>Bot:</strong> ${botReply}</p>`;
       chatbox.scrollTop = chatbox.scrollHeight;
