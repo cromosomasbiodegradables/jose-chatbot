@@ -1,97 +1,168 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Asistente de Jose</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chatbot de Jose</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    #chat-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: #fff;
+      border-radius: 8px;
       padding: 20px;
-    }
-    h1 {
-      text-align: center;
-    }
-    #chatbox {
-      background: white;
-      border: 1px solid #ccc;
-      padding: 10px;
-      height: 300px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
       overflow-y: auto;
-      margin-bottom: 10px;
+      height: 400px;
     }
-    #userInput {
-      width: 75%;
+
+    .bot-message, .user-message {
+      margin: 10px 0;
       padding: 10px;
+      border-radius: 6px;
+      max-width: 80%;
     }
-    #sendBtn {
+
+    .bot-message {
+      background-color: #e0e0e0;
+      align-self: flex-start;
+    }
+
+    .user-message {
+      background-color: #cce5ff;
+      align-self: flex-end;
+      text-align: right;
+    }
+
+    #input-area {
+      display: flex;
+      justify-content: center;
+      margin: 20px auto;
+      max-width: 600px;
+    }
+
+    #user-input {
+      flex: 1;
       padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
     }
-    .bot-button {
-      background-color: #007BFF;
+
+    #send-button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      font-size: 16px;
+      background-color: #007bff;
       color: white;
       border: none;
-      margin: 5px 5px 5px 0;
-      padding: 10px 15px;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
     }
+
+    .buttons-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .bot-button {
+      padding: 10px 15px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
     .bot-button:hover {
-      background-color: #0056b3;
+      background-color: #218838;
     }
   </style>
 </head>
 <body>
-  <h1>🤖 Asistente de Jose</h1>
-  <div id="chatbox"></div>
-  <input type="text" id="userInput" placeholder="Escribe tu mensaje aquí...">
-  <button id="sendBtn">Enviar</button>
+
+  <div id="chat-container"></div>
+
+  <div id="input-area">
+    <input type="text" id="user-input" placeholder="Escribe tu respuesta aquí..." />
+    <button id="send-button">Enviar</button>
+  </div>
 
   <script>
-    const chatbox = document.getElementById('chatbox');
-    const input = document.getElementById('userInput');
-    const button = document.getElementById('sendBtn');
+    const chatContainer = document.getElementById("chat-container");
+    const userInput = document.getElementById("user-input");
+    const sendButton = document.getElementById("send-button");
 
-    function limpiarTexto(texto) {
-      return texto
-        .toLowerCase()
-        .normalize("NFD") // separa letras de acentos
-        .replace(/[\u0300-\u036f]/g, "") // elimina acentos
-        .replace(/[¿?¡!.,]/g, "") // elimina signos
-        .trim();
+    let hasGreeted = false;
+    let hasShownOptions = false;
+
+    function addMessage(sender, text) {
+      const message = document.createElement("div");
+      message.className = sender === "bot" ? "bot-message" : "user-message";
+      message.innerText = text;
+      chatContainer.appendChild(message);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    button.onclick = () => {
-      const userText = input.value.trim();
-      if (!userText) return;
+    function showOptions() {
+      const optionsMessage = document.createElement("div");
+      optionsMessage.className = "bot-message";
+      optionsMessage.innerText = "Elige entre las siguientes opciones:";
 
-      chatbox.innerHTML += `<p><strong>Tú:</strong> ${userText}</p>`;
-      input.value = '';
+      const buttonsContainer = document.createElement("div");
+      buttonsContainer.className = "buttons-container";
 
-      const texto = limpiarTexto(userText);
-      let botReply = "Hmm... no estoy seguro qué decir 😅";
+      const portfolioButton = document.createElement("button");
+      portfolioButton.className = "bot-button";
+      portfolioButton.innerText = "Ver mi portfolio";
+      portfolioButton.onclick = () => window.open("https://uxfol.io/josecarlos-design", "_blank");
 
-      if (texto.includes("hola")) botReply = "¡Hola Jose! ¿Cómo estás?";
-      else if (texto.includes("adios")) botReply = "¡Hasta luego! Cuídate.";
-      else if (texto.includes("chiste")) botReply = "¿Sabes por qué el tomate se sonrojó? ¡Porque vio al otro pelarse! 🍅";
-      else if (texto.includes("que deseas hacer")) {
-        botReply = "¡Claro! Aquí tienes algunas opciones:";
-        chatbox.innerHTML += `<p><strong>Bot:</strong> ${botReply}</p>`;
-        chatbox.innerHTML += `
-          <div>
-            <button class="bot-button" onclick="window.open('https://uxfol.io/josecarlos-design', '_blank')">Ver mi portfolio</button>
-            <button class="bot-button" onclick="window.open('https://uxfol.io/p/josecarlos-design/new-page', '_blank')">Leer artículos</button>
-            <button class="bot-button" onclick="window.open('https://uxfol.io/p/josecarlos-design/contact', '_blank')">Contactar conmigo</button>
-          </div>
-        `;
-        chatbox.scrollTop = chatbox.scrollHeight;
-        return;
+      const articlesButton = document.createElement("button");
+      articlesButton.className = "bot-button";
+      articlesButton.innerText = "Leer artículos";
+      articlesButton.onclick = () => window.open("https://tusitio.com/articulos", "_blank");
+
+      buttonsContainer.appendChild(portfolioButton);
+      buttonsContainer.appendChild(articlesButton);
+
+      chatContainer.appendChild(optionsMessage);
+      chatContainer.appendChild(buttonsContainer);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    // Saludo automático al cargar
+    window.onload = () => {
+      addMessage("bot", "¡Bienvenido al chatbot de Jose! ¿Cómo estás?");
+      hasGreeted = true;
+    };
+
+    sendButton.onclick = () => {
+      const userText = userInput.value.trim();
+      if (userText === "") return;
+
+      addMessage("user", userText);
+      userInput.value = "";
+
+      if (hasGreeted && !hasShownOptions) {
+        setTimeout(() => {
+          addMessage("bot", "Genial. Elige entre las siguientes opciones:");
+          showOptions();
+          hasShownOptions = true;
+        }, 1000);
       }
-
-      chatbox.innerHTML += `<p><strong>Bot:</strong> ${botReply}</p>`;
-      chatbox.scrollTop = chatbox.scrollHeight;
     };
   </script>
+
 </body>
 </html>
-
