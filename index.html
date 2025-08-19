@@ -102,28 +102,28 @@
     }
 
     .bot-button {
-      padding: 12px 18px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 8px;
+      background-color: #a3d9a5;
+      color: #2d4b2d;
+      padding: 10px 14px;
+      font-size: 14px;
+      border: 1px solid #8fcf90;
+      border-radius: 6px;
       cursor: pointer;
-      font-size: 15px;
       width: 100%;
-      max-width: 400px;
+      max-width: 300px;
       text-align: left;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       transition: background-color 0.3s ease;
     }
 
     .bot-button:hover {
-      background-color: #218838;
+      background-color: #92c89b;
     }
 
     @media screen and (max-width: 480px) {
       .bot-button {
-        font-size: 14px;
-        padding: 10px 14px;
+        font-size: 13px;
+        padding: 9px 12px;
       }
 
       #chat-container {
@@ -215,42 +215,27 @@
 
         const buttonsContainer = document.createElement("div");
         buttonsContainer.className = "buttons-container";
+        chatContainer.appendChild(buttonsContainer);
 
-        const caso1 = document.createElement("button");
-        caso1.className = "bot-button";
-        caso1.innerText = "🧪 Caso 1: Rediseño de app médica";
-        caso1.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/caso1", "_blank");
+        const cases = [
+          { text: "🧪 Caso 1: Rediseño de app médica", url: "https://uxfol.io/p/josecarlos-design/caso1" },
+          { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
+          { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
+          { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
+          { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/josecarlos-design" }
+        ];
 
-        const caso2 = document.createElement("button");
-        caso2.className = "bot-button";
-        caso2.innerText = "🛍️ Caso 2: Optimización UX para e-commerce";
-        caso2.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/caso2", "_blank");
-
-        const caso3 = document.createElement("button");
-        caso3.className = "bot-button";
-        caso3.innerText = "📱 Caso 3: Diseño de app de bienestar";
-        caso3.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/caso3", "_blank");
-
-        const caso4 = document.createElement("button");
-        caso4.className = "bot-button";
-        caso4.innerText = "🌍 Caso 4: Plataforma educativa inclusiva";
-        caso4.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/caso4", "_blank");
-
-        const verTodos = document.createElement("button");
-        verTodos.className = "bot-button";
-        verTodos.innerText = "🔍 Ver todos los casos juntos";
-        verTodos.onclick = () => window.open("https://uxfol.io/josecarlos-design", "_blank");
-
-  buttonsContainer.appendChild(caso1);
-  buttonsContainer.appendChild(caso2);
-  buttonsContainer.appendChild(caso3);
-  buttonsContainer.appendChild(caso4);
-  buttonsContainer.appendChild(verTodos);
-
-  chatContainer.appendChild(buttonsContainer);
-  chatContainer.scrollTop = chatContainer.scrollHeight;
-}
-
+        cases.forEach((item, index) => {
+          setTimeout(() => {
+            const button = document.createElement("button");
+            button.className = "bot-button";
+            button.innerText = item.text;
+            button.onclick = () => window.open(item.url, "_blank");
+            buttonsContainer.appendChild(button);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          }, 1000 + index * 400);
+        });
+      }
 
       // Mensaje inicial + opciones
       addMessage("bot", "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?");
@@ -258,6 +243,4 @@
     });
   </script>
 </body>
-</html>
-
-
+</html
