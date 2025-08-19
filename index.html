@@ -4,10 +4,29 @@
   <meta charset="UTF-8">
   <title>Asistente de Jose</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
-    #chatbox { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; background: white; }
-    #userInput { width: 80%; padding: 10px; }
-    #sendBtn { padding: 10px; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    #chatbox {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      height: 300px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+    #userInput {
+      width: 75%;
+      padding: 10px;
+    }
+    #sendBtn {
+      padding: 10px;
+    }
   </style>
 </head>
 <body>
@@ -22,16 +41,16 @@
     const button = document.getElementById('sendBtn');
 
     button.onclick = () => {
-      const userText = input.value;
-      if (userText.trim() === '') return;
+      const userText = input.value.trim();
+      if (!userText) return;
 
       chatbox.innerHTML += `<p><strong>Tú:</strong> ${userText}</p>`;
       input.value = '';
 
-      // Respuesta simulada del bot
-      let botReply = "Estoy pensando... 🤔";
+      let botReply = "Hmm... no estoy seguro qué decir 😅";
       if (userText.toLowerCase().includes("hola")) botReply = "¡Hola Jose! ¿Cómo estás?";
-      if (userText.toLowerCase().includes("adiós")) botReply = "¡Hasta luego!";
+      if (userText.toLowerCase().includes("adiós")) botReply = "¡Hasta luego! Cuídate.";
+      if (userText.toLowerCase().includes("chiste")) botReply = "¿Sabes por qué el tomate se sonrojó? ¡Porque vio al otro pelarse! 🍅";
 
       chatbox.innerHTML += `<p><strong>Bot:</strong> ${botReply}</p>`;
       chatbox.scrollTop = chatbox.scrollHeight;
@@ -39,9 +58,3 @@
   </script>
 </body>
 </html>
-
-      });
-  </script>
-</body>
-</html>
-
