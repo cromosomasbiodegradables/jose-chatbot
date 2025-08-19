@@ -95,23 +95,41 @@
 
     .buttons-container {
       display: flex;
+      flex-direction: column;
       gap: 10px;
       margin-top: 10px;
-      flex-wrap: wrap;
+      align-items: center;
     }
 
     .bot-button {
-      padding: 10px 15px;
+      padding: 12px 18px;
       background-color: #28a745;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 15px;
+      width: 100%;
+      max-width: 400px;
+      text-align: left;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease;
     }
 
     .bot-button:hover {
       background-color: #218838;
+    }
+
+    @media screen and (max-width: 480px) {
+      .bot-button {
+        font-size: 14px;
+        padding: 10px 14px;
+      }
+
+      #chat-container {
+        padding: 15px;
+        height: auto;
+      }
     }
 
     @keyframes fadeIn {
@@ -191,36 +209,37 @@
         chatContainer.appendChild(buttonsContainer);
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }
+
       function showCaseButtons() {
-  addMessage("bot", "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?");
+        addMessage("bot", "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?");
 
-  const buttonsContainer = document.createElement("div");
-  buttonsContainer.className = "buttons-container";
+        const buttonsContainer = document.createElement("div");
+        buttonsContainer.className = "buttons-container";
 
-  const caso1 = document.createElement("button");
-  caso1.className = "bot-button";
-  caso1.innerText = "🧪 Caso 1: Rediseño de app médica";
-  caso1.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/caso1", "_blank");
+        const caso1 = document.createElement("button");
+        caso1.className = "bot-button";
+        caso1.innerText = "🧪 Caso 1: Rediseño de app médica";
+        caso1.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/caso1", "_blank");
 
-  const caso2 = document.createElement("button");
-  caso2.className = "bot-button";
-  caso2.innerText = "🛍️ Caso 2: Optimización UX para e-commerce";
-  caso2.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/caso2", "_blank");
+        const caso2 = document.createElement("button");
+        caso2.className = "bot-button";
+        caso2.innerText = "🛍️ Caso 2: Optimización UX para e-commerce";
+        caso2.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/caso2", "_blank");
 
-  const caso3 = document.createElement("button");
-  caso3.className = "bot-button";
-  caso3.innerText = "📱 Caso 3: Diseño de app de bienestar";
-  caso3.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/caso3", "_blank");
+        const caso3 = document.createElement("button");
+        caso3.className = "bot-button";
+        caso3.innerText = "📱 Caso 3: Diseño de app de bienestar";
+        caso3.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/caso3", "_blank");
 
-  const caso4 = document.createElement("button");
-  caso4.className = "bot-button";
-  caso4.innerText = "🌍 Caso 4: Plataforma educativa inclusiva";
-  caso4.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/caso4", "_blank");
+        const caso4 = document.createElement("button");
+        caso4.className = "bot-button";
+        caso4.innerText = "🌍 Caso 4: Plataforma educativa inclusiva";
+        caso4.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/caso4", "_blank");
 
-  const verTodos = document.createElement("button");
-  verTodos.className = "bot-button";
-  verTodos.innerText = "🔍 Ver todos los casos juntos";
-  verTodos.onclick = () => window.open("https://uxfol.io/josecarlos-design", "_blank");
+        const verTodos = document.createElement("button");
+        verTodos.className = "bot-button";
+        verTodos.innerText = "🔍 Ver todos los casos juntos";
+        verTodos.onclick = () => window.open("https://uxfol.io/josecarlos-design", "_blank");
 
   buttonsContainer.appendChild(caso1);
   buttonsContainer.appendChild(caso2);
@@ -240,4 +259,5 @@
   </script>
 </body>
 </html>
+
 
