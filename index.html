@@ -102,65 +102,65 @@
   </div>
 
   <script>
-    const chatContainer = document.getElementById("chat-container");
-    const userInput = document.getElementById("user-input");
-    const sendButton = document.getElementById("send-button");
+    document.addEventListener("DOMContentLoaded", () => {
+      const chatContainer = document.getElementById("chat-container");
+      const userInput = document.getElementById("user-input");
+      const sendButton = document.getElementById("send-button");
 
-    let hasShownOptions = false;
+      let hasShownOptions = false;
 
-    function addMessage(sender, text) {
-      const message = document.createElement("div");
-      message.className = sender === "bot" ? "bot-message" : "user-message";
-      message.innerText = text;
-      chatContainer.appendChild(message);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-
-    function showOptions() {
-      const optionsMessage = document.createElement("div");
-      optionsMessage.className = "bot-message";
-      optionsMessage.innerText = "Elige entre las siguientes opciones:";
-
-      const buttonsContainer = document.createElement("div");
-      buttonsContainer.className = "buttons-container";
-
-      const portfolioButton = document.createElement("button");
-      portfolioButton.className = "bot-button";
-      portfolioButton.innerText = "Ver mi portfolio";
-      portfolioButton.onclick = () => window.open("https://uxfol.io/josecarlos-design", "_blank");
-
-      const articlesButton = document.createElement("button");
-      articlesButton.className = "bot-button";
-      articlesButton.innerText = "Leer artículos";
-      articlesButton.onclick = () => window.open("https://tusitio.com/articulos", "_blank");
-
-      buttonsContainer.appendChild(portfolioButton);
-      buttonsContainer.appendChild(articlesButton);
-
-      chatContainer.appendChild(optionsMessage);
-      chatContainer.appendChild(buttonsContainer);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-
-    // Saludo automático al cargar
-    window.addEventListener("load", () => {
-      addMessage("bot", "¡Bienvenido al chatbot de Jose! ¿Cómo estás?");
-    });
-
-    sendButton.addEventListener("click", () => {
-      const userText = userInput.value.trim();
-      if (userText === "") return;
-
-      addMessage("user", userText);
-      userInput.value = "";
-
-      if (!hasShownOptions) {
-        setTimeout(() => {
-          addMessage("bot", "Genial. Elige entre las siguientes opciones:");
-          showOptions();
-          hasShownOptions = true;
-        }, 1000);
+      function addMessage(sender, text) {
+        const message = document.createElement("div");
+        message.className = sender === "bot" ? "bot-message" : "user-message";
+        message.innerText = text;
+        chatContainer.appendChild(message);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
       }
+
+      function showOptions() {
+        const optionsMessage = document.createElement("div");
+        optionsMessage.className = "bot-message";
+        optionsMessage.innerText = "Elige entre las siguientes opciones:";
+
+        const buttonsContainer = document.createElement("div");
+        buttonsContainer.className = "buttons-container";
+
+        const portfolioButton = document.createElement("button");
+        portfolioButton.className = "bot-button";
+        portfolioButton.innerText = "Ver mi portfolio";
+        portfolioButton.onclick = () => window.open("https://uxfol.io/josecarlos-design", "_blank");
+
+        const articlesButton = document.createElement("button");
+        articlesButton.className = "bot-button";
+        articlesButton.innerText = "Leer artículos";
+        articlesButton.onclick = () => window.open("https://tusitio.com/articulos", "_blank");
+
+        buttonsContainer.appendChild(portfolioButton);
+        buttonsContainer.appendChild(articlesButton);
+
+        chatContainer.appendChild(optionsMessage);
+        chatContainer.appendChild(buttonsContainer);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+
+      // Saludo automático al cargar
+      addMessage("bot", "¡Bienvenido al chatbot de Jose! ¿Cómo estás?");
+
+      sendButton.addEventListener("click", () => {
+        const userText = userInput.value.trim();
+        if (userText === "") return;
+
+        addMessage("user", userText);
+        userInput.value = "";
+
+        if (!hasShownOptions) {
+          setTimeout(() => {
+            addMessage("bot", "Genial. Elige entre las siguientes opciones:");
+            showOptions();
+            hasShownOptions = true;
+          }, 1000);
+        }
+      });
     });
   </script>
 
