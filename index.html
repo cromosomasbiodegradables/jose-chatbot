@@ -171,43 +171,33 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }
 
-      function showOptions() {
+      function showOptionsAnimated() {
         const buttonsContainer = document.createElement("div");
         buttonsContainer.className = "buttons-container";
-
-        const estudioButton = document.createElement("button");
-        estudioButton.className = "bot-button";
-        estudioButton.innerText = "🎨 Casos de estudio";
-        estudioButton.onclick = () => showCaseButtons();
-
-        const sobreMiButton = document.createElement("button");
-        sobreMiButton.className = "bot-button";
-        sobreMiButton.innerText = "👤 Sobre mí";
-        sobreMiButton.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/about", "_blank");
-
-        const cvButton = document.createElement("button");
-        cvButton.className = "bot-button";
-        cvButton.innerText = "📄 Descargar CV";
-        cvButton.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/cv", "_blank");
-
-        const contactoButton = document.createElement("button");
-        contactoButton.className = "bot-button";
-        contactoButton.innerText = "✉️ Contacto";
-        contactoButton.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/contact", "_blank");
-
-        const blogButton = document.createElement("button");
-        blogButton.className = "bot-button";
-        blogButton.innerText = "📝 Blog";
-        blogButton.onclick = () => window.open("https://uxfol.io/p/josecarlos-design/blog", "_blank");
-
-        buttonsContainer.appendChild(estudioButton);
-        buttonsContainer.appendChild(sobreMiButton);
-        buttonsContainer.appendChild(cvButton);
-        buttonsContainer.appendChild(contactoButton);
-        buttonsContainer.appendChild(blogButton);
-
         chatContainer.appendChild(buttonsContainer);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        const options = [
+          { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
+          { text: "👤 Sobre mí", url: "https://uxfol.io/p/josecarlos-design/about" },
+          { text: "📄 Descargar CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
+          { text: "✉️ Contacto", url: "https://uxfol.io/p/josecarlos-design/contact" },
+          { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
+        ];
+
+        options.forEach((item, index) => {
+          setTimeout(() => {
+            const button = document.createElement("button");
+            button.className = "bot-button";
+            button.innerText = item.text;
+            if (item.url) {
+              button.onclick = () => window.open(item.url, "_blank");
+            } else if (item.action) {
+              button.onclick = item.action;
+            }
+            buttonsContainer.appendChild(button);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          }, 1000 + index * 400);
+        });
       }
 
       function showCaseButtons() {
@@ -237,10 +227,10 @@
         });
       }
 
-      // Mensaje inicial + opciones
+      // Mensaje inicial + animación de botones
       addMessage("bot", "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?");
-      showOptions();
+      showOptionsAnimated();
     });
   </script>
 </body>
-</html
+</html>
