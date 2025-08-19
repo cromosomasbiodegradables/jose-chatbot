@@ -47,44 +47,53 @@
   <input type="text" id="userInput" placeholder="Escribe tu mensaje aquí...">
   <button id="sendBtn">Enviar</button>
 
-  <script>
-    const chatbox = document.getElementById('chatbox');
-    const input = document.getElementById('userInput');
-    const button = document.getElementById('sendBtn');
+<script>
+  const chatbox = document.getElementById('chatbox');
+  const input = document.getElementById('userInput');
+  const button = document.getElementById('sendBtn');
 
-    button.onclick = () => {
-      const userText = input.value.trim();
-      if (!userText) return;
+  function normalizarTexto(texto) {
+    return texto
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // quita acentos
+      .replace(/[¿?¡!.,]/g, "")        // quita signos
+      .trim();
+  }
 
-      chatbox.innerHTML += `<p><strong>Tú:</strong> ${userText}</p>`;
-      input.value = '';
+  button.onclick = () => {
+    const userText = input.value.trim();
+    if (!userText) return;
 
-      let botReply = "Hmm... no estoy seguro qué decir 😅";
+    chatbox.innerHTML += `<p><strong>Tú:</strong> ${userText}</p>`;
+    input.value = '';
 
-      const lowerText = userText.toLowerCase();
+    const textoNormalizado = normalizarTexto(userText);
+    let botReply = "Hmm... no estoy seguro qué decir 😅";
 
-      if (lowerText.includes("hola")) botReply = "¡Hola Jose! ¿Cómo estás?";
-      if (lowerText.includes("adiós")) botReply = "¡Hasta luego! Cuídate.";
-      if (lowerText.includes("chiste")) botReply = "¿Sabes por qué el tomate se sonrojó? ¡Porque vio al otro pelarse! 🍅";
+    if (textoNormalizado.includes("hola")) botReply = "¡Hola Jose! ¿Cómo estás?";
+    if (textoNormalizado.includes("adios")) botReply = "¡Hasta luego! Cuídate.";
+    if (textoNormalizado.includes("chiste")) botReply = "¿Sabes por qué el tomate se sonrojó? ¡Porque vio al otro pelarse! 🍅";
 
-      // Mostrar opciones si el usuario pregunta "¿Qué deseas hacer?"
-      if (lowerText.includes("¿qué deseas hacer?") || lowerText.includes("que deseas hacer")) {
-        botReply = "¡Claro! Aquí tienes algunas opciones:";
-        chatbox.innerHTML += `<p><strong>Bot:</strong> ${botReply}</p>`;
-        chatbox.innerHTML += `
-          <div>
-            <button class="bot-button" onclick="window.open('https://tupagina.com/portfolio', '_blank')">Ver mi portfolio</button>
-            <button class="bot-button" onclick="window.open('https://tupagina.com/articulos', '_blank')">Leer artículos</button>
-            <button class="bot-button" onclick="window.open('https://tupagina.com/contacto', '_blank')">Contactar conmigo</button>
-          </div>
-        `;
-        chatbox.scrollTop = chatbox.scrollHeight;
-        return;
-      }
-
+    if (textoNormalizado.includes("que deseas hacer")) {
+      botReply = "¡Claro! Aquí tienes algunas opciones:";
       chatbox.innerHTML += `<p><strong>Bot:</strong> ${botReply}</p>`;
+      chatbox.innerHTML += `
+        <div>
+          <button class="bot-button" onclick="window.open('https://tupagina.com/portfolio', '_blank')">Ver mi portfolio</button>
+          <button class="bot-button" onclick="window.open('https://tupagina.com/articulos', '_blank')">Leer artículos</button>
+          <button class="bot-button" onclick="window.open('https://tupagina.com/contacto', '_blank')">Contactar conmigo</button>
+        </div>
+      `;
       chatbox.scrollTop = chatbox.scrollHeight;
-    };
-  </script>
+      return;
+    }
+
+    chatbox.innerHTML += `<p><strong>Bot:</strong> ${botReply}</p>`;
+    chatbox.scrollTop = chatbox.scrollHeight;
+  };
+</script>
+
 </body>
 </html>
+
