@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Chatbot Jose</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/botui/build/botui.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/botui/build/botui.min.js"></script>
+  <style>
+    body { background: #f4f4f4; font-family: sans-serif; padding: 20px; }
+    #botui-app { max-width: 600px; margin: auto; }
+  </style>
+</head>
+<body>
+  <h2>🤖 Asistente de Jose</h2>
+  <div id="botui-app"></div>
+
+  <script>
+    var botui = new BotUI('botui-app');
+
+    botui.message.add({ content: '¡Hola! Soy el asistente de Jose. ¿Qué necesitas?' })
+      .then(() => botui.action.button({
+        action: [
+          { text: 'Ver proyecto UX: App de viajes', value: 'viajes' },
+          { text: 'Descargar CV en español', value: 'cv_es' },
+          { text: 'Descargar CV en inglés', value: 'cv_en' }
+        ]
+      }))
+      .then(res => {
+        if (res.value === 'viajes') {
+          botui.message.add({ content: 'Aquí tienes el proyecto: https://uxfol.io/jose/app-viajes' });
+        }
+        if (res.value === 'cv_es') {
+          botui.message.add({ content: 'Descarga tu CV en español: https://drive.google.com/tu-cv-es' });
+        }
+        if (res.value === 'cv_en') {
+          botui.message.add({ content: 'Descarga tu CV en inglés: https://drive.google.com/tu-cv-en' });
+        }
+      });
+  </script>
+</body>
+</html>
