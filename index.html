@@ -1,42 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Chatbot Jose</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/botui/build/botui.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/botui/build/botui.min.js"></script>
+  <title>Asistente de Jose</title>
   <style>
-    body { background: #f4f4f4; font-family: sans-serif; padding: 20px; }
-    #botui-app { max-width: 600px; margin: auto; }
+    body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+    #chatbox { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; background: white; }
+    #userInput { width: 80%; padding: 10px; }
+    #sendBtn { padding: 10px; }
   </style>
 </head>
 <body>
-  <h2>🤖 Asistente de Jose</h2>
-  <div id="botui-app"></div>
+  <h1>🤖 Asistente de Jose</h1>
+  <div id="chatbox"></div>
+  <input type="text" id="userInput" placeholder="Escribe tu mensaje aquí...">
+  <button id="sendBtn">Enviar</button>
 
   <script>
-    var botui = new BotUI('botui-app');
+    const chatbox = document.getElementById('chatbox');
+    const input = document.getElementById('userInput');
+    const button = document.getElementById('sendBtn');
 
-    botui.message.add({ content: '¡Hola! Soy el asistente de Jose. ¿Qué necesitas?' })
-      .then(() => botui.action.button({
-        action: [
-          { text: 'Ver proyecto UX: App de viajes', value: 'viajes' },
-          { text: 'Descargar CV en español', value: 'cv_es' },
-          { text: 'Descargar CV en inglés', value: 'cv_en' }
-        ]
-      }))
-      .then(res => {
-        if (res.value === 'viajes') {
-          botui.message.add({ content: 'Aquí tienes el proyecto: https://uxfol.io/jose/app-viajes' });
-        }
-        if (res.value === 'cv_es') {
-          botui.message.add({ content: 'Descarga tu CV en español: https://drive.google.com/tu-cv-es' });
-        }
-        if (res.value === 'cv_en') {
-          botui.message.add({ content: 'Descarga tu CV en inglés: https://drive.google.com/tu-cv-en' });
-        }
+    button.onclick = () => {
+      const userText = input.value;
+      if (userText.trim() === '') return;
+
+      chatbox.innerHTML += `<p><strong>Tú:</strong> ${userText}</p>`;
+      input.value = '';
+
+      // Respuesta simulada del bot
+      let botReply = "Estoy pensando... 🤔";
+      if (userText.toLowerCase().includes("hola")) botReply = "¡Hola Jose! ¿Cómo estás?";
+      if (userText.toLowerCase().includes("adiós")) botReply = "¡Hasta luego!";
+
+      chatbox.innerHTML += `<p><strong>Bot:</strong> ${botReply}</p>`;
+      chatbox.scrollTop = chatbox.scrollHeight;
+    };
+  </script>
+</body>
+</html>
+
       });
   </script>
 </body>
 </html>
+
