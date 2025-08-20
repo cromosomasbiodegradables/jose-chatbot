@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chatbot de Jose</title>
   <style>
-    /* Evita que la PÁGINA haga scroll suave: solo lo hará el contenedor del chat */
-    html, body { scroll-behavior: auto !important; }
-
     body {
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(to right, #eef2f3, #d9e4ff);
@@ -16,6 +13,7 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      overflow: hidden; /* 🔹 evita que la ventana se desplace */
     }
     #header {
       display: flex;
@@ -87,12 +85,11 @@
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      overflow-y: auto;               /* scroll dentro del contenedor */
+      overflow-y: auto;
       height: 400px;
       display: flex;
       flex-direction: column;
-      overscroll-behavior: contain;   /* evita que burbujee al body */
-      scroll-behavior: auto;          /* gestionamos el suave por JS, no por CSS */
+      overscroll-behavior: contain; /* 🔹 evita que burbujee al body */
     }
     .bot-message, .user-message {
       display: flex;
@@ -267,27 +264,11 @@
 
     let currentLanguage = "es";
 
-    // Scroll suave SOLO dentro del contenedor del chat (animación manual)
     function scrollToBottom() {
-      const target = chatContainer.scrollHeight - chatContainer.clientHeight;
-      const start = chatContainer.scrollTop;
-      const distance = target - start;
-
-      if (Math.abs(distance) < 1) return;
-
-      const duration = 350;
-      let startTime = null;
-
-      function step(timestamp) {
-        if (!startTime) startTime = timestamp;
-        const t = Math.min(1, (timestamp - startTime) / duration);
-        const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // easeInOutQuad
-        chatContainer.scrollTop = start + distance * eased;
-        if (t < 1) requestAnimationFrame(step);
-      }
-
-      // Espera a que el DOM pinte el nuevo nodo antes de animar
-      requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(step)));
+      chatContainer.scrollTo({
+        top: chatContainer.scrollHeight,
+        behavior: "smooth"
+      });
     }
 
     function addMessage(sender, text, key) {
@@ -397,6 +378,12 @@
       addMessage("bot", texts[currentLanguage].greeting, "greeting");
       showOptions();
     };
+
+    // 🔹 Evitar scroll global fuera del chat
+    chatContainer.addEventListener("wheel", function(event) {
+      this.scrollTop += event.deltaY;
+      event.preventDefault();
+    }, { passive: false });
   </script>
 </body>
 </html>
