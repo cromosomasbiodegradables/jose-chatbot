@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -31,25 +32,6 @@ header h1 {
     margin: 0;
     font-size: 1.2rem;
 }
-#lang-switch-container {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-}
-.lang-btn {
-    padding: 6px 14px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    background-color: #f0f0f0;
-    cursor: pointer;
-    font-weight: bold;
-}
-.lang-btn.active {
-    background-color: #007bff;
-    color: white;
-    border-color: #0056b3;
-}
-
 #chat-container {
     width: 100%;
     max-width: 600px;
@@ -138,15 +120,60 @@ header h1 {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* Switch de idioma */
+.language-switch {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.language-switch label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+.language-switch input[type="checkbox"] {
+  appearance: none;
+  width: 50px;
+  height: 24px;
+  background: #ccc;
+  border-radius: 12px;
+  position: relative;
+  outline: none;
+  transition: background 0.3s;
+}
+.language-switch input[type="checkbox"]::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+.language-switch input[type="checkbox"]:checked {
+  background: #007bff;
+}
+.language-switch input[type="checkbox"]:checked::before {
+  transform: translateX(26px);
+}
+.language-switch span {
+  margin: 0 5px;
+  font-weight: bold;
+}
 </style>
 </head>
 <body>
 
 <header>
     <h1>Chatbot</h1>
-    <div id="lang-switch-container">
-        <button class="lang-btn active" data-lang="es">ES</button>
-        <button class="lang-btn" data-lang="en">EN</button>
+    <div class="language-switch">
+        <span>ES</span>
+        <input type="checkbox" id="lang-toggle">
+        <span>EN</span>
         <button id="restart">Reiniciar</button>
     </div>
 </header>
@@ -161,6 +188,7 @@ header h1 {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const chatContainer = document.getElementById("chat-container");
+    const langToggle = document.getElementById("lang-toggle");
     let lang = 'es';
 
     const texts = {
@@ -202,92 +230,83 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    function addMessage(sender, text, key=null) {
-        return new Promise(resolve => {
-            const message = document.createElement("div");
-            message.className = sender === "bot" ? "bot-message" : "user-message";
-            const avatar = document.createElement("img");
-            avatar.src = sender === "bot" 
-                ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png" 
-                : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
-            avatar.className = "avatar";
-            const bubble = document.createElement("div");
-            bubble.className = "bubble";
-            bubble.innerText = text;
-            if(key) bubble.dataset.textKey = key; // clave para traducción
-            message.appendChild(avatar);
-            message.appendChild(bubble);
-            chatContainer.appendChild(message);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-            setTimeout(resolve, 100);
-        });
+    function addMessage(text, sender='bot') {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add(sender === 'bot' ? 'bot-message' : 'user-message');
+        const avatar = document.createElement('img');
+        avatar.src = sender === 'bot' ? 'https://cdn-icons-png.flaticon.com/512/4712/4712131.png' : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+        avatar.classList.add('avatar');
+        const bubble = document.createElement('div');
+        bubble.classList.add('bubble');
+        bubble.innerHTML = text;
+        msgDiv.appendChild(avatar);
+        msgDiv.appendChild(bubble);
+        chatContainer.appendChild(msgDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    function addButtons(buttonsArray) {
-        const container = document.createElement("div");
-        container.className = "buttons-container";
-        buttonsArray.forEach(b => {
-            const btn = document.createElement("button");
-            btn.className = "bot-button";
-            btn.innerText = b.text;
-            if(b.action === "showCases") {
-                btn.onclick = () => showCases();
-            } else {
-                btn.onclick = () => window.open(b.url, "_blank");
-            }
-            container.appendChild(btn);
+    function showButtons(buttons) {
+        const container = document.createElement('div');
+        container.classList.add('buttons-container');
+        buttons.forEach(btn => {
+            const b = document.createElement('button');
+            b.classList.add('bot-button');
+            b.innerText = btn.text;
+            b.onclick = () => {
+                if(btn.url) {
+                    window.open(btn.url, '_blank');
+                } else if(btn.action === 'showCases') {
+                    addMessage(texts[lang].casesIntro);
+                    showButtons(texts[lang].cases);
+                }
+            };
+            container.appendChild(b);
         });
         chatContainer.appendChild(container);
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    async function showCases() {
-        await addMessage("bot", texts[lang].casesIntro, "casesIntro");
-        addButtons(texts[lang].cases);
+    function initChat() {
+        addMessage(texts[lang].greeting);
+        showButtons(texts[lang].buttons);
     }
 
-    async function startChat() {
-        await addMessage("bot", texts[lang].greeting, "greeting");
-        addButtons(texts[lang].buttons);
-    }
+    initChat();
 
-    startChat();
-
-    // switch idioma
-    document.querySelectorAll(".lang-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            document.querySelectorAll(".lang-btn").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            lang = btn.dataset.lang;
-            // actualizar textos ya visibles
-            document.querySelectorAll("[data-text-key]").forEach(el => {
-                const key = el.dataset.textKey;
-                if(texts[lang][key]) el.innerText = texts[lang][key];
-            });
-            // actualizar botones
-            document.querySelectorAll(".buttons-container").forEach(container => {
-                container.remove();
-            });
-            addButtons(texts[lang].buttons);
+    langToggle.addEventListener('change', () => {
+        lang = langToggle.checked ? 'en' : 'es';
+        // Actualizamos solo los textos del bot existentes
+        const botBubbles = document.querySelectorAll('.bot-message .bubble');
+        botBubbles.forEach(bubble => {
+            const oldText = bubble.innerHTML;
+            if(oldText.includes('👋') || oldText.includes('Hola') || oldText.includes('Hi')) {
+                bubble.innerHTML = texts[lang].greeting;
+            }
+            if(oldText.includes('Aquí tienes') || oldText.includes('Here are')) {
+                bubble.innerHTML = texts[lang].casesIntro;
+            }
         });
+        // Actualizamos los botones existentes
+        const buttonsContainers = document.querySelectorAll('.buttons-container');
+        buttonsContainers.forEach(container => container.remove());
+        showButtons(texts[lang].buttons);
     });
 
-    document.getElementById("restart").addEventListener("click", () => {
-        chatContainer.innerHTML = "";
-        startChat();
+    document.getElementById('restart').addEventListener('click', () => {
+        chatContainer.innerHTML = '';
+        initChat();
     });
 
-    document.getElementById("send-button").addEventListener("click", async () => {
-        const input = document.getElementById("user-input");
-        if(input.value.trim() === "") return;
-        await addMessage("user", input.value);
-        input.value = "";
+    document.getElementById('send-button').addEventListener('click', () => {
+        const input = document.getElementById('user-input');
+        const text = input.value.trim();
+        if(text) {
+            addMessage(text, 'user');
+            input.value = '';
+        }
     });
-
 });
 </script>
 
 </body>
 </html>
-
-  
