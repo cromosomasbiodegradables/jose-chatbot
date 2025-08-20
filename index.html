@@ -259,6 +259,13 @@
 
     let currentLanguage = "es";
 
+    function scrollToBottom() {
+      chatContainer.scrollTo({
+        top: chatContainer.scrollHeight,
+        behavior: "smooth"
+      });
+    }
+
     function addMessage(sender, text, key) {
       const message = document.createElement("div");
       message.className = sender === "bot" ? "bot-message" : "user-message";
@@ -277,7 +284,7 @@
       message.appendChild(avatar);
       message.appendChild(bubble);
       chatContainer.appendChild(message);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
+      scrollToBottom();
     }
 
     function showOptions() {
@@ -297,7 +304,7 @@
             button.onclick = item.action;
           }
           buttonsContainer.appendChild(button);
-          chatContainer.scrollTop = chatContainer.scrollHeight;
+          scrollToBottom();
         }, 800 + index * 400);
       });
     }
@@ -316,7 +323,7 @@
           button.innerText = texts[currentLanguage].cases[index].text;
           button.onclick = () => window.open(item.url, "_blank");
           buttonsContainer.appendChild(button);
-          chatContainer.scrollTop = chatContainer.scrollHeight;
+          scrollToBottom();
         }, 800 + index * 400);
       });
     }
@@ -368,3 +375,4 @@
 
 
     
+
