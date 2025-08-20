@@ -89,6 +89,7 @@
       display: flex;
       flex-direction: column;
       overscroll-behavior: contain;   /* evita que burbujee al body */
+      scroll-behavior: smooth;        /* desplazamiento suave SOLO dentro del contenedor */
     }
     .bot-message, .user-message {
       display: flex;
@@ -179,7 +180,7 @@
       .bot-button { font-size: 13px; padding: 9px 12px; }
       #chat-container {
         padding: 15px;
-        height: 70vh;
+        height: 70vh;        /* scroll siempre interno en móviles */
       }
     }
 
@@ -263,12 +264,33 @@
 
     let currentLanguage = "es";
 
+    // --- Scroll suave SOLO dentro del contenedor del chat ---
     function scrollToBottom() {
-      // Scroll suave dentro del contenedor del chat
-      chatContainer.scrollTo({
-        top: chatContainer.scrollHeight,
-        behavior: "smooth"
-      });
+      const doScroll = () => {
+        const target = chatContainer.scrollHeight;
+        // intento nativo con smooth (si el navegador lo soporta para elementos)
+        try {
+          chatContainer.scrollTo({ top: target, behavior: "smooth" });
+        } catch (e) {
+          // fallback: animación manual
+          const start = chatContainer.scrollTop;
+          const change = target - start;
+          const duration = 300;
+          const startTime = performance.now();
+          function animate(now) {
+            const t = Math.min(1, (now - startTime) / duration);
+            // easeInOutQuad
+            const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+            chatContainer.scrollTop = start + change * eased;
+            if (t < 1) requestAnimationFrame(animate);
+          }
+          requestAnimationFrame(animate);
+        }
+      };
+      // Asegura que el DOM haya pintado antes de calcular alturas
+      requestAnimationFrame(doScroll);
+      // Segunda pasada por si hay imágenes/iconos que tardan un frame extra
+      setTimeout(doScroll, 0);
     }
 
     function addMessage(sender, text, key) {
