@@ -75,7 +75,7 @@
       transform: translateX(14px);
     }
 
-    /* 🔹 Corrección importante: el scroll solo aquí */
+    /* 🔹 Contenedor del chat con scroll interno */
     #chat-container {
       flex: 1;
       width: 100%;
@@ -267,9 +267,11 @@
     let currentLanguage = "es";
 
     function scrollToBottom() {
-      chatContainer.scrollTo({
-        top: chatContainer.scrollHeight,
-        behavior: "smooth"
+      requestAnimationFrame(() => {
+        chatContainer.scrollTo({
+          top: chatContainer.scrollHeight,
+          behavior: "smooth"
+        });
       });
     }
 
@@ -383,4 +385,5 @@
   </script>
 </body>
 </html>
+
 
