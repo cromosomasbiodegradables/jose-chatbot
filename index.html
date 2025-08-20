@@ -11,7 +11,6 @@
       margin: 0;
       padding: 0;
     }
-
     #header {
       display: flex;
       justify-content: space-between;
@@ -21,184 +20,42 @@
       border-bottom: 1px solid #ddd;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
-
-    #header h1 {
-      margin: 0;
-      font-size: 20px;
-      color: #333;
-    }
-
-    #header-controls {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    #restart-button {
-      padding: 6px 12px;
-      font-size: 14px;
-      background-color: #ffffff;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    #language-switch {
-      display: flex;
-      align-items: center;
-      font-size: 14px;
-      gap: 6px;
-    }
-
+    #header h1 { margin: 0; font-size: 20px; color: #333; }
+    #header-controls { display: flex; align-items: center; gap: 12px; }
+    #restart-button { padding: 6px 12px; font-size: 14px; background-color: #ffffff; border: 1px solid #ccc; border-radius: 6px; cursor: pointer; }
+    #language-switch { display: flex; align-items: center; font-size: 14px; gap: 6px; }
     #language-toggle {
-      width: 40px;
-      height: 20px;
-      background-color: #ccc;
-      border-radius: 10px;
-      position: relative;
-      cursor: pointer;
+      width: 40px; height: 20px; background-color: #ccc; border-radius: 10px; position: relative; cursor: pointer;
     }
-
     #language-toggle::before {
-      content: '';
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 16px;
-      height: 16px;
-      background-color: #fff;
-      border-radius: 50%;
-      transition: left 0.3s ease;
+      content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; background-color: #fff; border-radius: 50%; transition: left 0.3s ease;
     }
-
-    #language-toggle.active::before {
-      left: 22px;
-    }
-
+    #language-toggle.active::before { left: 22px; }
     #chat-container {
-      width: 100%;
-      max-width: 600px;
-      margin: 20px auto;
-      background-color: #ffffff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      overflow-y: auto;
-      height: 400px;
-      display: flex;
-      flex-direction: column;
+      width: 100%; max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 12px;
+      padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); overflow-y: auto; height: 400px; display: flex; flex-direction: column;
     }
-
-    .bot-message, .user-message {
-      display: flex;
-      align-items: flex-start;
-      margin: 10px 0;
-      animation: fadeIn 0.4s ease-in;
-    }
-
-    .avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-
-    .bubble {
-      padding: 10px 14px;
-      border-radius: 12px;
-      max-width: 80%;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-
-    .bot-message .bubble {
-      background-color: #e0e0e0;
-      color: #333;
-    }
-
-    .user-message {
-      flex-direction: row-reverse;
-    }
-
-    .user-message .avatar {
-      margin-left: 10px;
-      margin-right: 0;
-    }
-
-    .user-message .bubble {
-      background-color: #cce5ff;
-      color: #003366;
-      text-align: right;
-    }
-
-    #input-area {
-      display: flex;
-      justify-content: center;
-      margin: 20px auto;
-      max-width: 600px;
-    }
-
-    #user-input {
-      flex: 1;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    #send-button {
-      padding: 10px 20px;
-      margin-left: 10px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .buttons-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-      align-items: center;
-    }
-
+    .bot-message, .user-message { display: flex; align-items: flex-start; margin: 10px 0; animation: fadeIn 0.4s ease-in; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; margin-right: 10px; }
+    .bubble { padding: 10px 14px; border-radius: 12px; max-width: 80%; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+    .bot-message .bubble { background-color: #e0e0e0; color: #333; }
+    .user-message { flex-direction: row-reverse; }
+    .user-message .avatar { margin-left: 10px; margin-right: 0; }
+    .user-message .bubble { background-color: #cce5ff; color: #003366; text-align: right; }
+    #input-area { display: flex; justify-content: center; margin: 20px auto; max-width: 600px; }
+    #user-input { flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; }
+    #send-button { padding: 10px 20px; margin-left: 10px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; }
+    .buttons-container { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; align-items: center; }
     .bot-button {
-      background-color: #a3d9a5;
-      color: #2d4b2d;
-      padding: 10px 14px;
-      font-size: 14px;
-      border: 1px solid #8fcf90;
-      border-radius: 6px;
-      cursor: pointer;
-      width: 100%;
-      max-width: 300px;
-      text-align: left;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      transition: background-color 0.3s ease;
+      background-color: #a3d9a5; color: #2d4b2d; padding: 10px 14px; font-size: 14px; border: 1px solid #8fcf90;
+      border-radius: 6px; cursor: pointer; width: 100%; max-width: 300px; text-align: left; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: background-color 0.3s ease;
     }
-
-    .bot-button:hover {
-      background-color: #92c89b;
-    }
-
+    .bot-button:hover { background-color: #92c89b; }
     @media screen and (max-width: 480px) {
-      .bot-button {
-        font-size: 13px;
-        padding: 9px 12px;
-      }
-
-      #chat-container {
-        padding: 15px;
-        height: auto;
-      }
+      .bot-button { font-size: 13px; padding: 9px 12px; }
+      #chat-container { padding: 15px; height: auto; }
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
@@ -254,7 +111,7 @@
       chatContainer.appendChild(buttonsContainer);
 
       const options = [
-        { text: currentLanguage === "es" ? "🎨 Casos de estudio" : "🎨 Case studies", action: () => alert("Aquí mostrarías los casos") },
+        { text: currentLanguage === "es" ? "🎨 Casos de estudio" : "🎨 Case studies", action: () => showCaseButtons() },
         { text: currentLanguage === "es" ? "👤 Sobre mí" : "👤 About me", url: "https://uxfol.io/p/josecarlos-design/about" },
         { text: currentLanguage === "es" ? "📄 Descargar CV" : "📄 Download CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
         { text: currentLanguage === "es" ? "✉️ Contacto" : "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
@@ -267,11 +124,8 @@
           button.className = "bot-button";
           button.innerText = item.text;
 
-          if (item.url) {
-            button.onclick = () => window.open(item.url, "_blank");
-          } else if (item.action) {
-            button.onclick = item.action;
-          }
+          if (item.url) button.onclick = () => window.open(item.url, "_blank");
+          else if (item.action) button.onclick = item.action;
 
           buttonsContainer.appendChild(button);
           chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -279,25 +133,49 @@
       });
     }
 
-    function startChat() {
-      chatContainer.innerHTML = "";
-      const greeting = currentLanguage === "es"
-        ? "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?"
-        : "👋 Hi! I'm Jose Carlos' assistant, senior UX/UI designer. What would you like to focus on today?";
-      addMessage("bot", greeting);
-      showOptionsAnimated();
+    function showCaseButtons() {
+      addMessage("bot", currentLanguage === "es" 
+        ? "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?" 
+        : "Here are some projects where I solved real problems with user-centered design. Which one interests you?");
+
+      const buttonsContainer = document.createElement("div");
+      buttonsContainer.className = "buttons-container";
+      chatContainer.appendChild(buttonsContainer);
+
+      const cases = [
+        { text: currentLanguage === "es" ? "🧪 Caso 1: Rediseño de app médica" : "🧪 Case 1: Medical app redesign", url: "https://uxfol.io/p/josecarlos-design/caso1" },
+        { text: currentLanguage === "es" ? "🛍️ Caso 2: Optimización UX para e-commerce" : "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
+        { text: currentLanguage === "es" ? "📱 Caso 3: Diseño de app de bienestar" : "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
+        { text: currentLanguage === "es" ? "🌍 Caso 4: Plataforma educativa inclusiva" : "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
+        { text: currentLanguage === "es" ? "🔍 Ver todos los casos juntos" : "🔍 View all cases", url: "https://uxfol.io/p/josecarlos-design" }
+      ];
+
+      cases.forEach((item, index) => {
+        setTimeout(() => {
+          const button = document.createElement("button");
+          button.className = "bot-button";
+          button.innerText = item.text;
+          button.onclick = () => window.open(item.url, "_blank");
+          buttonsContainer.appendChild(button);
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }, 1000 + index * 400);
+      });
     }
 
-    restartButton.addEventListener("click", startChat);
+    // Inicializar chatbot
+    addMessage("bot", currentLanguage === "es" 
+      ? "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?" 
+      : "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?");
+    showOptionsAnimated();
 
-    languageToggle.addEventListener("click", () => {
+    restartButton.onclick = () => location.reload();
+    languageToggle.onclick = () => {
       languageToggle.classList.toggle("active");
       currentLanguage = currentLanguage === "es" ? "en" : "es";
-      startChat();
-    });
-
-    // Iniciar chatbot al cargar
-    startChat();
+      location.reload();
+    };
   </script>
 </body>
 </html>
+
+
