@@ -75,7 +75,7 @@
       transform: translateX(14px);
     }
 
-    /* 🔹 Contenedor del chat con scroll interno */
+    /* 🔹 Scroll solo dentro del chat (con momentum en iOS) */
     #chat-container {
       flex: 1;
       width: 100%;
@@ -90,7 +90,7 @@
       display: flex;
       flex-direction: column;
       overscroll-behavior: contain;
-      scroll-behavior: smooth;   /* scroll suave */
+      -webkit-overflow-scrolling: touch; /* momentum scroll iOS */
     }
 
     .bot-message, .user-message {
@@ -266,12 +266,28 @@
 
     let currentLanguage = "es";
 
+    // 🔹 Scroll suave SOLO en el contenedor del chat (sin tocar la página)
     function scrollToBottom() {
+      const c = chatContainer;
+      // Espera al siguiente frame para asegurar que el DOM ya midió alturas
       requestAnimationFrame(() => {
-        chatContainer.scrollTo({
-          top: chatContainer.scrollHeight,
-          behavior: "smooth"
-        });
+        const target = c.scrollHeight - c.clientHeight;
+        const start = c.scrollTop;
+        const distance = target - start;
+        if (Math.abs(distance) < 1) return;
+
+        const duration = 400; // ms
+        let startTime = null;
+
+        function step(ts) {
+          if (!startTime) startTime = ts;
+          const t = Math.min((ts - startTime) / duration, 1);
+          // ease-in-out
+          const eased = 0.5 - Math.cos(Math.PI * t) / 2;
+          c.scrollTop = start + distance * eased;
+          if (t < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
       });
     }
 
@@ -385,5 +401,3 @@
   </script>
 </body>
 </html>
-
-
