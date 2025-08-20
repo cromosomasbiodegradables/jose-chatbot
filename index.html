@@ -1,40 +1,52 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chatbot de Jose</title>
 <style>
 body {
     font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(to right, #eef2f3, #d9e4ff);
+    background: #eef2f3;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    max-width: 600px;
     padding: 10px 20px;
-    background-color: #ffffffcc;
-    backdrop-filter: blur(6px);
+    background-color: #ffffff;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
     z-index: 10;
 }
+header h1 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+header div {
+    display: flex;
+    gap: 10px;
+}
 #chat-container {
     width: 100%;
     max-width: 600px;
-    margin: 20px auto;
+    height: 400px;
+    margin: 10px 0;
     background-color: #ffffff;
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    overflow-y: auto;
-    height: 400px;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 .bot-message, .user-message {
     display: flex;
@@ -62,8 +74,9 @@ header {
 #input-area {
     display: flex;
     justify-content: center;
-    margin: 20px auto;
+    width: 100%;
     max-width: 600px;
+    margin-bottom: 20px;
 }
 #user-input {
     flex: 1;
@@ -106,11 +119,6 @@ header {
 }
 .bot-button:hover { background-color: #92c89b; }
 
-@media screen and (max-width: 480px) {
-    .bot-button { font-size: 13px; padding: 9px 12px; }
-    #chat-container { padding: 15px; height: auto; }
-}
-
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -133,7 +141,7 @@ header {
 <div id="chat-container"></div>
 
 <div id="input-area">
-    <input type="text" id="user-input" placeholder="Escribe tu respuesta aquí..." />
+    <input type="text" id="user-input" placeholder="Escribe tu respuesta aquí...">
     <button id="send-button">Enviar</button>
 </div>
 
@@ -230,15 +238,27 @@ document.addEventListener("DOMContentLoaded", () => {
         await showButtons(texts[lang].buttons);
     }
 
-    document.getElementById("lang-switch").addEventListener("change", (e) => {
-        lang = e.target.value;
-        // solo actualizar texto de botones existentes y mensajes futuros
-        chatContainer.querySelectorAll(".bot-button").forEach((btn, idx) => {
-            const currentButtons = texts[lang].buttons;
-            if (currentButtons[idx]) btn.innerText = currentButtons[idx].text;
-        });
-    });
+    function updateLanguage() {
+        const oldLang = lang;
+        lang = document.getElementById("lang-switch").value;
 
+        // actualizar mensajes existentes
+        const messages = chatContainer.querySelectorAll(".bot-message .bubble");
+        messages.forEach((bubble, idx) => {
+            if (idx === 0) bubble.innerText = texts[lang].greeting;
+        });
+
+        // actualizar botones existentes
+        const buttonContainers = chatContainer.querySelectorAll(".buttons-container");
+        buttonContainers.forEach((container, idx) => {
+            const buttonsArray = idx === 0 ? texts[lang].buttons : texts[lang].cases;
+            container.querySelectorAll(".bot-button").forEach((btn, bIdx) => {
+                if (buttonsArray[bIdx]) btn.innerText = buttonsArray[bIdx].text;
+            });
+        });
+    }
+
+    document.getElementById("lang-switch").addEventListener("change", updateLanguage);
     document.getElementById("restart").addEventListener("click", initChat);
 
     initChat();
@@ -247,5 +267,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
-
-
