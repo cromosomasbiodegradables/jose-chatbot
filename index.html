@@ -254,61 +254,50 @@
       chatContainer.appendChild(buttonsContainer);
 
       const options = [
-        { text: currentLanguage === "es" ? "🎨 Casos de estudio" : "🎨 Case studies", action: () => showCaseButtons() },
+        { text: currentLanguage === "es" ? "🎨 Casos de estudio" : "🎨 Case studies", action: () => alert("Aquí mostrarías los casos") },
         { text: currentLanguage === "es" ? "👤 Sobre mí" : "👤 About me", url: "https://uxfol.io/p/josecarlos-design/about" },
         { text: currentLanguage === "es" ? "📄 Descargar CV" : "📄 Download CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
         { text: currentLanguage === "es" ? "✉️ Contacto" : "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
         { text: currentLanguage === "es" ? "📝 Blog" : "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
       ];
 
-               options.forEach((item, index) => {
-          setTimeout(() => {
-            const button = document.createElement("button");
-            button.className = "bot-button";
-            button.innerText = item.text;
+      options.forEach((item, index) => {
+        setTimeout(() => {
+          const button = document.createElement("button");
+          button.className = "bot-button";
+          button.innerText = item.text;
 
-            if (item.url) {
-              button.onclick = () => window.open(item.url, "_blank");
-            } else if (item.action) {
-              button.onclick = item.action;
-            }
+          if (item.url) {
+            button.onclick = () => window.open(item.url, "_blank");
+          } else if (item.action) {
+            button.onclick = item.action;
+          }
 
-            buttonsContainer.appendChild(button);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-          }, 1000 + index * 400);
-        });
-
-        // Mensaje inicial + animación de botones traducido
-        const greeting = currentLanguage === "es"
-          ? "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?"
-          : "👋 Hi! I'm Jose Carlos' assistant, senior UX/UI designer. What would you like to focus on today?";
-        addMessage("bot", greeting);
-        showOptionsAnimated();
+          buttonsContainer.appendChild(button);
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }, 1000 + index * 400);
       });
+    }
 
-      // Reiniciar conversación
-      restartButton.addEventListener("click", () => {
-        chatContainer.innerHTML = "";
-        const greeting = currentLanguage === "es"
-          ? "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?"
-          : "👋 Hi! I'm Jose Carlos' assistant, senior UX/UI designer. What would you like to focus on today?";
-        addMessage("bot", greeting);
-        showOptionsAnimated();
-      });
+    function startChat() {
+      chatContainer.innerHTML = "";
+      const greeting = currentLanguage === "es"
+        ? "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?"
+        : "👋 Hi! I'm Jose Carlos' assistant, senior UX/UI designer. What would you like to focus on today?";
+      addMessage("bot", greeting);
+      showOptionsAnimated();
+    }
 
-      // Cambiar idioma
-      languageToggle.addEventListener("click", () => {
-        languageToggle.classList.toggle("active");
-        currentLanguage = currentLanguage === "es" ? "en" : "es";
-        chatContainer.innerHTML = "";
-        const greeting = currentLanguage === "es"
-          ? "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?"
-          : "👋 Hi! I'm Jose Carlos' assistant, senior UX/UI designer. What would you like to focus on today?";
-        addMessage("bot", greeting);
-        showOptionsAnimated();
-      });
+    restartButton.addEventListener("click", startChat);
+
+    languageToggle.addEventListener("click", () => {
+      languageToggle.classList.toggle("active");
+      currentLanguage = currentLanguage === "es" ? "en" : "es";
+      startChat();
+    });
+
+    // Iniciar chatbot al cargar
+    startChat();
   </script>
 </body>
 </html>
-
-
