@@ -62,9 +62,9 @@
 <body>
 
   <div id="header">
-    <h1>Chatbot</h1>
+    <h1 id="header-title">Chatbot</h1>
     <div id="header-controls">
-      <button id="restart-button">Volver a empezar</button>
+      <button id="restart-button" data-key="restart">Volver a empezar</button>
       <div id="language-switch">
         ES / EN
         <div id="language-toggle"></div>
@@ -75,20 +75,68 @@
   <div id="chat-container"></div>
 
   <div id="input-area">
-    <input type="text" id="user-input" placeholder="Escribe tu respuesta aquí..." />
-    <button id="send-button">Enviar</button>
+    <input type="text" id="user-input" placeholder="Escribe tu respuesta aquí..." data-key="placeholder"/>
+    <button id="send-button" data-key="send">Enviar</button>
   </div>
 
   <script>
+    const texts = {
+      es: {
+        greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
+        options: [
+          "🎨 Casos de estudio",
+          "👤 Sobre mí",
+          "📄 Descargar CV",
+          "✉️ Contacto",
+          "📝 Blog"
+        ],
+        casesIntro: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
+        cases: [
+          "🧪 Caso 1: Rediseño de app médica",
+          "🛍️ Caso 2: Optimización UX para e-commerce",
+          "📱 Caso 3: Diseño de app de bienestar",
+          "🌍 Caso 4: Plataforma educativa inclusiva",
+          "🔍 Ver todos los casos juntos"
+        ],
+        restart: "Volver a empezar",
+        placeholder: "Escribe tu respuesta aquí...",
+        send: "Enviar"
+      },
+      en: {
+        greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
+        options: [
+          "🎨 Case studies",
+          "👤 About me",
+          "📄 Download CV",
+          "✉️ Contact",
+          "📝 Blog"
+        ],
+        casesIntro: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
+        cases: [
+          "🧪 Case 1: Medical app redesign",
+          "🛍️ Case 2: UX optimization for e-commerce",
+          "📱 Case 3: Wellness app design",
+          "🌍 Case 4: Inclusive educational platform",
+          "🔍 View all cases"
+        ],
+        restart: "Restart",
+        placeholder: "Type your response here...",
+        send: "Send"
+      }
+    };
+
     const chatContainer = document.getElementById("chat-container");
     const restartButton = document.getElementById("restart-button");
     const languageToggle = document.getElementById("language-toggle");
+    const userInput = document.getElementById("user-input");
+    const sendButton = document.getElementById("send-button");
 
     let currentLanguage = "es";
 
-    function addMessage(sender, text) {
+    function addMessage(sender, text, key = null) {
       const message = document.createElement("div");
       message.className = sender === "bot" ? "bot-message" : "user-message";
+      if (key) message.dataset.key = key;
 
       const avatar = document.createElement("img");
       avatar.src = sender === "bot"
@@ -111,22 +159,24 @@
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
-      const options = [
-        { text: currentLanguage === "es" ? "🎨 Casos de estudio" : "🎨 Case studies", action: () => showCaseButtons() },
-        { text: currentLanguage === "es" ? "👤 Sobre mí" : "👤 About me", url: "https://uxfol.io/p/josecarlos-design/about" },
-        { text: currentLanguage === "es" ? "📄 Descargar CV" : "📄 Download CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
-        { text: currentLanguage === "es" ? "✉️ Contacto" : "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
-        { text: currentLanguage === "es" ? "📝 Blog" : "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
-      ];
-
-      options.forEach((item, index) => {
+      texts[currentLanguage].options.forEach((text, index) => {
         setTimeout(() => {
           const button = document.createElement("button");
           button.className = "bot-button";
-          button.innerText = item.text;
+          button.innerText = text;
+          button.dataset.key = "option-" + index;
 
-          if (item.url) button.onclick = () => window.open(item.url, "_blank");
-          else if (item.action) button.onclick = item.action;
+          if (index === 0) button.onclick = () => showCaseButtons();
+          else {
+            const urls = [
+              null,
+              "https://uxfol.io/p/josecarlos-design/about",
+              "https://uxfol.io/p/josecarlos-design/cv",
+              "https://uxfol.io/p/josecarlos-design/contact",
+              "https://uxfol.io/p/josecarlos-design/blog"
+            ];
+            if (urls[index]) button.onclick = () => window.open(urls[index], "_blank");
+          }
 
           buttonsContainer.appendChild(button);
           chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -135,46 +185,56 @@
     }
 
     function showCaseButtons() {
-      addMessage("bot", currentLanguage === "es" 
-        ? "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?" 
-        : "Here are some projects where I solved real problems with user-centered design. Which one interests you?");
+      addMessage("bot", texts[currentLanguage].casesIntro, "casesIntro");
 
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
-      const cases = [
-        { text: currentLanguage === "es" ? "🧪 Caso 1: Rediseño de app médica" : "🧪 Case 1: Medical app redesign", url: "https://uxfol.io/p/josecarlos-design/caso1" },
-        { text: currentLanguage === "es" ? "🛍️ Caso 2: Optimización UX para e-commerce" : "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
-        { text: currentLanguage === "es" ? "📱 Caso 3: Diseño de app de bienestar" : "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
-        { text: currentLanguage === "es" ? "🌍 Caso 4: Plataforma educativa inclusiva" : "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
-        { text: currentLanguage === "es" ? "🔍 Ver todos los casos juntos" : "🔍 View all cases", url: "https://uxfol.io/p/josecarlos-design" }
-      ];
-
-      cases.forEach((item, index) => {
+      texts[currentLanguage].cases.forEach((text, index) => {
         setTimeout(() => {
           const button = document.createElement("button");
           button.className = "bot-button";
-          button.innerText = item.text;
-          button.onclick = () => window.open(item.url, "_blank");
+          button.innerText = text;
+          button.dataset.key = "case-" + index;
+          button.onclick = () => window.open("https://uxfol.io/p/josecarlos-design", "_blank");
           buttonsContainer.appendChild(button);
           chatContainer.scrollTop = chatContainer.scrollHeight;
         }, 1000 + index * 400);
       });
     }
 
+    function translateUI() {
+      restartButton.innerText = texts[currentLanguage].restart;
+      userInput.placeholder = texts[currentLanguage].placeholder;
+      sendButton.innerText = texts[currentLanguage].send;
+
+      // Mensajes del bot con data-key
+      document.querySelectorAll("[data-key]").forEach(el => {
+        const key = el.dataset.key;
+        if (key.startsWith("option-")) {
+          const idx = key.split("-")[1];
+          el.innerText = texts[currentLanguage].options[idx];
+        } else if (key.startsWith("case-")) {
+          const idx = key.split("-")[1];
+          el.innerText = texts[currentLanguage].cases[idx];
+        } else if (texts[currentLanguage][key]) {
+          el.innerText = texts[currentLanguage][key];
+        }
+      });
+    }
+
     // Inicializar chatbot
-    addMessage("bot", currentLanguage === "es" 
-      ? "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?" 
-      : "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?");
+    addMessage("bot", texts[currentLanguage].greeting, "greeting");
     showOptionsAnimated();
 
     restartButton.onclick = () => location.reload();
     languageToggle.onclick = () => {
       languageToggle.classList.toggle("active");
       currentLanguage = currentLanguage === "es" ? "en" : "es";
-      location.reload();
+      translateUI();
     };
   </script>
 </body>
 </html>
+
