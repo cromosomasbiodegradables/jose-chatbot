@@ -12,7 +12,6 @@
       padding: 0;
     }
 
-    /* Encabezado */
     #header {
       display: flex;
       justify-content: space-between;
@@ -223,92 +222,93 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const chatContainer = document.getElementById("chat-container");
-      const restartButton = document.getElementById("restart-button");
-      const languageToggle = document.getElementById("language-toggle");
+    const chatContainer = document.getElementById("chat-container");
+    const restartButton = document.getElementById("restart-button");
+    const languageToggle = document.getElementById("language-toggle");
 
-      function addMessage(sender, text) {
-        const message = document.createElement("div");
-        message.className = sender === "bot" ? "bot-message" : "user-message";
+    let currentLanguage = "es";
 
-        const avatar = document.createElement("img");
-        avatar.src = sender === "bot"
-          ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png"
-          : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
-        avatar.className = "avatar";
+    function addMessage(sender, text) {
+      const message = document.createElement("div");
+      message.className = sender === "bot" ? "bot-message" : "user-message";
 
-        const bubble = document.createElement("div");
-        bubble.className = "bubble";
-        bubble.innerText = text;
+      const avatar = document.createElement("img");
+      avatar.src = sender === "bot"
+        ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png"
+        : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
+      avatar.className = "avatar";
 
-        message.appendChild(avatar);
-        message.appendChild(bubble);
-        chatContainer.appendChild(message);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-      }
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.innerText = text;
 
-      function showOptionsAnimated() {
-        const buttonsContainer = document.createElement("div");
-        buttonsContainer.className = "buttons-container";
-        chatContainer.appendChild(buttonsContainer);
+      message.appendChild(avatar);
+      message.appendChild(bubble);
+      chatContainer.appendChild(message);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
 
-        const options = [
-          { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
-          { text: "👤 Sobre mí", url: "https://uxfol.io/p/josecarlos-design/about" },
-          { text: "📄 Descargar CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
-          { text: "✉️ Contacto", url: "https://uxfol.io/p/josecarlos-design/contact" },
-          { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
-        ];
+    function showOptionsAnimated() {
+      const buttonsContainer = document.createElement("div");
+      buttonsContainer.className = "buttons-container";
+      chatContainer.appendChild(buttonsContainer);
 
-        options.forEach((item, index) => {
+      const options = [
+        { text: currentLanguage === "es" ? "🎨 Casos de estudio" : "🎨 Case studies", action: () => showCaseButtons() },
+        { text: currentLanguage === "es" ? "👤 Sobre mí" : "👤 About me", url: "https://uxfol.io/p/josecarlos-design/about" },
+        { text: currentLanguage === "es" ? "📄 Descargar CV" : "📄 Download CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
+        { text: currentLanguage === "es" ? "✉️ Contacto" : "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
+        { text: currentLanguage === "es" ? "📝 Blog" : "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
+      ];
+
+               options.forEach((item, index) => {
           setTimeout(() => {
             const button = document.createElement("button");
             button.className = "bot-button";
             button.innerText = item.text;
+
             if (item.url) {
               button.onclick = () => window.open(item.url, "_blank");
             } else if (item.action) {
               button.onclick = item.action;
             }
+
             buttonsContainer.appendChild(button);
             chatContainer.scrollTop = chatContainer.scrollHeight;
           }, 1000 + index * 400);
         });
-      }
 
-      function showCaseButtons() {
-        addMessage("bot", "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?");
+        // Mensaje inicial + animación de botones traducido
+        const greeting = currentLanguage === "es"
+          ? "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?"
+          : "👋 Hi! I'm Jose Carlos' assistant, senior UX/UI designer. What would you like to focus on today?";
+        addMessage("bot", greeting);
+        showOptionsAnimated();
+      });
 
-        const buttonsContainer = document.createElement("div");
-        buttonsContainer.className = "buttons-container";
-        chatContainer.appendChild(buttonsContainer);
+      // Reiniciar conversación
+      restartButton.addEventListener("click", () => {
+        chatContainer.innerHTML = "";
+        const greeting = currentLanguage === "es"
+          ? "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?"
+          : "👋 Hi! I'm Jose Carlos' assistant, senior UX/UI designer. What would you like to focus on today?";
+        addMessage("bot", greeting);
+        showOptionsAnimated();
+      });
 
-        const cases = [
-          { text: "🧪 Caso 1: Rediseño de app médica", url: "https://uxfol.io/p/josecarlos-design/caso1" },
-          { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
-          { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
-          { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
-          { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/josecarlos-design" }
-        ];
-
-        cases.forEach((item, index) => {
-          setTimeout(() => {
-            const button = document.createElement("button");
-            button.className = "bot-button";
-            button.innerText = item.text;
-            button.onclick = () => window.open(item.url, "_blank");
-            buttonsContainer.appendChild(button);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-          }, 1000 + index * 400);
-        });
-      }
-
-      // Mensaje inicial + animación de botones
-      addMessage("bot", "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?");
-      showOptionsAnimated();
-    });
+      // Cambiar idioma
+      languageToggle.addEventListener("click", () => {
+        languageToggle.classList.toggle("active");
+        currentLanguage = currentLanguage === "es" ? "en" : "es";
+        chatContainer.innerHTML = "";
+        const greeting = currentLanguage === "es"
+          ? "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?"
+          : "👋 Hi! I'm Jose Carlos' assistant, senior UX/UI designer. What would you like to focus on today?";
+        addMessage("bot", greeting);
+        showOptionsAnimated();
+      });
   </script>
 </body>
 </html>
+
 
