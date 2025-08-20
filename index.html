@@ -118,29 +118,29 @@ header h1 {
 .language-switch {
     display: flex;
     align-items: center;
-    cursor: pointer;
+    gap: 8px;
+    font-weight: bold;
 }
 .switch {
     position: relative;
     display: inline-block;
     width: 50px;
-    height: 24px;
-    margin-left: 10px;
+    height: 26px;
 }
-.switch input {display:none;}
+.switch input { display: none; }
 .slider {
     position: absolute;
     cursor: pointer;
     top: 0; left: 0; right: 0; bottom: 0;
     background-color: #ccc;
     transition: 0.4s;
-    border-radius: 24px;
+    border-radius: 26px;
 }
 .slider:before {
     position: absolute;
     content: "";
-    height: 18px;
-    width: 18px;
+    height: 20px;
+    width: 20px;
     left: 3px;
     bottom: 3px;
     background-color: white;
@@ -151,7 +151,7 @@ input:checked + .slider {
     background-color: #2196F3;
 }
 input:checked + .slider:before {
-    transform: translateX(26px);
+    transform: translateX(24px);
 }
 
 @keyframes fadeIn {
@@ -165,12 +165,12 @@ input:checked + .slider:before {
 <header>
     <h1>Chatbot</h1>
     <div class="language-switch">
-        ES
+        <span>ES</span>
         <label class="switch">
             <input type="checkbox" id="lang-switch">
             <span class="slider"></span>
         </label>
-        EN
+        <span>EN</span>
         <button id="restart" style="margin-left:15px;">Reiniciar</button>
     </div>
 </header>
@@ -186,6 +186,7 @@ input:checked + .slider:before {
 document.addEventListener("DOMContentLoaded", () => {
     const chatContainer = document.getElementById("chat-container");
     const langSwitch = document.getElementById("lang-switch");
+    const userInput = document.getElementById("user-input");
     let lang = 'es';
 
     const texts = {
@@ -205,7 +206,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
                 { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
                 { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
-            ]
+            ],
+            inputPlaceholder: "Escribe tu respuesta aquí..."
         },
         en: {
             greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
@@ -223,62 +225,73 @@ document.addEventListener("DOMContentLoaded", () => {
                 { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
                 { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
                 { text: "🔍 View all cases", url: "https://uxfol.io/p/josecarlos-design" }
-            ]
+            ],
+            inputPlaceholder: "Type your answer here..."
         }
     };
 
-    function addMessage(sender, text) {
-        return new Promise(resolve => {
-            const message = document.createElement("div");
-            message.className = sender === "bot" ? "bot-message" : "user-message";
-            const avatar = document.createElement("img");
-            avatar.src = sender === "bot" 
-                ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png" 
-                : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
-            avatar.className = "avatar";
-            const bubble = document.createElement("div");
-            bubble.className = "bubble";
-            bubble.innerText = text;
-            message.appendChild(avatar);
-            message.appendChild(bubble);
-            chatContainer.appendChild(message);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+    function scrollToBottom() {
+        chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+    }
 
-            setTimeout(() => resolve(message), 300);
-        });
+    async function addMessage(sender, text, bubbleEl=null) {
+        const message = document.createElement("div");
+        message.className = sender === "bot" ? "bot-message" : "user-message";
+        const avatar = document.createElement("img");
+        avatar.src = sender === "bot" 
+            ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png" 
+            : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
+        avatar.className = "avatar";
+        const bubble = bubbleEl || document.createElement("div");
+        bubble.className = "bubble";
+        bubble.innerText = text;
+        message.appendChild(avatar);
+        message.appendChild(bubble);
+        chatContainer.appendChild(message);
+        scrollToBottom();
+        return new Promise(res => setTimeout(res, 300));
     }
 
     async function showButtons(buttonsArray) {
         const buttonsContainer = document.createElement("div");
         buttonsContainer.className = "buttons-container";
         chatContainer.appendChild(buttonsContainer);
+        scrollToBottom();
 
         for (let item of buttonsArray) {
-            await new Promise(res => setTimeout(res, 400));
+            await new Promise(r => setTimeout(r, 200));
             const button = document.createElement("button");
             button.className = "bot-button";
             button.innerText = item.text;
             if(item.url) button.onclick = () => window.open(item.url, "_blank");
             if(item.action === "showCases") button.onclick = () => showCases();
             buttonsContainer.appendChild(button);
+            scrollToBottom();
         }
-        chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
     async function showCases() {
         await addMessage("bot", texts[lang].casesIntro);
-        showButtons(texts[lang].cases);
+        await showButtons(texts[lang].cases);
     }
 
     async function startChat() {
         chatContainer.innerHTML = "";
         await addMessage("bot", texts[lang].greeting);
-        showButtons(texts[lang].buttons);
+        await showButtons(texts[lang].buttons);
     }
 
     langSwitch.addEventListener("change", () => {
         lang = langSwitch.checked ? 'en' : 'es';
-        startChat();
+        // actualizar textos visibles sin reiniciar la conversación
+        document.getElementById("user-input").placeholder = texts[lang].inputPlaceholder;
+        // actualizar botones existentes
+        document.querySelectorAll(".buttons-container").forEach(container => {
+            container.querySelectorAll(".bot-button").forEach((btn, idx) => {
+                const textKey = container === chatContainer.lastElementChild && texts[lang].buttons[idx] ? texts[lang].buttons[idx].text : texts[lang].cases[idx].text;
+                if(textKey) btn.innerText = textKey;
+            });
+        });
     });
 
     document.getElementById("restart").addEventListener("click", startChat);
@@ -289,4 +302,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
