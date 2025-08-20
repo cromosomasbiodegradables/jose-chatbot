@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chatbot de Jose</title>
   <style>
+    /* Evita que la PÁGINA haga scroll suave: solo lo hará el contenedor del chat */
+    html, body { scroll-behavior: auto !important; }
+
     body {
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(to right, #eef2f3, #d9e4ff);
@@ -89,7 +92,7 @@
       display: flex;
       flex-direction: column;
       overscroll-behavior: contain;   /* evita que burbujee al body */
-      scroll-behavior: smooth;        /* desplazamiento suave SOLO dentro del contenedor */
+      scroll-behavior: auto;          /* gestionamos el suave por JS, no por CSS */
     }
     .bot-message, .user-message {
       display: flex;
@@ -180,7 +183,7 @@
       .bot-button { font-size: 13px; padding: 9px 12px; }
       #chat-container {
         padding: 15px;
-        height: 70vh;        /* scroll siempre interno en móviles */
+        height: 70vh;
       }
     }
 
@@ -264,33 +267,27 @@
 
     let currentLanguage = "es";
 
-    // --- Scroll suave SOLO dentro del contenedor del chat ---
+    // Scroll suave SOLO dentro del contenedor del chat (animación manual)
     function scrollToBottom() {
-      const doScroll = () => {
-        const target = chatContainer.scrollHeight;
-        // intento nativo con smooth (si el navegador lo soporta para elementos)
-        try {
-          chatContainer.scrollTo({ top: target, behavior: "smooth" });
-        } catch (e) {
-          // fallback: animación manual
-          const start = chatContainer.scrollTop;
-          const change = target - start;
-          const duration = 300;
-          const startTime = performance.now();
-          function animate(now) {
-            const t = Math.min(1, (now - startTime) / duration);
-            // easeInOutQuad
-            const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-            chatContainer.scrollTop = start + change * eased;
-            if (t < 1) requestAnimationFrame(animate);
-          }
-          requestAnimationFrame(animate);
-        }
-      };
-      // Asegura que el DOM haya pintado antes de calcular alturas
-      requestAnimationFrame(doScroll);
-      // Segunda pasada por si hay imágenes/iconos que tardan un frame extra
-      setTimeout(doScroll, 0);
+      const target = chatContainer.scrollHeight - chatContainer.clientHeight;
+      const start = chatContainer.scrollTop;
+      const distance = target - start;
+
+      if (Math.abs(distance) < 1) return;
+
+      const duration = 350;
+      let startTime = null;
+
+      function step(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const t = Math.min(1, (timestamp - startTime) / duration);
+        const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; // easeInOutQuad
+        chatContainer.scrollTop = start + distance * eased;
+        if (t < 1) requestAnimationFrame(step);
+      }
+
+      // Espera a que el DOM pinte el nuevo nodo antes de animar
+      requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(step)));
     }
 
     function addMessage(sender, text, key) {
@@ -403,3 +400,5 @@
   </script>
 </body>
 </html>
+
+
