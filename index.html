@@ -12,9 +12,12 @@
       padding: 0;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      height: 100vh;              /* 🔹 ocupa toda la pantalla */
+      overflow: hidden;           /* 🔹 sin scroll en body */
     }
+
     #header {
+      flex: 0 0 auto;             /* 🔹 fijo arriba */
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -75,24 +78,50 @@
       transform: translateX(14px);
     }
 
+    /* 🔹 El contenedor de mensajes es el ÚNICO que scrollea */
     #chat-container {
-      flex: 1;
+      flex: 1 1 auto;
       width: 100%;
       max-width: 600px;
-      margin: 20px auto;
+      margin: 0 auto;
       background-color: #ffffff;
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      overflow-y: auto;               /* scroll dentro del contenedor */
-      height: 400px;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
-      overscroll-behavior: contain;   /* evita que burbujee al body */
-      scroll-behavior: smooth;        /* 🔹 scroll suave dentro del contenedor */
-      -webkit-overflow-scrolling: touch; /* 🔹 inercia iOS */
-      touch-action: pan-y;            /* 🔹 asegura gesto vertical en touch */
+      overscroll-behavior: contain;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
     }
+
+    #input-area {
+      flex: 0 0 auto;             /* 🔹 fijo abajo */
+      display: flex;
+      justify-content: center;
+      padding: 12px;
+      background: #fff;
+      border-top: 1px solid #ddd;
+    }
+    #user-input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    #send-button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
     .bot-message, .user-message {
       display: flex;
       align-items: flex-start;
@@ -128,31 +157,6 @@
       text-align: right;
     }
 
-    #input-area {
-      display: flex;
-      justify-content: center;
-      margin: 20px auto;
-      max-width: 600px;
-      width: 100%;
-    }
-    #user-input {
-      flex: 1;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    #send-button {
-      padding: 10px 20px;
-      margin-left: 10px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
     .buttons-container {
       display: flex;
       flex-direction: column;
@@ -180,10 +184,6 @@
 
     @media screen and (max-width: 480px) {
       .bot-button { font-size: 13px; padding: 9px 12px; }
-      #chat-container {
-        padding: 15px;
-        height: 70vh;
-      }
     }
 
     @keyframes fadeIn {
@@ -213,174 +213,22 @@
   </div>
 
   <script>
+    // ... JS igual que ya lo tienes, no hay que tocar nada en scrollToBottom()
     const texts = {
-      es: {
-        greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
-        casesIntro: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
-        options: [
-          { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
-          { text: "👤 Sobre mí", url: "https://uxfol.io/p/josecarlos-design/about" },
-          { text: "📄 Descargar CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
-          { text: "✉️ Contacto", url: "https://uxfol.io/p/josecarlos-design/contact" },
-          { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
-        ],
-        cases: [
-          { text: "🧪 Caso 1: Rediseño de app médica", url: "https://uxfol.io/p/josecarlos-design/caso1" },
-          { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
-          { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
-          { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
-          { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/josecarlos-design" }
-        ],
-        restart: "Volver a empezar",
-        placeholder: "Escribe tu respuesta aquí...",
-        send: "Enviar"
-      },
-      en: {
-        greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
-        casesIntro: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
-        options: [
-          { text: "🎨 Case studies", action: () => showCaseButtons() },
-          { text: "👤 About me", url: "https://uxfol.io/p/josecarlos-design/about" },
-          { text: "📄 Download CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
-          { text: "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
-          { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
-        ],
-        cases: [
-          { text: "🧪 Case 1: Medical app redesign", url: "https://uxfol.io/p/josecarlos-design/caso1" },
-          { text: "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
-          { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
-          { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
-          { text: "🔍 View all cases together", url: "https://uxfol.io/josecarlos-design" }
-        ],
-        restart: "Restart",
-        placeholder: "Type your response here...",
-        send: "Send"
-      }
+      es: { greeting:"👋 ¡Hola! Soy el asistente de Jose Carlos...", options:[ /* ... */ ] },
+      en: { greeting:"👋 Hi! I'm Jose Carlos's assistant...", options:[ /* ... */ ] }
     };
 
     const chatContainer = document.getElementById("chat-container");
-    const restartButton = document.getElementById("restart-button");
-    const userInput = document.getElementById("user-input");
-    const sendButton = document.getElementById("send-button");
-    const languageToggle = document.getElementById("language-toggle");
-
-    let currentLanguage = "es";
 
     function scrollToBottom() {
-      // Scroll suave SOLO dentro del contenedor del chat
       chatContainer.scrollTo({
         top: chatContainer.scrollHeight,
         behavior: "smooth"
       });
     }
 
-    function addMessage(sender, text, key) {
-      const message = document.createElement("div");
-      message.className = sender === "bot" ? "bot-message" : "user-message";
-      if (key) message.dataset.key = key;
-
-      const avatar = document.createElement("img");
-      avatar.src = sender === "bot"
-        ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png"
-        : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
-      avatar.className = "avatar";
-
-      const bubble = document.createElement("div");
-      bubble.className = "bubble";
-      bubble.innerText = text;
-
-      message.appendChild(avatar);
-      message.appendChild(bubble);
-      chatContainer.appendChild(message);
-      scrollToBottom();
-    }
-
-    function showOptions() {
-      const buttonsContainer = document.createElement("div");
-      buttonsContainer.className = "buttons-container";
-      chatContainer.appendChild(buttonsContainer);
-
-      texts[currentLanguage].options.forEach((item, index) => {
-        setTimeout(() => {
-          const button = document.createElement("button");
-          button.className = "bot-button";
-          button.dataset.key = `option-${index}`;
-          button.innerText = texts[currentLanguage].options[index].text;
-          if (item.url) {
-            button.onclick = () => window.open(item.url, "_blank");
-          } else if (item.action) {
-            button.onclick = item.action;
-          }
-          buttonsContainer.appendChild(button);
-          scrollToBottom();
-        }, 800 + index * 400);
-      });
-    }
-
-    function showCaseButtons() {
-      addMessage("bot", texts[currentLanguage].casesIntro, "casesIntro");
-      const buttonsContainer = document.createElement("div");
-      buttonsContainer.className = "buttons-container";
-      chatContainer.appendChild(buttonsContainer);
-
-      texts[currentLanguage].cases.forEach((item, index) => {
-        setTimeout(() => {
-          const button = document.createElement("button");
-          button.className = "bot-button";
-          button.dataset.key = `case-${index}`;
-          button.innerText = texts[currentLanguage].cases[index].text;
-          button.onclick = () => window.open(item.url, "_blank");
-          buttonsContainer.appendChild(button);
-          scrollToBottom();
-        }, 800 + index * 400);
-      });
-    }
-
-    function translateUI() {
-      restartButton.innerText = texts[currentLanguage].restart;
-      userInput.placeholder = texts[currentLanguage].placeholder;
-      sendButton.innerText = texts[currentLanguage].send;
-
-      document.querySelectorAll("[data-key]").forEach(el => {
-        const key = el.dataset.key;
-        if (key && texts[currentLanguage][key]) {
-          const bubble = el.querySelector(".bubble");
-          if (bubble) bubble.innerText = texts[currentLanguage][key];
-        }
-      });
-
-      document.querySelectorAll(".bot-button").forEach(btn => {
-        const key = btn.dataset.key;
-        if (key && key.startsWith("option-")) {
-          const idx = +key.split("-")[1];
-          btn.innerText = texts[currentLanguage].options[idx].text;
-        }
-        if (key && key.startsWith("case-")) {
-          const idx = +key.split("-")[1];
-          btn.innerText = texts[currentLanguage].cases[idx].text;
-        }
-      });
-
-      scrollToBottom();
-    }
-
-    // Inicialización
-    addMessage("bot", texts[currentLanguage].greeting, "greeting");
-    showOptions();
-
-    // Switch idioma
-    languageToggle.onclick = () => {
-      currentLanguage = currentLanguage === "es" ? "en" : "es";
-      languageToggle.classList.toggle("active");
-      translateUI();
-    };
-
-    // Reiniciar
-    restartButton.onclick = () => {
-      chatContainer.innerHTML = "";
-      addMessage("bot", texts[currentLanguage].greeting, "greeting");
-      showOptions();
-    };
+    // resto de tu lógica...
   </script>
 </body>
 </html>
