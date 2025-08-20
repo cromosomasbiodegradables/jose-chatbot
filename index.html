@@ -84,10 +84,12 @@
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      overflow-y: auto;
+      overflow-y: auto;               /* scroll dentro del contenedor */
       height: 400px;
       display: flex;
       flex-direction: column;
+      scroll-behavior: smooth;        /* desplazamiento suave dentro del contenedor */
+      overscroll-behavior: contain;   /* evita que burbujee al body */
     }
     .bot-message, .user-message {
       display: flex;
@@ -176,7 +178,10 @@
 
     @media screen and (max-width: 480px) {
       .bot-button { font-size: 13px; padding: 9px 12px; }
-      #chat-container { padding: 15px; height: auto; }
+      #chat-container {
+        padding: 15px;
+        height: 70vh;        /* <— antes estaba en auto; ahora scroll siempre interno */
+      }
     }
 
     @keyframes fadeIn {
@@ -260,9 +265,9 @@
     let currentLanguage = "es";
 
     function scrollToBottom() {
-      chatContainer.scrollTo({
-        top: chatContainer.scrollHeight,
-        behavior: "smooth"
+      // Scroll SUAVE dentro del contenedor del chat
+      requestAnimationFrame(() => {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
       });
     }
 
@@ -336,7 +341,8 @@
       document.querySelectorAll("[data-key]").forEach(el => {
         const key = el.dataset.key;
         if (key && texts[currentLanguage][key]) {
-          el.querySelector(".bubble").innerText = texts[currentLanguage][key];
+          const bubble = el.querySelector(".bubble");
+          if (bubble) bubble.innerText = texts[currentLanguage][key];
         }
       });
 
@@ -351,6 +357,8 @@
           btn.innerText = texts[currentLanguage].cases[idx].text;
         }
       });
+
+      scrollToBottom();
     }
 
     // Inicialización
@@ -364,6 +372,7 @@
       translateUI();
     };
 
+    // Reiniciar
     restartButton.onclick = () => {
       chatContainer.innerHTML = "";
       addMessage("bot", texts[currentLanguage].greeting, "greeting");
@@ -374,5 +383,7 @@
 </html>
 
 
+
     
+
 
