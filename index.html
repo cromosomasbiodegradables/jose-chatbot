@@ -13,7 +13,6 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      overflow: hidden; /* 🔹 evita que la ventana se desplace */
     }
     #header {
       display: flex;
@@ -85,11 +84,14 @@
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      overflow-y: auto;
+      overflow-y: auto;               /* scroll dentro del contenedor */
       height: 400px;
       display: flex;
       flex-direction: column;
-      overscroll-behavior: contain; /* 🔹 evita que burbujee al body */
+      overscroll-behavior: contain;   /* evita que burbujee al body */
+      scroll-behavior: smooth;        /* 🔹 scroll suave dentro del contenedor */
+      -webkit-overflow-scrolling: touch; /* 🔹 inercia iOS */
+      touch-action: pan-y;            /* 🔹 asegura gesto vertical en touch */
     }
     .bot-message, .user-message {
       display: flex;
@@ -265,6 +267,7 @@
     let currentLanguage = "es";
 
     function scrollToBottom() {
+      // Scroll suave SOLO dentro del contenedor del chat
       chatContainer.scrollTo({
         top: chatContainer.scrollHeight,
         behavior: "smooth"
@@ -378,14 +381,7 @@
       addMessage("bot", texts[currentLanguage].greeting, "greeting");
       showOptions();
     };
-
-    // 🔹 Evitar scroll global fuera del chat
-    chatContainer.addEventListener("wheel", function(event) {
-      this.scrollTop += event.deltaY;
-      event.preventDefault();
-    }, { passive: false });
   </script>
 </body>
 </html>
-
 
