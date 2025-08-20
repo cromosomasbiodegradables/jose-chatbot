@@ -88,7 +88,6 @@
       height: 400px;
       display: flex;
       flex-direction: column;
-      scroll-behavior: smooth;        /* desplazamiento suave dentro del contenedor */
       overscroll-behavior: contain;   /* evita que burbujee al body */
     }
     .bot-message, .user-message {
@@ -180,7 +179,7 @@
       .bot-button { font-size: 13px; padding: 9px 12px; }
       #chat-container {
         padding: 15px;
-        height: 70vh;        /* <— antes estaba en auto; ahora scroll siempre interno */
+        height: 70vh;
       }
     }
 
@@ -265,7 +264,7 @@
     let currentLanguage = "es";
 
     function scrollToBottom() {
-      // Scroll SUAVE dentro del contenedor del chat
+      // Scroll suave dentro del contenedor del chat
       chatContainer.scrollTo({
         top: chatContainer.scrollHeight,
         behavior: "smooth"
