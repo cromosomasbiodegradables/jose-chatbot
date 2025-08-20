@@ -11,17 +11,18 @@ body {
     margin: 0;
     padding: 0;
 }
-#header {
+header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background: #f5f5f5;
-    border-bottom: 1px solid #ddd;
+    background-color: #ffffffcc;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
-#header h1 { margin: 0; font-size: 1.5em; }
-#header button { margin-left: 10px; padding: 6px 12px; font-size: 14px; cursor: pointer; }
-
 #chat-container {
     width: 100%;
     max-width: 600px;
@@ -58,9 +59,29 @@ body {
 .user-message .avatar { margin-left: 10px; margin-right: 0; }
 .user-message .bubble { background-color: #cce5ff; color: #003366; text-align: right; }
 
-#input-area { display: flex; justify-content: center; margin: 20px auto; max-width: 600px; }
-#user-input { flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; }
-#send-button { padding: 10px 20px; margin-left: 10px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; }
+#input-area {
+    display: flex;
+    justify-content: center;
+    margin: 20px auto;
+    max-width: 600px;
+}
+#user-input {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+#send-button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
 
 .buttons-container {
     display: flex;
@@ -89,6 +110,7 @@ body {
     .bot-button { font-size: 13px; padding: 9px 12px; }
     #chat-container { padding: 15px; height: auto; }
 }
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -97,13 +119,16 @@ body {
 </head>
 <body>
 
-<div id="header">
+<header>
     <h1>Chatbot</h1>
     <div>
-        <button id="lang-switch">EN</button>
-        <button id="restart-button">🔄 Volver a empezar</button>
+        <select id="lang-switch">
+            <option value="es">ES</option>
+            <option value="en">EN</option>
+        </select>
+        <button id="restart">Reiniciar</button>
     </div>
-</div>
+</header>
 
 <div id="chat-container"></div>
 
@@ -115,10 +140,7 @@ body {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const chatContainer = document.getElementById("chat-container");
-    const langSwitch = document.getElementById("lang-switch");
-    const restartButton = document.getElementById("restart-button");
-
-    let lang = "es"; // idioma actual
+    let lang = 'es';
 
     const texts = {
         es: {
@@ -140,98 +162,84 @@ document.addEventListener("DOMContentLoaded", () => {
             ]
         },
         en: {
-            greeting: "👋 Hello! I'm Jose Carlos' assistant, senior UX/UI designer. What would you like to focus on today?",
+            greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
             casesIntro: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
             buttons: [
-                { text: "🎨 Case Studies", action: "showCases" },
-                { text: "👤 About Me", url: "https://uxfol.io/p/josecarlos-design/about" },
+                { text: "🎨 Case studies", action: "showCases" },
+                { text: "👤 About me", url: "https://uxfol.io/p/josecarlos-design/about" },
                 { text: "📄 Download CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
                 { text: "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
                 { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
             ],
             cases: [
-                { text: "🧪 Case 1: Medical App Redesign", url: "https://uxfol.io/p/josecarlos-design/caso1" },
-                { text: "🛍️ Case 2: E-commerce UX Optimization", url: "https://uxfol.io/p/josecarlos-design/caso2" },
-                { text: "📱 Case 3: Wellness App Design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
-                { text: "🌍 Case 4: Inclusive Educational Platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
-                { text: "🔍 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
+                { text: "🧪 Case 1: Medical app redesign", url: "https://uxfol.io/p/josecarlos-design/caso1" },
+                { text: "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
+                { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
+                { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
+                { text: "🔍 View all cases", url: "https://uxfol.io/p/josecarlos-design" }
             ]
         }
     };
 
     function addMessage(sender, text) {
-        const message = document.createElement("div");
-        message.className = sender === "bot" ? "bot-message" : "user-message";
-        const avatar = document.createElement("img");
-        avatar.src = sender === "bot" ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png" : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
-        avatar.className = "avatar";
-        const bubble = document.createElement("div");
-        bubble.className = "bubble";
-        bubble.innerText = text;
-        message.appendChild(avatar);
-        message.appendChild(bubble);
-        chatContainer.appendChild(message);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-        return bubble;
+        return new Promise(resolve => {
+            const message = document.createElement("div");
+            message.className = sender === "bot" ? "bot-message" : "user-message";
+            const avatar = document.createElement("img");
+            avatar.src = sender === "bot" 
+                ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png" 
+                : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
+            avatar.className = "avatar";
+            const bubble = document.createElement("div");
+            bubble.className = "bubble";
+            bubble.innerText = text;
+            message.appendChild(avatar);
+            message.appendChild(bubble);
+            chatContainer.appendChild(message);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            setTimeout(() => resolve(message), 300);
+        });
     }
 
-    function showButtons(buttonsArray) {
+    async function showButtons(buttonsArray) {
         const buttonsContainer = document.createElement("div");
         buttonsContainer.className = "buttons-container";
         chatContainer.appendChild(buttonsContainer);
-        buttonsArray.forEach((item, index) => {
-            setTimeout(() => {
-                const button = document.createElement("button");
-                button.className = "bot-button";
-                button.innerText = item.text;
-                if (item.url) {
-                    button.onclick = () => window.open(item.url, "_blank");
-                } else if (item.action === "showCases") {
-                    button.onclick = () => showCaseButtons();
-                }
-                buttonsContainer.appendChild(button);
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }, 400 * index);
-        });
+
+        for (let item of buttonsArray) {
+            await new Promise(res => setTimeout(res, 400));
+            const button = document.createElement("button");
+            button.className = "bot-button";
+            button.innerText = item.text;
+            if (item.url) button.onclick = () => window.open(item.url, "_blank");
+            else if (item.action === "showCases") button.onclick = () => showCaseButtons();
+            buttonsContainer.appendChild(button);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
     }
 
-    function showCaseButtons() {
-        addMessage("bot", texts[lang].casesIntro);
-        showButtons(texts[lang].cases);
+    async function showCaseButtons() {
+        await addMessage("bot", texts[lang].casesIntro);
+        await showButtons(texts[lang].cases);
     }
 
-    function initChat() {
+    async function initChat() {
         chatContainer.innerHTML = "";
-        addMessage("bot", texts[lang].greeting);
-        showButtons(texts[lang].buttons);
+        await addMessage("bot", texts[lang].greeting);
+        await showButtons(texts[lang].buttons);
     }
 
-    langSwitch.addEventListener("click", () => {
-        lang = lang === "es" ? "en" : "es";
-        langSwitch.innerText = lang === "es" ? "EN" : "ES";
-
-        // Cambia los textos existentes en el chat (solo último mensaje de bot y botones)
-        const lastBotBubbles = chatContainer.querySelectorAll(".bot-message .bubble");
-        lastBotBubbles.forEach((bubble, index) => {
-            if (index === lastBotBubbles.length - 1) {
-                // Cambiar texto solo si era la intro de botones
-                bubble.innerText = texts[lang].greeting;
-            }
-        });
-
-        // Cambiar botones existentes
-        const buttonsContainers = chatContainer.querySelectorAll(".buttons-container");
-        buttonsContainers.forEach(container => {
-            container.querySelectorAll(".bot-button").forEach((btn, i) => {
-                const newText = texts[lang].buttons[i] ? texts[lang].buttons[i].text : btn.innerText;
-                btn.innerText = newText;
-            });
+    document.getElementById("lang-switch").addEventListener("change", (e) => {
+        lang = e.target.value;
+        // solo actualizar texto de botones existentes y mensajes futuros
+        chatContainer.querySelectorAll(".bot-button").forEach((btn, idx) => {
+            const currentButtons = texts[lang].buttons;
+            if (currentButtons[idx]) btn.innerText = currentButtons[idx].text;
         });
     });
 
-    restartButton.addEventListener("click", () => {
-        initChat();
-    });
+    document.getElementById("restart").addEventListener("click", initChat);
 
     initChat();
 });
@@ -239,4 +247,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </body>
 </html>
+
 
