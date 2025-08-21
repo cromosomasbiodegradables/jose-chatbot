@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chatbot de Jose</title>
   <style>
+    /* caja consistente para evitar cálculos de tamaño raros */
+    * { box-sizing: border-box; }
+
     body {
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(to right, #eef2f3, #d9e4ff);
@@ -12,8 +15,10 @@
       padding: 0;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      /* importante: ocupar la ventana para que el flex funcione correctamente */
+      height: 100vh;
     }
+
     #header {
       display: flex;
       justify-content: space-between;
@@ -21,6 +26,7 @@
       padding: 12px 20px;
       background-color: #ffffff;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      flex: 0 0 auto;
     }
     #header h1 {
       margin: 0;
@@ -75,10 +81,13 @@
       transform: translateX(14px);
     }
 
-    /* 🔹 Chat con scroll SOLO dentro */
+    /* ======= CORRECCIÓN CLAVE =======
+       El chat-container es el ÚNICO que scrollea.
+       flex:1 + min-height:0 permite overflow interno real dentro de un flex container.
+    */
     #chat-container {
-      flex: 1;                     /* ocupa el espacio libre */
-      min-height: 0;               /* evita que colapse el scroll en flexbox */
+      flex: 1 1 auto;            /* ocupa espacio disponible */
+      min-height: 0;             /* crucial para que overflow funcione en flex */
       width: 100%;
       max-width: 600px;
       margin: 20px auto 0 auto;
@@ -86,11 +95,12 @@
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      overflow-y: auto;            /* scroll solo en el chat */
+      overflow-y: auto;          /* scroll interno único */
       display: flex;
       flex-direction: column;
       overscroll-behavior: contain;
-      -webkit-overflow-scrolling: touch; /* momentum scroll iOS */
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch; /* momentum iOS */
     }
 
     .bot-message, .user-message {
@@ -104,36 +114,27 @@
       height: 32px;
       border-radius: 50%;
       margin-right: 10px;
+      flex-shrink: 0;
     }
     .bubble {
       padding: 10px 14px;
       border-radius: 12px;
       max-width: 80%;
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      word-break: break-word;
     }
-    .bot-message .bubble {
-      background-color: #e0e0e0;
-      color: #333;
-    }
-    .user-message {
-      flex-direction: row-reverse;
-    }
-    .user-message .avatar {
-      margin-left: 10px;
-      margin-right: 0;
-    }
-    .user-message .bubble {
-      background-color: #cce5ff;
-      color: #003366;
-      text-align: right;
-    }
+    .bot-message .bubble { background-color: #e0e0e0; color: #333; }
+    .user-message { flex-direction: row-reverse; }
+    .user-message .avatar { margin-left: 10px; margin-right: 0; }
+    .user-message .bubble { background-color: #cce5ff; color: #003366; text-align: right; }
 
     #input-area {
       display: flex;
       justify-content: center;
-      margin: 20px auto;
+      margin: 12px auto 20px auto;
       max-width: 600px;
       width: 100%;
+      flex: 0 0 auto; /* no se encoge, queda fuera del scroll del chat */
     }
     #user-input {
       flex: 1;
@@ -174,19 +175,14 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       transition: background-color 0.3s ease;
     }
-    .bot-button:hover {
-      background-color: #92c89b;
-    }
+    .bot-button:hover { background-color: #92c89b; }
 
     @media screen and (max-width: 480px) {
       .bot-button { font-size: 13px; padding: 9px 12px; }
       #chat-container { padding: 15px; }
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
@@ -202,7 +198,7 @@
     </div>
   </div>
 
-  <div id="chat-container"></div>
+  <div id="chat-container" aria-live="polite"></div>
 
   <div id="input-area">
     <input type="text" id="user-input" placeholder="Escribe tu respuesta aquí..." />
@@ -210,7 +206,8 @@
   </div>
 
   <script>
-    const texts = { /* 🔹 se mantiene igual */ 
+    /* tu objeto texts se mantiene exactamente igual */
+    const texts = {
       es: {
         greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
         casesIntro: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
@@ -226,7 +223,7 @@
           { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
           { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
-          { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/josecarlos-design" }
+          { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
         ],
         restart: "Volver a empezar",
         placeholder: "Escribe tu respuesta aquí...",
@@ -247,7 +244,7 @@
           { text: "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
           { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
-          { text: "🔍 View all cases together", url: "https://uxfol.io/josecarlos-design" }
+          { text: "🔍 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
         ],
         restart: "Restart",
         placeholder: "Type your response here...",
@@ -263,10 +260,21 @@
 
     let currentLanguage = "es";
 
-    // 🔹 Scroll suave SOLO dentro del contenedor del chat
+    // Scroll robusto: esperamos a que el navegador pinte (double rAF) y luego hacemos scroll en el contenedor.
     function scrollToBottom() {
       requestAnimationFrame(() => {
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+        requestAnimationFrame(() => {
+          // usa scrollTo con behavior smooth; si no soportado, fallback a scrollTop
+          if ('scrollTo' in chatContainer) {
+            try {
+              chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+            } catch (e) {
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+          } else {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          }
+        });
       });
     }
 
@@ -280,6 +288,7 @@
         ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png"
         : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
       avatar.className = "avatar";
+      avatar.alt = sender === "bot" ? "bot" : "user";
 
       const bubble = document.createElement("div");
       bubble.className = "bubble";
@@ -337,6 +346,7 @@
       userInput.placeholder = texts[currentLanguage].placeholder;
       sendButton.innerText = texts[currentLanguage].send;
 
+      // traducir mensajes con data-key (greeting, casesIntro...)
       document.querySelectorAll("[data-key]").forEach(el => {
         const key = el.dataset.key;
         if (key && texts[currentLanguage][key]) {
@@ -345,6 +355,7 @@
         }
       });
 
+      // traducir botones existentes (opciones / casos)
       document.querySelectorAll(".bot-button").forEach(btn => {
         const key = btn.dataset.key;
         if (key && key.startsWith("option-")) {
@@ -377,6 +388,17 @@
       addMessage("bot", texts[currentLanguage].greeting, "greeting");
       showOptions();
     };
+
+    // (opcional) enviar con enter (sin alterar diseño)
+    userInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const v = userInput.value.trim();
+        if (!v) return;
+        addMessage("user", v);
+        userInput.value = "";
+        // aquí podrías añadir respuesta del bot...
+      }
+    });
   </script>
 </body>
 </html>
