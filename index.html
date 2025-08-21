@@ -301,27 +301,28 @@
     }
 
     function showOptions() {
-      const buttonsContainer = document.createElement("div");
-      buttonsContainer.className = "buttons-container";
-      chatContainer.appendChild(buttonsContainer);
+  const buttonsContainer = document.createElement("div");
+  buttonsContainer.className = "buttons-container";
+  chatContainer.appendChild(buttonsContainer);
 
-      texts[currentLanguage].options.forEach((item, index) => {
-        setTimeout(() => {
-          const button = document.createElement("button");
-          button.className = "bot-button";
-          button.dataset.key = `option-${index}`;
-          button.innerText = texts[currentLanguage].options[index].text;
-          if (item.url) {
-            button.onclick = () => window.open(item.url, "_blank");
-          } else if (item.action) {
-            button.onclick = item.action;
-          }
-          buttonsContainer.appendChild(button);
-          scrollToBottom();
-        }, 800 + index * 400);
-      });
-    }
+  texts[currentLanguage].options.forEach((item, index) => {
+    setTimeout(() => {
+      const button = document.createElement("button");
+      button.className = "bot-button";
+      button.dataset.key = `option-${index}`;
+      button.innerText = item.text;
 
+      if (item.action && typeof item.action === "function") {
+        button.onclick = item.action;
+      } else if (item.url) {
+        button.onclick = () => window.open(item.url, "_blank");
+      }
+
+      buttonsContainer.appendChild(button);
+      scrollToBottom();
+    }, 800 + index * 400);
+  });
+}
     function showCaseButtons() {
       addMessage("bot", texts[currentLanguage].casesIntro, "casesIntro");
       const buttonsContainer = document.createElement("div");
@@ -421,6 +422,7 @@
   </script>
 </body>
 </html>
+
 
 
 
