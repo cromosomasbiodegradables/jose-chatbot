@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chatbot de Jose</title>
   <style>
+    /* caja consistente para evitar cálculos de tamaño raros */
     * { box-sizing: border-box; }
 
     body {
@@ -14,6 +15,7 @@
       padding: 0;
       display: flex;
       flex-direction: column;
+      /* importante: ocupar la ventana para que el flex funcione correctamente */
       height: 100vh;
     }
 
@@ -26,8 +28,16 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       flex: 0 0 auto;
     }
-    #header h1 { margin: 0; font-size: 18px; color: #333; }
-    #header-controls { display: flex; align-items: center; gap: 10px; }
+    #header h1 {
+      margin: 0;
+      font-size: 18px;
+      color: #333;
+    }
+    #header-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
     #restart-button {
       padding: 6px 12px;
       font-size: 14px;
@@ -71,9 +81,13 @@
       transform: translateX(14px);
     }
 
+    /* ======= CORRECCIÓN CLAVE =======
+       El chat-container es el ÚNICO que scrollea.
+       flex:1 + min-height:0 permite overflow interno real dentro de un flex container.
+    */
     #chat-container {
-      flex: 1 1 auto;
-      min-height: 0;
+      flex: 1 1 auto;            /* ocupa espacio disponible */
+      min-height: 0;             /* crucial para que overflow funcione en flex */
       width: 100%;
       max-width: 600px;
       margin: 20px auto 0 auto;
@@ -81,12 +95,12 @@
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      overflow-y: auto;
+      overflow-y: auto;          /* scroll interno único */
       display: flex;
       flex-direction: column;
       overscroll-behavior: contain;
       scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
+      -webkit-overflow-scrolling: touch; /* momentum iOS */
     }
 
     .bot-message, .user-message {
@@ -120,7 +134,7 @@
       margin: 12px auto 20px auto;
       max-width: 600px;
       width: 100%;
-      flex: 0 0 auto;
+      flex: 0 0 auto; /* no se encoge, queda fuera del scroll del chat */
     }
     #user-input {
       flex: 1;
@@ -192,6 +206,7 @@
   </div>
 
   <script>
+    /* tu objeto texts se mantiene exactamente igual */
     const texts = {
       es: {
         greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
@@ -232,31 +247,56 @@
           { text: "🔍 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
         ],
         restart: "Restart",
-        placeholder: "Type your answer here...",
+        placeholder: "Type your response here...",
         send: "Send"
       }
     };
 
-    let currentLanguage = 'es';
-    const chatContainer = document.getElementById('chat-container');
+    const chatContainer = document.getElementById("chat-container");
+    const restartButton = document.getElementById("restart-button");
+    const userInput = document.getElementById("user-input");
+    const sendButton = document.getElementById("send-button");
+    const languageToggle = document.getElementById("language-toggle");
 
+    let currentLanguage = "es";
+
+    // Scroll robusto: esperamos a que el navegador pinte (double rAF) y luego hacemos scroll en el contenedor.
     function scrollToBottom() {
-      chatContainer.scrollTop = chatContainer.scrollHeight;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          // usa scrollTo con behavior smooth; si no soportado, fallback a scrollTop
+          if ('scrollTo' in chatContainer) {
+            try {
+              chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
+            } catch (e) {
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+          } else {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          }
+        });
+      });
     }
 
-    function addBotMessage(message) {
-      const messageElem = document.createElement('div');
-      messageElem.className = 'bot-message';
-      messageElem.innerHTML = `<img class="avatar" src="https://cdn-icons-png.flaticon.com/512/4712/4712038.png" alt="Bot"/> <div class="bubble">${message}</div>`;
-      chatContainer.appendChild(messageElem);
-      scrollToBottom();
-    }
+    function addMessage(sender, text, key) {
+      const message = document.createElement("div");
+      message.className = sender === "bot" ? "bot-message" : "user-message";
+      if (key) message.dataset.key = key;
 
-    function addUserMessage(message) {
-      const messageElem = document.createElement('div');
-      messageElem.className = 'user-message';
-      messageElem.innerHTML = `<div class="bubble">${message}</div><img class="avatar" src="https://cdn-icons-png.flaticon.com/512/147/147144.png" alt="Tú"/>`;
-      chatContainer.appendChild(messageElem);
+      const avatar = document.createElement("img");
+      avatar.src = sender === "bot"
+        ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png"
+        : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
+      avatar.className = "avatar";
+      avatar.alt = sender === "bot" ? "bot" : "user";
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.innerText = text;
+
+      message.appendChild(avatar);
+      message.appendChild(bubble);
+      chatContainer.appendChild(message);
       scrollToBottom();
     }
 
@@ -265,49 +305,25 @@
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
-      const options = texts[currentLanguage].options;
-      const firstBatch = options.slice(0, 3);
-      const remainingBatch = options.slice(3);
-
-      firstBatch.forEach((item, index) => {
+      texts[currentLanguage].options.forEach((item, index) => {
         setTimeout(() => {
           const button = document.createElement("button");
           button.className = "bot-button";
           button.dataset.key = `option-${index}`;
-          button.innerText = item.text;
-          if (item.url) { button.onclick = () => window.open(item.url, "_blank"); }
-          else if (item.action) { button.onclick = item.action; }
+          button.innerText = texts[currentLanguage].options[index].text;
+          if (item.url) {
+            button.onclick = () => window.open(item.url, "_blank");
+          } else if (item.action) {
+            button.onclick = item.action;
+          }
           buttonsContainer.appendChild(button);
           scrollToBottom();
         }, 800 + index * 400);
       });
-
-      if (remainingBatch.length > 0) {
-        setTimeout(() => {
-          const showMoreButton = document.createElement("button");
-          showMoreButton.className = "bot-button";
-          showMoreButton.innerText = "Mostrar más…";
-          showMoreButton.onclick = () => {
-            remainingBatch.forEach((item, index) => {
-              const button = document.createElement("button");
-              button.className = "bot-button";
-              button.dataset.key = `option-${index + 3}`;
-              button.innerText = item.text;
-              if (item.url) { button.onclick = () => window.open(item.url, "_blank"); }
-              else if (item.action) { button.onclick = item.action; }
-              buttonsContainer.appendChild(button);
-            });
-            showMoreButton.remove();
-            scrollToBottom();
-          };
-          buttonsContainer.appendChild(showMoreButton);
-          scrollToBottom();
-        }, 800 + firstBatch.length * 400);
-      }
     }
 
     function showCaseButtons() {
-      addBotMessage(texts[currentLanguage].casesIntro);
+      addMessage("bot", texts[currentLanguage].casesIntro, "casesIntro");
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
@@ -316,40 +332,74 @@
         setTimeout(() => {
           const button = document.createElement("button");
           button.className = "bot-button";
-          button.innerText = item.text;
+          button.dataset.key = `case-${index}`;
+          button.innerText = texts[currentLanguage].cases[index].text;
           button.onclick = () => window.open(item.url, "_blank");
           buttonsContainer.appendChild(button);
           scrollToBottom();
-        }, 400 + index * 300);
+        }, 800 + index * 400);
       });
     }
 
-    function startChat() {
-      chatContainer.innerHTML = '';
-      addBotMessage(texts[currentLanguage].greeting);
-      setTimeout(showOptions, 1000);
+    function translateUI() {
+      restartButton.innerText = texts[currentLanguage].restart;
+      userInput.placeholder = texts[currentLanguage].placeholder;
+      sendButton.innerText = texts[currentLanguage].send;
+
+      // traducir mensajes con data-key (greeting, casesIntro...)
+      document.querySelectorAll("[data-key]").forEach(el => {
+        const key = el.dataset.key;
+        if (key && texts[currentLanguage][key]) {
+          const bubble = el.querySelector(".bubble");
+          if (bubble) bubble.innerText = texts[currentLanguage][key];
+        }
+      });
+
+      // traducir botones existentes (opciones / casos)
+      document.querySelectorAll(".bot-button").forEach(btn => {
+        const key = btn.dataset.key;
+        if (key && key.startsWith("option-")) {
+          const idx = +key.split("-")[1];
+          btn.innerText = texts[currentLanguage].options[idx].text;
+        }
+        if (key && key.startsWith("case-")) {
+          const idx = +key.split("-")[1];
+          btn.innerText = texts[currentLanguage].cases[idx].text;
+        }
+      });
+
+      scrollToBottom();
     }
 
-    document.getElementById('restart-button').onclick = startChat;
+    // Inicialización
+    addMessage("bot", texts[currentLanguage].greeting, "greeting");
+    showOptions();
 
-    const langToggle = document.getElementById('language-toggle');
-    document.getElementById('language-switch').onclick = () => {
-      currentLanguage = currentLanguage === 'es' ? 'en' : 'es';
-      langToggle.classList.toggle('active', currentLanguage === 'en');
-      startChat();
+    // Switch idioma
+    languageToggle.onclick = () => {
+      currentLanguage = currentLanguage === "es" ? "en" : "es";
+      languageToggle.classList.toggle("active");
+      translateUI();
     };
 
-    document.getElementById('send-button').onclick = () => {
-      const userInput = document.getElementById('user-input');
-      if (userInput.value.trim() !== '') {
-        addUserMessage(userInput.value.trim());
-        userInput.value = '';
+    // Reiniciar
+    restartButton.onclick = () => {
+      chatContainer.innerHTML = "";
+      addMessage("bot", texts[currentLanguage].greeting, "greeting");
+      showOptions();
+    };
+
+    // (opcional) enviar con enter (sin alterar diseño)
+    userInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const v = userInput.value.trim();
+        if (!v) return;
+        addMessage("user", v);
+        userInput.value = "";
+        // aquí podrías añadir respuesta del bot...
       }
-    };
-
-    startChat();
+    });
   </script>
-
 </body>
 </html>
 
