@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chatbot de Jose</title>
   <style>
-    /* caja consistente para evitar cálculos de tamaño raros */
     * { box-sizing: border-box; }
 
     body {
@@ -15,7 +14,6 @@
       padding: 0;
       display: flex;
       flex-direction: column;
-      /* importante: ocupar la ventana para que el flex funcione correctamente */
       height: 100vh;
     }
 
@@ -28,16 +26,8 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       flex: 0 0 auto;
     }
-    #header h1 {
-      margin: 0;
-      font-size: 18px;
-      color: #333;
-    }
-    #header-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    #header h1 { margin: 0; font-size: 18px; color: #333; }
+    #header-controls { display: flex; align-items: center; gap: 10px; }
     #restart-button {
       padding: 6px 12px;
       font-size: 14px;
@@ -81,7 +71,6 @@
       transform: translateX(14px);
     }
 
-    /* ======= CORRECCIÓN CLAVE ======= */
     #chat-container {
       flex: 1 1 auto;
       min-height: 0;
@@ -248,103 +237,115 @@
       }
     };
 
-    let currentLang = 'es';
+    let currentLanguage = 'es';
     const chatContainer = document.getElementById('chat-container');
 
-    function addMessage(text, isBot = true) {
-      const msgDiv = document.createElement('div');
-      msgDiv.classList.add(isBot ? 'bot-message' : 'user-message');
-
-      const avatar = document.createElement('img');
-      avatar.classList.add('avatar');
-      avatar.src = isBot ? 'https://img.icons8.com/fluency/48/000000/bot.png' : 'https://img.icons8.com/fluency/48/000000/user.png';
-
-      const bubble = document.createElement('div');
-      bubble.classList.add('bubble');
-      bubble.innerHTML = text;
-
-      msgDiv.appendChild(avatar);
-      msgDiv.appendChild(bubble);
-
-      chatContainer.appendChild(msgDiv);
+    function scrollToBottom() {
       chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function addBotMessage(message) {
+      const messageElem = document.createElement('div');
+      messageElem.className = 'bot-message';
+      messageElem.innerHTML = `<img class="avatar" src="https://cdn-icons-png.flaticon.com/512/4712/4712038.png" alt="Bot"/> <div class="bubble">${message}</div>`;
+      chatContainer.appendChild(messageElem);
+      scrollToBottom();
+    }
+
+    function addUserMessage(message) {
+      const messageElem = document.createElement('div');
+      messageElem.className = 'user-message';
+      messageElem.innerHTML = `<div class="bubble">${message}</div><img class="avatar" src="https://cdn-icons-png.flaticon.com/512/147/147144.png" alt="Tú"/>`;
+      chatContainer.appendChild(messageElem);
+      scrollToBottom();
     }
 
     function showOptions() {
-      const container = document.createElement('div');
-      container.classList.add('buttons-container');
+      const buttonsContainer = document.createElement("div");
+      buttonsContainer.className = "buttons-container";
+      chatContainer.appendChild(buttonsContainer);
 
-      const options = texts[currentLang].options;
-      const initialCount = 3;
-      let isExpanded = false;
+      const options = texts[currentLanguage].options;
+      const firstBatch = options.slice(0, 3);
+      const remainingBatch = options.slice(3);
 
-      function renderButtons(count) {
-        container.innerHTML = '';
-        for (let i = 0; i < count; i++) {
-          const btn = document.createElement('button');
-          btn.classList.add('bot-button');
-          btn.textContent = options[i].text;
-          btn.onclick = () => {
-            if (options[i].action) options[i].action();
-            else if (options[i].url) window.open(options[i].url, "_blank");
+      firstBatch.forEach((item, index) => {
+        setTimeout(() => {
+          const button = document.createElement("button");
+          button.className = "bot-button";
+          button.dataset.key = `option-${index}`;
+          button.innerText = item.text;
+          if (item.url) { button.onclick = () => window.open(item.url, "_blank"); }
+          else if (item.action) { button.onclick = item.action; }
+          buttonsContainer.appendChild(button);
+          scrollToBottom();
+        }, 800 + index * 400);
+      });
+
+      if (remainingBatch.length > 0) {
+        setTimeout(() => {
+          const showMoreButton = document.createElement("button");
+          showMoreButton.className = "bot-button";
+          showMoreButton.innerText = "Mostrar más…";
+          showMoreButton.onclick = () => {
+            remainingBatch.forEach((item, index) => {
+              const button = document.createElement("button");
+              button.className = "bot-button";
+              button.dataset.key = `option-${index + 3}`;
+              button.innerText = item.text;
+              if (item.url) { button.onclick = () => window.open(item.url, "_blank"); }
+              else if (item.action) { button.onclick = item.action; }
+              buttonsContainer.appendChild(button);
+            });
+            showMoreButton.remove();
+            scrollToBottom();
           };
-          container.appendChild(btn);
-        }
-        if (!isExpanded && options.length > initialCount) {
-          const moreBtn = document.createElement('button');
-          moreBtn.classList.add('bot-button');
-          moreBtn.textContent = "Mostrar más";
-          moreBtn.onclick = () => { isExpanded = true; renderButtons(options.length); };
-          container.appendChild(moreBtn);
-        }
+          buttonsContainer.appendChild(showMoreButton);
+          scrollToBottom();
+        }, 800 + firstBatch.length * 400);
       }
-
-      renderButtons(initialCount);
-      chatContainer.appendChild(container);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
     function showCaseButtons() {
-      const container = document.createElement('div');
-      container.classList.add('buttons-container');
-      texts[currentLang].cases.forEach(c => {
-        const btn = document.createElement('button');
-        btn.classList.add('bot-button');
-        btn.textContent = c.text;
-        btn.onclick = () => window.open(c.url, "_blank");
-        container.appendChild(btn);
+      addBotMessage(texts[currentLanguage].casesIntro);
+      const buttonsContainer = document.createElement("div");
+      buttonsContainer.className = "buttons-container";
+      chatContainer.appendChild(buttonsContainer);
+
+      texts[currentLanguage].cases.forEach((item, index) => {
+        setTimeout(() => {
+          const button = document.createElement("button");
+          button.className = "bot-button";
+          button.innerText = item.text;
+          button.onclick = () => window.open(item.url, "_blank");
+          buttonsContainer.appendChild(button);
+          scrollToBottom();
+        }, 400 + index * 300);
       });
-      addMessage(texts[currentLang].casesIntro);
-      chatContainer.appendChild(container);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
     function startChat() {
       chatContainer.innerHTML = '';
-      addMessage(texts[currentLang].greeting);
-      setTimeout(showOptions, 500);
+      addBotMessage(texts[currentLanguage].greeting);
+      setTimeout(showOptions, 1000);
     }
 
     document.getElementById('restart-button').onclick = startChat;
 
     const langToggle = document.getElementById('language-toggle');
-    langToggle.onclick = () => {
-      currentLang = currentLang === 'es' ? 'en' : 'es';
-      langToggle.classList.toggle('active');
+    document.getElementById('language-switch').onclick = () => {
+      currentLanguage = currentLanguage === 'es' ? 'en' : 'es';
+      langToggle.classList.toggle('active', currentLanguage === 'en');
       startChat();
     };
 
     document.getElementById('send-button').onclick = () => {
-      const input = document.getElementById('user-input');
-      if (input.value.trim() !== "") {
-        addMessage(input.value, false);
-        input.value = '';
+      const userInput = document.getElementById('user-input');
+      if (userInput.value.trim() !== '') {
+        addUserMessage(userInput.value.trim());
+        userInput.value = '';
       }
     };
-
-    document.getElementById('user-input').addEventListener('keypress', e => {
-      if (e.key === 'Enter') document.getElementById('send-button').click();
-    });
 
     startChat();
   </script>
