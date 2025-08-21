@@ -81,13 +81,10 @@
       transform: translateX(14px);
     }
 
-    /* ======= CORRECCIÓN CLAVE =======
-       El chat-container es el ÚNICO que scrollea.
-       flex:1 + min-height:0 permite overflow interno real dentro de un flex container.
-    */
+    /* ======= CORRECCIÓN CLAVE ======= */
     #chat-container {
-      flex: 1 1 auto;            /* ocupa espacio disponible */
-      min-height: 0;             /* crucial para que overflow funcione en flex */
+      flex: 1 1 auto;
+      min-height: 0;
       width: 100%;
       max-width: 600px;
       margin: 20px auto 0 auto;
@@ -95,12 +92,12 @@
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      overflow-y: auto;          /* scroll interno único */
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       overscroll-behavior: contain;
       scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch; /* momentum iOS */
+      -webkit-overflow-scrolling: touch;
     }
 
     .bot-message, .user-message {
@@ -134,7 +131,7 @@
       margin: 12px auto 20px auto;
       max-width: 600px;
       width: 100%;
-      flex: 0 0 auto; /* no se encoge, queda fuera del scroll del chat */
+      flex: 0 0 auto;
     }
     #user-input {
       flex: 1;
@@ -206,7 +203,6 @@
   </div>
 
   <script>
-    /* tu objeto texts se mantiene exactamente igual */
     const texts = {
       es: {
         greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
@@ -247,159 +243,112 @@
           { text: "🔍 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
         ],
         restart: "Restart",
-        placeholder: "Type your response here...",
+        placeholder: "Type your answer here...",
         send: "Send"
       }
     };
 
-    const chatContainer = document.getElementById("chat-container");
-    const restartButton = document.getElementById("restart-button");
-    const userInput = document.getElementById("user-input");
-    const sendButton = document.getElementById("send-button");
-    const languageToggle = document.getElementById("language-toggle");
+    let currentLang = 'es';
+    const chatContainer = document.getElementById('chat-container');
 
-    let currentLanguage = "es";
+    function addMessage(text, isBot = true) {
+      const msgDiv = document.createElement('div');
+      msgDiv.classList.add(isBot ? 'bot-message' : 'user-message');
 
-    // Scroll robusto: esperamos a que el navegador pinte (double rAF) y luego hacemos scroll en el contenedor.
-    function scrollToBottom() {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          // usa scrollTo con behavior smooth; si no soportado, fallback a scrollTop
-          if ('scrollTo' in chatContainer) {
-            try {
-              chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
-            } catch (e) {
-              chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-          } else {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-          }
-        });
-      });
-    }
+      const avatar = document.createElement('img');
+      avatar.classList.add('avatar');
+      avatar.src = isBot ? 'https://img.icons8.com/fluency/48/000000/bot.png' : 'https://img.icons8.com/fluency/48/000000/user.png';
 
-    function addMessage(sender, text, key) {
-      const message = document.createElement("div");
-      message.className = sender === "bot" ? "bot-message" : "user-message";
-      if (key) message.dataset.key = key;
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble');
+      bubble.innerHTML = text;
 
-      const avatar = document.createElement("img");
-      avatar.src = sender === "bot"
-        ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png"
-        : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
-      avatar.className = "avatar";
-      avatar.alt = sender === "bot" ? "bot" : "user";
+      msgDiv.appendChild(avatar);
+      msgDiv.appendChild(bubble);
 
-      const bubble = document.createElement("div");
-      bubble.className = "bubble";
-      bubble.innerText = text;
-
-      message.appendChild(avatar);
-      message.appendChild(bubble);
-      chatContainer.appendChild(message);
-      scrollToBottom();
+      chatContainer.appendChild(msgDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
     function showOptions() {
-      const buttonsContainer = document.createElement("div");
-      buttonsContainer.className = "buttons-container";
-      chatContainer.appendChild(buttonsContainer);
+      const container = document.createElement('div');
+      container.classList.add('buttons-container');
 
-      texts[currentLanguage].options.forEach((item, index) => {
-        setTimeout(() => {
-          const button = document.createElement("button");
-          button.className = "bot-button";
-          button.dataset.key = `option-${index}`;
-          button.innerText = texts[currentLanguage].options[index].text;
-          if (item.url) {
-            button.onclick = () => window.open(item.url, "_blank");
-          } else if (item.action) {
-            button.onclick = item.action;
-          }
-          buttonsContainer.appendChild(button);
-          scrollToBottom();
-        }, 800 + index * 400);
-      });
+      const options = texts[currentLang].options;
+      const initialCount = 3;
+      let isExpanded = false;
+
+      function renderButtons(count) {
+        container.innerHTML = '';
+        for (let i = 0; i < count; i++) {
+          const btn = document.createElement('button');
+          btn.classList.add('bot-button');
+          btn.textContent = options[i].text;
+          btn.onclick = () => {
+            if (options[i].action) options[i].action();
+            else if (options[i].url) window.open(options[i].url, "_blank");
+          };
+          container.appendChild(btn);
+        }
+        if (!isExpanded && options.length > initialCount) {
+          const moreBtn = document.createElement('button');
+          moreBtn.classList.add('bot-button');
+          moreBtn.textContent = "Mostrar más";
+          moreBtn.onclick = () => { isExpanded = true; renderButtons(options.length); };
+          container.appendChild(moreBtn);
+        }
+      }
+
+      renderButtons(initialCount);
+      chatContainer.appendChild(container);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
     function showCaseButtons() {
-      addMessage("bot", texts[currentLanguage].casesIntro, "casesIntro");
-      const buttonsContainer = document.createElement("div");
-      buttonsContainer.className = "buttons-container";
-      chatContainer.appendChild(buttonsContainer);
-
-      texts[currentLanguage].cases.forEach((item, index) => {
-        setTimeout(() => {
-          const button = document.createElement("button");
-          button.className = "bot-button";
-          button.dataset.key = `case-${index}`;
-          button.innerText = texts[currentLanguage].cases[index].text;
-          button.onclick = () => window.open(item.url, "_blank");
-          buttonsContainer.appendChild(button);
-          scrollToBottom();
-        }, 800 + index * 400);
+      const container = document.createElement('div');
+      container.classList.add('buttons-container');
+      texts[currentLang].cases.forEach(c => {
+        const btn = document.createElement('button');
+        btn.classList.add('bot-button');
+        btn.textContent = c.text;
+        btn.onclick = () => window.open(c.url, "_blank");
+        container.appendChild(btn);
       });
+      addMessage(texts[currentLang].casesIntro);
+      chatContainer.appendChild(container);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    function translateUI() {
-      restartButton.innerText = texts[currentLanguage].restart;
-      userInput.placeholder = texts[currentLanguage].placeholder;
-      sendButton.innerText = texts[currentLanguage].send;
-
-      // traducir mensajes con data-key (greeting, casesIntro...)
-      document.querySelectorAll("[data-key]").forEach(el => {
-        const key = el.dataset.key;
-        if (key && texts[currentLanguage][key]) {
-          const bubble = el.querySelector(".bubble");
-          if (bubble) bubble.innerText = texts[currentLanguage][key];
-        }
-      });
-
-      // traducir botones existentes (opciones / casos)
-      document.querySelectorAll(".bot-button").forEach(btn => {
-        const key = btn.dataset.key;
-        if (key && key.startsWith("option-")) {
-          const idx = +key.split("-")[1];
-          btn.innerText = texts[currentLanguage].options[idx].text;
-        }
-        if (key && key.startsWith("case-")) {
-          const idx = +key.split("-")[1];
-          btn.innerText = texts[currentLanguage].cases[idx].text;
-        }
-      });
-
-      scrollToBottom();
+    function startChat() {
+      chatContainer.innerHTML = '';
+      addMessage(texts[currentLang].greeting);
+      setTimeout(showOptions, 500);
     }
 
-    // Inicialización
-    addMessage("bot", texts[currentLanguage].greeting, "greeting");
-    showOptions();
+    document.getElementById('restart-button').onclick = startChat;
 
-    // Switch idioma
-    languageToggle.onclick = () => {
-      currentLanguage = currentLanguage === "es" ? "en" : "es";
-      languageToggle.classList.toggle("active");
-      translateUI();
+    const langToggle = document.getElementById('language-toggle');
+    langToggle.onclick = () => {
+      currentLang = currentLang === 'es' ? 'en' : 'es';
+      langToggle.classList.toggle('active');
+      startChat();
     };
 
-    // Reiniciar
-    restartButton.onclick = () => {
-      chatContainer.innerHTML = "";
-      addMessage("bot", texts[currentLanguage].greeting, "greeting");
-      showOptions();
-    };
-
-    // (opcional) enviar con enter (sin alterar diseño)
-    userInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        const v = userInput.value.trim();
-        if (!v) return;
-        addMessage("user", v);
-        userInput.value = "";
-        // aquí podrías añadir respuesta del bot...
+    document.getElementById('send-button').onclick = () => {
+      const input = document.getElementById('user-input');
+      if (input.value.trim() !== "") {
+        addMessage(input.value, false);
+        input.value = '';
       }
+    };
+
+    document.getElementById('user-input').addEventListener('keypress', e => {
+      if (e.key === 'Enter') document.getElementById('send-button').click();
     });
+
+    startChat();
   </script>
+
 </body>
 </html>
 
