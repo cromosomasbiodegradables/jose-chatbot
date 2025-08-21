@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chatbot de Jose</title>
   <style>
+    * { box-sizing: border-box; }
     body {
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(to right, #eef2f3, #d9e4ff);
@@ -14,163 +15,93 @@
       flex-direction: column;
       height: 100vh;
     }
-
-    header {
-      background: #ffffff;
-      padding: 10px 20px;
+    #header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #ccc;
+      padding: 12px 20px;
+      background-color: #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      flex: 0 0 auto;
     }
-
-    header h1 {
-      margin: 0;
-      font-size: 18px;
-      color: #333;
+    #header h1 { margin: 0; font-size: 18px; color: #333; }
+    #header-controls { display: flex; align-items: center; gap: 10px; }
+    #restart-button {
+      padding: 6px 12px; font-size: 14px; border: none;
+      border-radius: 6px; background-color: #007bff; color: #fff; cursor: pointer;
     }
-
-    .header-buttons {
-      display: flex;
-      gap: 10px;
+    #language-switch {
+      font-size: 14px; cursor: pointer; display: flex;
+      align-items: center; gap: 6px; user-select: none;
     }
+    #language-toggle {
+      width: 30px; height: 16px; border-radius: 10px; background: #ccc;
+      position: relative; transition: background 0.3s;
+    }
+    #language-toggle::after {
+      content: ""; width: 14px; height: 14px; background: #fff;
+      border-radius: 50%; position: absolute; top: 1px; left: 1px;
+      transition: transform 0.3s;
+    }
+    #language-toggle.active { background: #007bff; }
+    #language-toggle.active::after { transform: translateX(14px); }
 
     #chat-container {
-      flex: 1;
-      max-width: 600px;
-      margin: 20px auto;
-      background-color: #ffffff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      scroll-behavior: smooth;
+      flex: 1 1 auto; min-height: 0; width: 100%; max-width: 600px;
+      margin: 20px auto 0 auto; background-color: #ffffff;
+      border-radius: 12px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      overflow-y: auto; display: flex; flex-direction: column;
+      overscroll-behavior: contain; scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
     }
-
-    .bot-message, .user-message {
-      display: flex;
-      align-items: flex-start;
-      margin: 10px 0;
-      animation: fadeIn 0.4s ease-in;
-    }
-
-    .avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-
+    .bot-message, .user-message { display: flex; align-items: flex-start; margin: 10px 0; animation: fadeIn 0.4s ease-in; }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; margin-right: 10px; flex-shrink: 0; }
     .bubble {
-      padding: 10px 14px;
-      border-radius: 12px;
-      max-width: 80%;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      padding: 10px 14px; border-radius: 12px; max-width: 80%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05); word-break: break-word;
     }
-
-    .bot-message .bubble {
-      background-color: #e0e0e0;
-      color: #333;
-    }
-
-    .user-message {
-      flex-direction: row-reverse;
-    }
-
-    .user-message .avatar {
-      margin-left: 10px;
-      margin-right: 0;
-    }
-
-    .user-message .bubble {
-      background-color: #cce5ff;
-      color: #003366;
-      text-align: right;
-    }
+    .bot-message .bubble { background-color: #e0e0e0; color: #333; }
+    .user-message { flex-direction: row-reverse; }
+    .user-message .avatar { margin-left: 10px; margin-right: 0; }
+    .user-message .bubble { background-color: #cce5ff; color: #003366; text-align: right; }
 
     #input-area {
-      display: flex;
-      justify-content: center;
-      margin: 0 auto 20px;
-      max-width: 600px;
-      width: 100%;
-      padding: 0 20px;
+      display: flex; justify-content: center; margin: 12px auto 20px auto;
+      max-width: 600px; width: 100%; flex: 0 0 auto;
     }
+    #user-input { flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; }
+    #send-button { padding: 10px 20px; margin-left: 10px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; }
 
-    #user-input {
-      flex: 1;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    #send-button {
-      padding: 10px 20px;
-      margin-left: 10px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .buttons-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-      align-items: center;
-    }
-
+    .buttons-container { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; align-items: center; }
     .bot-button {
-      background-color: #a3d9a5;
-      color: #2d4b2d;
-      padding: 10px 14px;
-      font-size: 14px;
-      border: 1px solid #8fcf90;
-      border-radius: 6px;
-      cursor: pointer;
-      width: 100%;
-      max-width: 300px;
-      text-align: left;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      transition: background-color 0.3s ease;
+      background-color: #a3d9a5; color: #2d4b2d; padding: 10px 14px; font-size: 14px;
+      border: 1px solid #8fcf90; border-radius: 6px; cursor: pointer; width: 100%;
+      max-width: 300px; text-align: left; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: background-color 0.3s ease;
     }
-
-    .bot-button:hover {
-      background-color: #92c89b;
-    }
+    .bot-button:hover { background-color: #92c89b; }
 
     @media screen and (max-width: 480px) {
-      .bot-button {
-        font-size: 13px;
-        padding: 9px 12px;
-      }
-      #chat-container {
-        padding: 15px;
-      }
+      .bot-button { font-size: 13px; padding: 9px 12px; }
+      #chat-container { padding: 15px; }
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🤖 Chatbot</h1>
-    <div class="header-buttons">
-      <button id="lang-switch">EN</button>
-      <button id="restart">⟳</button>
-    </div>
-  </header>
 
-  <div id="chat-container"></div>
+  <div id="header">
+    <h1>Chatbot</h1>
+    <div id="header-controls">
+      <button id="restart-button">Volver a empezar</button>
+      <div id="language-switch">
+        ES / EN
+        <div id="language-toggle"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="chat-container" aria-live="polite"></div>
 
   <div id="input-area">
     <input type="text" id="user-input" placeholder="Escribe tu respuesta aquí..." />
@@ -178,165 +109,167 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const chatContainer = document.getElementById("chat-container");
-      const langSwitch = document.getElementById("lang-switch");
-      const restartBtn = document.getElementById("restart");
-
-      let currentLanguage = "es";
-
-      const texts = {
-        es: {
-          greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
-          options: [
-            { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
-            { text: "👤 Sobre mí", url: "https://uxfol.io/p/josecarlos-design/about" },
-            { text: "📄 Descargar CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
-            { text: "✉️ Contacto", url: "https://uxfol.io/p/josecarlos-design/contact" },
-            { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
-          ],
-          casesText: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
-          cases: [
-            { text: "🧪 Caso 1: Rediseño de app médica", url: "https://uxfol.io/p/josecarlos-design/caso1" },
-            { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
-            { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
-            { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
-            { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/josecarlos-design" }
-          ],
-          showMore: "➕ Mostrar más",
-          showLess: "➖ Mostrar menos"
-        },
-        en: {
-          greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
-          options: [
-            { text: "🎨 Case Studies", action: () => showCaseButtons() },
-            { text: "👤 About me", url: "https://uxfol.io/p/josecarlos-design/about" },
-            { text: "📄 Download CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
-            { text: "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
-            { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
-          ],
-          casesText: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
-          cases: [
-            { text: "🧪 Case 1: Medical App Redesign", url: "https://uxfol.io/p/josecarlos-design/caso1" },
-            { text: "🛍️ Case 2: UX Optimization for E-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
-            { text: "📱 Case 3: Wellness App Design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
-            { text: "🌍 Case 4: Inclusive Educational Platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
-            { text: "🔍 See all cases together", url: "https://uxfol.io/josecarlos-design" }
-          ],
-          showMore: "➕ Show more",
-          showLess: "➖ Show less"
-        }
-      };
-
-      function addMessage(sender, text, extraClass = "") {
-        const message = document.createElement("div");
-        message.className = sender === "bot" ? "bot-message" : "user-message";
-
-        const avatar = document.createElement("img");
-        avatar.src = sender === "bot"
-          ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png"
-          : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
-        avatar.className = "avatar";
-
-        const bubble = document.createElement("div");
-        bubble.className = "bubble " + extraClass;
-        bubble.innerText = text;
-
-        message.appendChild(avatar);
-        message.appendChild(bubble);
-        chatContainer.appendChild(message);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+    const texts = {
+      es: {
+        greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
+        casesIntro: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
+        options: [
+          { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
+          { text: "👤 Sobre mí", url: "https://uxfol.io/p/josecarlos-design/about" },
+          { text: "📄 Descargar CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
+          { text: "✉️ Contacto", url: "https://uxfol.io/p/josecarlos-design/contact" },
+          { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
+        ],
+        cases: [
+          { text: "🧪 Caso 1: Rediseño de app médica", url: "https://uxfol.io/p/josecarlos-design/caso1" },
+          { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
+          { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
+          { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
+          { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
+        ],
+        restart: "Volver a empezar",
+        placeholder: "Escribe tu respuesta aquí...",
+        send: "Enviar"
+      },
+      en: {
+        greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
+        casesIntro: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
+        options: [
+          { text: "🎨 Case studies", action: () => showCaseButtons() },
+          { text: "👤 About me", url: "https://uxfol.io/p/josecarlos-design/about" },
+          { text: "📄 Download CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
+          { text: "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
+          { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
+        ],
+        cases: [
+          { text: "🧪 Case 1: Medical app redesign", url: "https://uxfol.io/p/josecarlos-design/caso1" },
+          { text: "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
+          { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
+          { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
+          { text: "🔍 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
+        ],
+        restart: "Restart",
+        placeholder: "Type your response here...",
+        send: "Send"
       }
+    };
 
-      function showOptionsAnimated() {
+    const chatContainer = document.getElementById("chat-container");
+    const restartButton = document.getElementById("restart-button");
+    const userInput = document.getElementById("user-input");
+    const sendButton = document.getElementById("send-button");
+    const languageToggle = document.getElementById("language-toggle");
+    let currentLanguage = "es";
+
+    function scrollToBottom() {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if ('scrollTo' in chatContainer) {
+            try { chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' }); } catch(e) { chatContainer.scrollTop = chatContainer.scrollHeight; }
+          } else { chatContainer.scrollTop = chatContainer.scrollHeight; }
+        });
+      });
+    }
+
+    function createBotMessage(text, buttons = null) {
+      const message = document.createElement("div");
+      message.className = "bot-message";
+      const avatar = document.createElement("img");
+      avatar.src = "https://i.imgur.com/8Km9tLL.png"; 
+      avatar.alt = "Bot";
+      avatar.className = "avatar";
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.innerHTML = text;
+      message.appendChild(avatar);
+      message.appendChild(bubble);
+      chatContainer.appendChild(message);
+      scrollToBottom();
+
+      if (buttons) {
         const buttonsContainer = document.createElement("div");
         buttonsContainer.className = "buttons-container";
-        chatContainer.appendChild(buttonsContainer);
-
-        const options = texts[currentLanguage].options;
-        options.forEach((item, index) => {
-          setTimeout(() => {
-            const button = document.createElement("button");
-            button.className = "bot-button";
-            button.innerText = item.text;
-            button.dataset.key = "option-" + index;
-            if (item.url) {
-              button.onclick = () => window.open(item.url, "_blank");
-            } else if (item.action) {
-              button.onclick = item.action;
-            }
-            buttonsContainer.appendChild(button);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-          }, 1000 + index * 400);
-        });
-      }
-
-      function showCaseButtons() {
-        addMessage("bot", texts[currentLanguage].casesText, "cases-intro");
-        const buttonsContainer = document.createElement("div");
-        buttonsContainer.className = "buttons-container";
-        chatContainer.appendChild(buttonsContainer);
-
-        const cases = texts[currentLanguage].cases;
-        cases.forEach((item, index) => {
-          setTimeout(() => {
-            const button = document.createElement("button");
-            button.className = "bot-button";
-            button.innerText = item.text;
-            button.dataset.key = "case-" + index;
-            button.onclick = () => window.open(item.url, "_blank");
-            buttonsContainer.appendChild(button);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-          }, 1000 + index * 400);
-        });
-      }
-
-      // Switch de idioma (actualiza textos sin reiniciar)
-      langSwitch.onclick = () => {
-        currentLanguage = currentLanguage === "es" ? "en" : "es";
-        langSwitch.textContent = currentLanguage === "es" ? "EN" : "ES";
-
-        // Actualizar saludo inicial
-        const firstBubble = chatContainer.querySelector(".bot-message .bubble");
-        if (firstBubble) {
-          firstBubble.textContent = texts[currentLanguage].greeting;
-        }
-
-        // Actualizar botones visibles
-        const allButtons = chatContainer.querySelectorAll(".bot-button");
-        const opts = texts[currentLanguage].options;
-        const cases = texts[currentLanguage].cases;
-
-        allButtons.forEach((btn) => {
-          const key = btn.dataset.key;
-          if (!key) return;
-
-          if (key.startsWith("option-")) {
-            const idx = parseInt(key.replace("option-", ""));
-            if (opts[idx]) btn.textContent = opts[idx].text;
-          } else if (key.startsWith("case-")) {
-            const idx = parseInt(key.replace("case-", ""));
-            if (cases[idx]) btn.textContent = cases[idx].text;
-          } else if (key === "showMore") {
-            btn.textContent = texts[currentLanguage].showMore;
-          } else if (key === "showLess") {
-            btn.textContent = texts[currentLanguage].showLess;
+        buttons.forEach((btn, index) => {
+          const buttonEl = document.createElement("button");
+          buttonEl.className = "bot-button";
+          buttonEl.innerHTML = btn.text;
+          if (btn.url) {
+            buttonEl.onclick = () => window.open(btn.url, "_blank");
+          } else if (btn.action) {
+            buttonEl.onclick = btn.action;
           }
+          buttonsContainer.appendChild(buttonEl);
         });
 
-        // Actualizar texto de casos si está visible
-        const caseIntro = chatContainer.querySelector(".cases-intro");
-        if (caseIntro) {
-          caseIntro.textContent = texts[currentLanguage].casesText;
+        // Mostrar solo las primeras 3 y agregar botón "Mostrar más"
+        if (buttons.length > 3) {
+          const showMoreBtn = document.createElement("button");
+          showMoreBtn.className = "bot-button";
+          showMoreBtn.innerHTML = "Mostrar más...";
+          showMoreBtn.onclick = () => {
+            Array.from(buttonsContainer.children).forEach((child, i) => { if (i < buttons.length) child.style.display = "flex"; });
+            showMoreBtn.style.display = "none";
+          };
+          buttonsContainer.insertBefore(showMoreBtn, buttonsContainer.children[3]);
+          Array.from(buttonsContainer.children).forEach((child, i) => { if (i >= 3) child.style.display = "none"; });
         }
-      };
 
-      restartBtn.onclick = () => location.reload();
+        chatContainer.appendChild(buttonsContainer);
+        scrollToBottom();
+      }
+    }
 
-      // Inicio
-      addMessage("bot", texts[currentLanguage].greeting);
-      showOptionsAnimated();
+    function createUserMessage(text) {
+      const message = document.createElement("div");
+      message.className = "user-message";
+      const avatar = document.createElement("img");
+      avatar.src = "https://i.imgur.com/1Q9Z1Z4.png"; 
+      avatar.alt = "User";
+      avatar.className = "avatar";
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.innerText = text;
+      message.appendChild(avatar);
+      message.appendChild(bubble);
+      chatContainer.appendChild(message);
+      scrollToBottom();
+    }
+
+    function showOptions() {
+      createBotMessage(texts[currentLanguage].greeting, texts[currentLanguage].options);
+    }
+
+    function showCaseButtons() {
+      createBotMessage(texts[currentLanguage].casesIntro, texts[currentLanguage].cases);
+    }
+
+    function restartChat() {
+      chatContainer.innerHTML = "";
+      showOptions();
+    }
+
+    restartButton.onclick = restartChat;
+
+    sendButton.onclick = () => {
+      const text = userInput.value.trim();
+      if (text) {
+        createUserMessage(text);
+        userInput.value = "";
+      }
+    };
+
+    userInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") sendButton.click();
     });
+
+    languageToggle.onclick = () => {
+      currentLanguage = currentLanguage === "es" ? "en" : "es";
+      languageToggle.classList.toggle("active");
+      restartChat();
+    };
+
+    restartChat();
   </script>
+
 </body>
 </html>
