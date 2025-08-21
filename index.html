@@ -214,7 +214,7 @@
         options: [
           { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
           { text: "👤 Sobre mí", url: "https://uxfol.io/p/josecarlos-design/about" },
-          { text: "📄 Descargar CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
+          { text: "📄 Descargar CV", url: sendCV() },
           { text: "✉️ Contacto", url: "https://uxfol.io/p/josecarlos-design/contact" },
           { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
@@ -235,7 +235,7 @@
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
           { text: "👤 About me", url: "https://uxfol.io/p/josecarlos-design/about" },
-          { text: "📄 Download CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
+          { text: "📄 Download CV", url: sendCV() },
           { text: "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
           { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
@@ -399,9 +399,29 @@
         // aquí podrías añadir respuesta del bot...
       }
     });
+
+    function sendCV() {
+  const isSpanish = currentLanguage === "es";
+  const msg = isSpanish
+    ? "📎 Enviando tu CV... un momento por favor."
+    : "📎 Sending your CV... just a moment.";
+  addMessage("bot", msg);
+
+  setTimeout(() => {
+    const cvURL = "https://github.com/cromosomasbiodegradables/jose-chatbot/raw/main/JoseTorres__UXUI.pdf";
+    const link = document.createElement("a");
+    link.href = cvURL;
+    link.download = "JoseCarlosCV.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }, 2000);
+}
+
   </script>
 </body>
 </html>
+
 
 
 
