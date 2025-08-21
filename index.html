@@ -214,7 +214,7 @@
         options: [
           { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
           { text: "👤 Sobre mí", url: "https://uxfol.io/p/josecarlos-design/about" },
-          { text: "📄 Descargar CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
+          { text: "📄 Descargar CV", url: "cv-auto" },
           { text: "✉️ Contacto", url: "https://uxfol.io/p/josecarlos-design/contact" },
           { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
@@ -235,7 +235,7 @@
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
           { text: "👤 About me", url: "https://uxfol.io/p/josecarlos-design/about" },
-          { text: "📄 Download CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
+          { text: "📄 Download CV", url: "cv-auto" },
           { text: "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
           { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
@@ -374,6 +374,7 @@
     // Inicialización
     addMessage("bot", texts[currentLanguage].greeting, "greeting");
     showOptions();
+    interceptCVDownload();
 
     // Switch idioma
     languageToggle.onclick = () => {
@@ -387,6 +388,7 @@
       chatContainer.innerHTML = "";
       addMessage("bot", texts[currentLanguage].greeting, "greeting");
       showOptions();
+      interceptCVDownload();
     };
 
     // (opcional) enviar con enter (sin alterar diseño)
@@ -399,7 +401,35 @@
         // aquí podrías añadir respuesta del bot...
       }
     });
+    function interceptCVDownload() {
+  document.querySelectorAll(".bot-button").forEach(btn => {
+    const text = btn.innerText.trim();
+    const isSpanish = currentLanguage === "es";
+    const matchText = isSpanish ? "📄 Descargar CV" : "📄 Download CV";
+
+    if (text === matchText) {
+      btn.onclick = () => {
+        const msg = isSpanish
+          ? "📎 Enviando el CV... un momento por favor."
+          : "📎 Sending the CV... just a moment.";
+        addMessage("bot", msg);
+
+        setTimeout(() => {
+          const cvURL = "https://github.com/cromosomasbiodegradables/jose-chatbot/raw/main/JoseTorres__UXUI.pdf";
+          const link = document.createElement("a");
+          link.href = cvURL;
+          link.download = "JoseCarlosCV.pdf";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }, 2000);
+      };
+    }
+  });
+}
+
   </script>
 </body>
 </html>
+
 
