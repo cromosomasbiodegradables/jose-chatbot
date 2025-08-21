@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chatbot de Jose</title>
   <style>
-    /* caja consistente para evitar cálculos de tamaño raros */
     * { box-sizing: border-box; }
-
     body {
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(to right, #eef2f3, #d9e4ff);
@@ -15,10 +13,8 @@
       padding: 0;
       display: flex;
       flex-direction: column;
-      /* importante: ocupar la ventana para que el flex funcione correctamente */
       height: 100vh;
     }
-
     #header {
       display: flex;
       justify-content: space-between;
@@ -28,100 +24,42 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       flex: 0 0 auto;
     }
-    #header h1 {
-      margin: 0;
-      font-size: 18px;
-      color: #333;
-    }
-    #header-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    #header h1 { margin: 0; font-size: 18px; color: #333; }
+    #header-controls { display: flex; align-items: center; gap: 10px; }
     #restart-button {
-      padding: 6px 12px;
-      font-size: 14px;
-      border: none;
-      border-radius: 6px;
-      background-color: #007bff;
-      color: #fff;
+      padding: 6px 12px; font-size: 14px; border: none;
+      border-radius: 6px; background-color: #007bff; color: #fff;
       cursor: pointer;
     }
-    #language-switch {
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      user-select: none;
-    }
+    #language-switch { font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px; user-select: none; }
     #language-toggle {
-      width: 30px;
-      height: 16px;
-      border-radius: 10px;
-      background: #ccc;
-      position: relative;
-      transition: background 0.3s;
+      width: 30px; height: 16px; border-radius: 10px; background: #ccc;
+      position: relative; transition: background 0.3s;
     }
     #language-toggle::after {
-      content: "";
-      width: 14px;
-      height: 14px;
-      background: #fff;
-      border-radius: 50%;
-      position: absolute;
-      top: 1px;
-      left: 1px;
+      content: ""; width: 14px; height: 14px; background: #fff;
+      border-radius: 50%; position: absolute; top: 1px; left: 1px;
       transition: transform 0.3s;
     }
-    #language-toggle.active {
-      background: #007bff;
-    }
-    #language-toggle.active::after {
-      transform: translateX(14px);
-    }
+    #language-toggle.active { background: #007bff; }
+    #language-toggle.active::after { transform: translateX(14px); }
 
-    /* ======= CORRECCIÓN CLAVE =======
-       El chat-container es el ÚNICO que scrollea.
-       flex:1 + min-height:0 permite overflow interno real dentro de un flex container.
-    */
     #chat-container {
-      flex: 1 1 auto;            /* ocupa espacio disponible */
-      min-height: 0;             /* crucial para que overflow funcione en flex */
-      width: 100%;
-      max-width: 600px;
-      margin: 20px auto 0 auto;
-      background-color: #ffffff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      overflow-y: auto;          /* scroll interno único */
-      display: flex;
-      flex-direction: column;
-      overscroll-behavior: contain;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch; /* momentum iOS */
+      flex: 1 1 auto; min-height: 0; width: 100%; max-width: 600px;
+      margin: 20px auto 0 auto; background-color: #ffffff; border-radius: 12px;
+      padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      overflow-y: auto; display: flex; flex-direction: column;
+      overscroll-behavior: contain; scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
     }
-
     .bot-message, .user-message {
-      display: flex;
-      align-items: flex-start;
-      margin: 10px 0;
+      display: flex; align-items: flex-start; margin: 10px 0;
       animation: fadeIn 0.4s ease-in;
     }
-    .avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      margin-right: 10px;
-      flex-shrink: 0;
-    }
+    .avatar { width: 32px; height: 32px; border-radius: 50%; margin-right: 10px; flex-shrink: 0; }
     .bubble {
-      padding: 10px 14px;
-      border-radius: 12px;
-      max-width: 80%;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-      word-break: break-word;
+      padding: 10px 14px; border-radius: 12px; max-width: 80%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05); word-break: break-word;
     }
     .bot-message .bubble { background-color: #e0e0e0; color: #333; }
     .user-message { flex-direction: row-reverse; }
@@ -129,51 +67,25 @@
     .user-message .bubble { background-color: #cce5ff; color: #003366; text-align: right; }
 
     #input-area {
-      display: flex;
-      justify-content: center;
-      margin: 12px auto 20px auto;
-      max-width: 600px;
-      width: 100%;
-      flex: 0 0 auto; /* no se encoge, queda fuera del scroll del chat */
+      display: flex; justify-content: center;
+      margin: 12px auto 20px auto; max-width: 600px; width: 100%; flex: 0 0 auto;
     }
     #user-input {
-      flex: 1;
-      padding: 10px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px;
     }
     #send-button {
-      padding: 10px 20px;
-      margin-left: 10px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+      padding: 10px 20px; margin-left: 10px; font-size: 16px;
+      background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer;
     }
 
     .buttons-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-      align-items: center;
+      display: flex; flex-direction: column; gap: 10px; margin-top: 10px; align-items: center;
     }
     .bot-button {
-      background-color: #a3d9a5;
-      color: #2d4b2d;
-      padding: 10px 14px;
-      font-size: 14px;
-      border: 1px solid #8fcf90;
-      border-radius: 6px;
-      cursor: pointer;
-      width: 100%;
-      max-width: 300px;
-      text-align: left;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      transition: background-color 0.3s ease;
+      background-color: #a3d9a5; color: #2d4b2d; padding: 10px 14px;
+      font-size: 14px; border: 1px solid #8fcf90; border-radius: 6px;
+      cursor: pointer; width: 100%; max-width: 300px; text-align: left;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: background-color 0.3s ease;
     }
     .bot-button:hover { background-color: #92c89b; }
 
@@ -181,7 +93,6 @@
       .bot-button { font-size: 13px; padding: 9px 12px; }
       #chat-container { padding: 15px; }
     }
-
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
@@ -192,8 +103,7 @@
     <div id="header-controls">
       <button id="restart-button">Volver a empezar</button>
       <div id="language-switch">
-        ES / EN
-        <div id="language-toggle"></div>
+        ES / EN <div id="language-toggle"></div>
       </div>
     </div>
   </div>
@@ -206,7 +116,6 @@
   </div>
 
   <script>
-    /* tu objeto texts se mantiene exactamente igual */
     const texts = {
       es: {
         greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
@@ -218,6 +127,8 @@
           { text: "✉️ Contacto", url: "https://uxfol.io/p/josecarlos-design/contact" },
           { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
+        showMore: "➕ Mostrar más",
+        showLess: "➖ Mostrar menos",
         cases: [
           { text: "🧪 Caso 1: Rediseño de app médica", url: "https://uxfol.io/p/josecarlos-design/caso1" },
           { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
@@ -239,6 +150,8 @@
           { text: "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
           { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
+        showMore: "➕ Show more",
+        showLess: "➖ Show less",
         cases: [
           { text: "🧪 Case 1: Medical app redesign", url: "https://uxfol.io/p/josecarlos-design/caso1" },
           { text: "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
@@ -260,20 +173,10 @@
 
     let currentLanguage = "es";
 
-    // Scroll robusto: esperamos a que el navegador pinte (double rAF) y luego hacemos scroll en el contenedor.
     function scrollToBottom() {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          // usa scrollTo con behavior smooth; si no soportado, fallback a scrollTop
-          if ('scrollTo' in chatContainer) {
-            try {
-              chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
-            } catch (e) {
-              chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-          } else {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-          }
+          chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
         });
       });
     }
@@ -288,7 +191,6 @@
         ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png"
         : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
       avatar.className = "avatar";
-      avatar.alt = sender === "bot" ? "bot" : "user";
 
       const bubble = document.createElement("div");
       bubble.className = "bubble";
@@ -300,26 +202,48 @@
       scrollToBottom();
     }
 
-    function showOptions() {
+    function showOptions(showAll = false) {
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
-      texts[currentLanguage].options.forEach((item, index) => {
-        setTimeout(() => {
+      const opts = texts[currentLanguage].options;
+      const visibleCount = showAll ? opts.length : 3;
+
+      opts.forEach((item, index) => {
+        if (index < visibleCount) {
           const button = document.createElement("button");
           button.className = "bot-button";
           button.dataset.key = `option-${index}`;
-          button.innerText = texts[currentLanguage].options[index].text;
-          if (item.url) {
-            button.onclick = () => window.open(item.url, "_blank");
-          } else if (item.action) {
-            button.onclick = item.action;
-          }
+          button.innerText = item.text;
+          if (item.url) button.onclick = () => window.open(item.url, "_blank");
+          if (item.action) button.onclick = item.action;
           buttonsContainer.appendChild(button);
-          scrollToBottom();
-        }, 800 + index * 400);
+        }
       });
+
+      // Botón mostrar más/menos
+      if (!showAll) {
+        const moreBtn = document.createElement("button");
+        moreBtn.className = "bot-button";
+        moreBtn.innerText = texts[currentLanguage].showMore;
+        moreBtn.onclick = () => {
+          buttonsContainer.remove();
+          showOptions(true);
+        };
+        buttonsContainer.appendChild(moreBtn);
+      } else {
+        const lessBtn = document.createElement("button");
+        lessBtn.className = "bot-button";
+        lessBtn.innerText = texts[currentLanguage].showLess;
+        lessBtn.onclick = () => {
+          buttonsContainer.remove();
+          showOptions(false);
+        };
+        buttonsContainer.appendChild(lessBtn);
+      }
+
+      scrollToBottom();
     }
 
     function showCaseButtons() {
@@ -329,33 +253,20 @@
       chatContainer.appendChild(buttonsContainer);
 
       texts[currentLanguage].cases.forEach((item, index) => {
-        setTimeout(() => {
-          const button = document.createElement("button");
-          button.className = "bot-button";
-          button.dataset.key = `case-${index}`;
-          button.innerText = texts[currentLanguage].cases[index].text;
-          button.onclick = () => window.open(item.url, "_blank");
-          buttonsContainer.appendChild(button);
-          scrollToBottom();
-        }, 800 + index * 400);
+        const button = document.createElement("button");
+        button.className = "bot-button";
+        button.dataset.key = `case-${index}`;
+        button.innerText = item.text;
+        button.onclick = () => window.open(item.url, "_blank");
+        buttonsContainer.appendChild(button);
       });
+      scrollToBottom();
     }
 
     function translateUI() {
       restartButton.innerText = texts[currentLanguage].restart;
       userInput.placeholder = texts[currentLanguage].placeholder;
       sendButton.innerText = texts[currentLanguage].send;
-
-      // traducir mensajes con data-key (greeting, casesIntro...)
-      document.querySelectorAll("[data-key]").forEach(el => {
-        const key = el.dataset.key;
-        if (key && texts[currentLanguage][key]) {
-          const bubble = el.querySelector(".bubble");
-          if (bubble) bubble.innerText = texts[currentLanguage][key];
-        }
-      });
-
-      // traducir botones existentes (opciones / casos)
       document.querySelectorAll(".bot-button").forEach(btn => {
         const key = btn.dataset.key;
         if (key && key.startsWith("option-")) {
@@ -367,36 +278,31 @@
           btn.innerText = texts[currentLanguage].cases[idx].text;
         }
       });
-
-      scrollToBottom();
     }
 
-    // Inicialización
     addMessage("bot", texts[currentLanguage].greeting, "greeting");
-    showOptions();
+    showOptions(false);
 
-    // Switch idioma
     languageToggle.onclick = () => {
       currentLanguage = currentLanguage === "es" ? "en" : "es";
       languageToggle.classList.toggle("active");
-      translateUI();
+      chatContainer.innerHTML = "";
+      addMessage("bot", texts[currentLanguage].greeting, "greeting");
+      showOptions(false);
     };
 
-    // Reiniciar
     restartButton.onclick = () => {
       chatContainer.innerHTML = "";
       addMessage("bot", texts[currentLanguage].greeting, "greeting");
-      showOptions();
+      showOptions(false);
     };
 
-    // (opcional) enviar con enter (sin alterar diseño)
     userInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         const v = userInput.value.trim();
         if (!v) return;
         addMessage("user", v);
         userInput.value = "";
-        // aquí podrías añadir respuesta del bot...
       }
     });
   </script>
