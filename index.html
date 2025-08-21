@@ -75,18 +75,18 @@
       transform: translateX(14px);
     }
 
-    /* 🔹 Scroll solo dentro del chat (con momentum en iOS) */
+    /* 🔹 Chat con scroll SOLO dentro */
     #chat-container {
-      flex: 1;
+      flex: 1;                     /* ocupa el espacio libre */
+      min-height: 0;               /* evita que colapse el scroll en flexbox */
       width: 100%;
       max-width: 600px;
-      margin: 20px auto;
+      margin: 20px auto 0 auto;
       background-color: #ffffff;
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      overflow-y: auto;          /* scroll solo en el chat */
-      height: 60vh;              /* altura relativa a la ventana */
+      overflow-y: auto;            /* scroll solo en el chat */
       display: flex;
       flex-direction: column;
       overscroll-behavior: contain;
@@ -180,10 +180,7 @@
 
     @media screen and (max-width: 480px) {
       .bot-button { font-size: 13px; padding: 9px 12px; }
-      #chat-container {
-        padding: 15px;
-        height: 70vh;
-      }
+      #chat-container { padding: 15px; }
     }
 
     @keyframes fadeIn {
@@ -213,7 +210,7 @@
   </div>
 
   <script>
-    const texts = {
+    const texts = { /* 🔹 se mantiene igual */ 
       es: {
         greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
         casesIntro: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
@@ -266,28 +263,10 @@
 
     let currentLanguage = "es";
 
-    // 🔹 Scroll suave SOLO en el contenedor del chat (sin tocar la página)
+    // 🔹 Scroll suave SOLO dentro del contenedor del chat
     function scrollToBottom() {
-      const c = chatContainer;
-      // Espera al siguiente frame para asegurar que el DOM ya midió alturas
       requestAnimationFrame(() => {
-        const target = c.scrollHeight - c.clientHeight;
-        const start = c.scrollTop;
-        const distance = target - start;
-        if (Math.abs(distance) < 1) return;
-
-        const duration = 400; // ms
-        let startTime = null;
-
-        function step(ts) {
-          if (!startTime) startTime = ts;
-          const t = Math.min((ts - startTime) / duration, 1);
-          // ease-in-out
-          const eased = 0.5 - Math.cos(Math.PI * t) / 2;
-          c.scrollTop = start + distance * eased;
-          if (t < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
       });
     }
 
