@@ -213,7 +213,7 @@
         casesIntro: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
         options: [
           { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
-          { text: "👤 Sobre mí", url: "https://uxfol.io/p/josecarlos-design/about" },
+          { text: "👤 Sobre mí", action: () => showAboutMe() },
           { text: "📄 Descargar CV", url: "https://github.com/cromosomasbiodegradables/jose-chatbot/raw/main/JoseTorres__UXUI.pdf" }, /* ← reemplaza esta URL por tu enlace directo */
           { text: "✉️ Contacto", url: "https://uxfol.io/p/josecarlos-design/contact" },
           { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
@@ -236,7 +236,7 @@
         casesIntro: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
-          { text: "👤 About me", url: "https://uxfol.io/p/josecarlos-design/about" },
+          { text: "👤 About me", action: () => showAboutMe() },
           { text: "📄 Download CV", url: "https://github.com/cromosomasbiodegradables/jose-chatbot/raw/main/JoseTorres__UXUI.pdf" }, /* ← reemplaza esta URL por tu enlace directo */
           { text: "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
           { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
@@ -421,7 +421,39 @@
         // aquí podrías añadir respuesta del bot…
       }
     });
+    function showAboutMe() {
+  const isSpanish = currentLanguage === "es";
+
+  const message = isSpanish
+    ? "👨‍💼 Soy Jose Carlos, diseñador UX/UI con más de 10 años de experiencia creando productos digitales centrados en las personas. Me apasiona transformar ideas en experiencias útiles y elegantes."
+    : "👨‍💼 I'm Jose Carlos, a UX/UI designer with over 10 years of experience crafting user-centered digital products. I love turning ideas into elegant and useful experiences.";
+
+  const linkText = isSpanish ? "Ver más sobre mí" : "See more about me";
+  const linkURL = "https://uxfol.io/p/josecarlos-design/about";
+
+  addMessage("bot", message, "aboutMe");
+
+  // Añadir imagen
+  const imgMessage = document.createElement("div");
+  imgMessage.className = "bot-message";
+
+  const avatar = document.createElement("img");
+  avatar.src = "https://raw.githubusercontent.com/cromosomasbiodegradables/jose-chatbot/main/01.JPG"; // Asegúrate de subir esta imagen al repositorio
+  avatar.className = "avatar";
+  avatar.alt = "Jose Carlos";
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.innerHTML = `<a href="${linkURL}" target="_blank">${linkText}</a>`;
+
+  imgMessage.appendChild(avatar);
+  imgMessage.appendChild(bubble);
+  chatContainer.appendChild(imgMessage);
+  scrollToBottom();
+}
+
   </script>
 </body>
 </html>
+
 
