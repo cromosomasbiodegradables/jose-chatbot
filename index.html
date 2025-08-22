@@ -86,8 +86,8 @@
        flex:1 + min-height:0 permite overflow interno real dentro de un flex container.
     */
     #chat-container {
-      flex: 1 1 auto;            /* ocupa espacio disponible */
-      min-height: 0;             /* crucial para que overflow funcione en flex */
+      flex: 1 1 auto;
+      min-height: 0;
       width: 100%;
       max-width: 600px;
       margin: 20px auto 0 auto;
@@ -95,12 +95,12 @@
       border-radius: 12px;
       padding: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      overflow-y: auto;          /* scroll interno único */
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       overscroll-behavior: contain;
       scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch; /* momentum iOS */
+      -webkit-overflow-scrolling: touch;
     }
 
     .bot-message, .user-message {
@@ -134,7 +134,7 @@
       margin: 12px auto 20px auto;
       max-width: 600px;
       width: 100%;
-      flex: 0 0 auto; /* no se encoge, queda fuera del scroll del chat */
+      flex: 0 0 auto;
     }
     #user-input {
       flex: 1;
@@ -206,7 +206,7 @@
   </div>
 
   <script>
-    /* tu objeto texts se mantiene exactamente igual */
+    /* tu objeto texts se mantiene prácticamente igual */
     const texts = {
       es: {
         greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
@@ -214,7 +214,7 @@
         options: [
           { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
           { text: "👤 Sobre mí", url: "https://uxfol.io/p/josecarlos-design/about" },
-          { text: "📄 Descargar CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
+          { text: "📄 Descargar CV", url: "https://uxfol.io/p/josecarlos-design/cv" }, /* ← reemplaza esta URL por tu enlace directo */
           { text: "✉️ Contacto", url: "https://uxfol.io/p/josecarlos-design/contact" },
           { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
@@ -227,7 +227,9 @@
         ],
         restart: "Volver a empezar",
         placeholder: "Escribe tu respuesta aquí...",
-        send: "Enviar"
+        send: "Enviar",
+        /* NUEVO: mensaje de descarga */
+        downloadingCV: "📄 En unos segundos comenzará la descarga de mi CV…"
       },
       en: {
         greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
@@ -235,7 +237,7 @@
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
           { text: "👤 About me", url: "https://uxfol.io/p/josecarlos-design/about" },
-          { text: "📄 Download CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
+          { text: "📄 Download CV", url: "https://uxfol.io/p/josecarlos-design/cv" }, /* ← reemplaza esta URL por tu enlace directo */
           { text: "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
           { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
@@ -248,7 +250,9 @@
         ],
         restart: "Restart",
         placeholder: "Type your response here...",
-        send: "Send"
+        send: "Send",
+        /* NUEVO: mensaje de descarga */
+        downloadingCV: "📄 The CV download will start in a few seconds…"
       }
     };
 
@@ -260,11 +264,10 @@
 
     let currentLanguage = "es";
 
-    // Scroll robusto: esperamos a que el navegador pinte (double rAF) y luego hacemos scroll en el contenedor.
+    // Scroll robusto
     function scrollToBottom() {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          // usa scrollTo con behavior smooth; si no soportado, fallback a scrollTop
           if ('scrollTo' in chatContainer) {
             try {
               chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
@@ -311,11 +314,30 @@
           button.className = "bot-button";
           button.dataset.key = `option-${index}`;
           button.innerText = texts[currentLanguage].options[index].text;
+
           if (item.url) {
-            button.onclick = () => window.open(item.url, "_blank");
+            // SOLO cambiamos el comportamiento del botón de CV (Descargar/Download CV)
+            if (/cv/i.test(item.text)) {
+              button.onclick = () => {
+                addMessage("bot", texts[currentLanguage].downloadingCV, "downloadingCV");
+                setTimeout(() => {
+                  const a = document.createElement("a");
+                  a.href = item.url;   // sustituye por tu enlace directo (p. ej., https://raw.githubusercontent.com/.../CV.pdf)
+                  a.target = "_blank";
+                  a.rel = "noopener";
+                  a.download = "";     // sugiere descarga (efecto depende del dominio/origen)
+                  document.body.appendChild(a);
+                  a.click();
+                  a.remove();
+                }, 1200);
+              };
+            } else {
+              button.onclick = () => window.open(item.url, "_blank");
+            }
           } else if (item.action) {
             button.onclick = item.action;
           }
+
           buttonsContainer.appendChild(button);
           scrollToBottom();
         }, 800 + index * 400);
@@ -346,7 +368,7 @@
       userInput.placeholder = texts[currentLanguage].placeholder;
       sendButton.innerText = texts[currentLanguage].send;
 
-      // traducir mensajes con data-key (greeting, casesIntro...)
+      // traducir mensajes con data-key (greeting, casesIntro, downloadingCV…)
       document.querySelectorAll("[data-key]").forEach(el => {
         const key = el.dataset.key;
         if (key && texts[currentLanguage][key]) {
@@ -389,19 +411,16 @@
       showOptions();
     };
 
-    // (opcional) enviar con enter (sin alterar diseño)
+    // Enviar con Enter (opcional)
     userInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         const v = userInput.value.trim();
         if (!v) return;
         addMessage("user", v);
         userInput.value = "";
-        // aquí podrías añadir respuesta del bot...
+        // aquí podrías añadir respuesta del bot…
       }
     });
   </script>
 </body>
 </html>
-
-
- 
