@@ -214,7 +214,7 @@
         options: [
           { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
           { text: "👤 Sobre mí", url: "https://uxfol.io/p/josecarlos-design/about" },
-          { text: "📄 Descargar CV", url: sendCV() },
+          { text: "📄 Descargar CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
           { text: "✉️ Contacto", url: "https://uxfol.io/p/josecarlos-design/contact" },
           { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
@@ -235,7 +235,7 @@
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
           { text: "👤 About me", url: "https://uxfol.io/p/josecarlos-design/about" },
-          { text: "📄 Download CV", url: sendCV() },
+          { text: "📄 Download CV", url: "https://uxfol.io/p/josecarlos-design/cv" },
           { text: "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
           { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
@@ -301,28 +301,27 @@
     }
 
     function showOptions() {
-  const buttonsContainer = document.createElement("div");
-  buttonsContainer.className = "buttons-container";
-  chatContainer.appendChild(buttonsContainer);
+      const buttonsContainer = document.createElement("div");
+      buttonsContainer.className = "buttons-container";
+      chatContainer.appendChild(buttonsContainer);
 
-  texts[currentLanguage].options.forEach((item, index) => {
-    setTimeout(() => {
-      const button = document.createElement("button");
-      button.className = "bot-button";
-      button.dataset.key = `option-${index}`;
-      button.innerText = item.text;
+      texts[currentLanguage].options.forEach((item, index) => {
+        setTimeout(() => {
+          const button = document.createElement("button");
+          button.className = "bot-button";
+          button.dataset.key = `option-${index}`;
+          button.innerText = texts[currentLanguage].options[index].text;
+          if (item.url) {
+            button.onclick = () => window.open(item.url, "_blank");
+          } else if (item.action) {
+            button.onclick = item.action;
+          }
+          buttonsContainer.appendChild(button);
+          scrollToBottom();
+        }, 800 + index * 400);
+      });
+    }
 
-      if (item.action && typeof item.action === "function") {
-        button.onclick = item.action;
-      } else if (item.url) {
-        button.onclick = () => window.open(item.url, "_blank");
-      }
-
-      buttonsContainer.appendChild(button);
-      scrollToBottom();
-    }, 800 + index * 400);
-  });
-}
     function showCaseButtons() {
       addMessage("bot", texts[currentLanguage].casesIntro, "casesIntro");
       const buttonsContainer = document.createElement("div");
@@ -400,33 +399,9 @@
         // aquí podrías añadir respuesta del bot...
       }
     });
-
-    function sendCV() {
-  const isSpanish = currentLanguage === "es";
-  const msg = isSpanish
-    ? "📎 Enviando tu CV... un momento por favor."
-    : "📎 Sending your CV... just a moment.";
-  addMessage("bot", msg);
-
-  setTimeout(() => {
-    const cvURL = "https://github.com/cromosomasbiodegradables/jose-chatbot/raw/main/JoseTorres__UXUI.pdf";
-    const link = document.createElement("a");
-    link.href = cvURL;
-    link.download = "JoseCarlosCV.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }, 2000);
-}
-
   </script>
 </body>
 </html>
 
 
-
-
-
-
-
-
+ 
