@@ -211,7 +211,6 @@
       es: {
         greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
         casesIntro: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
-        aboutMe: "👨‍💼 Soy Jose Carlos, diseñador UX/UI con más de 10 años de experiencia creando productos digitales centrados en las personas. Me apasiona transformar ideas en experiencias útiles y elegantes.",
         options: [
           { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
           { text: "👤 Sobre mí", action: () => showAboutMe() },
@@ -235,7 +234,6 @@
       en: {
         greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
         casesIntro: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
-        aboutMe: "👨‍💼 I'm Jose Carlos, a UX/UI designer with over 10 years of experience crafting user-centered digital products. I love turning ideas into elegant and useful experiences.",
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
           { text: "👤 About me", action: () => showAboutMe() },
@@ -393,7 +391,6 @@
       });
 
       scrollToBottom();
-      if (document.querySelector('[data-key="aboutMe"]')) showAboutMe();
     }
 
     // Inicialización
@@ -427,41 +424,35 @@
     function showAboutMe() {
   const isSpanish = currentLanguage === "es";
 
-  const messageText = texts[currentLanguage].aboutMe;
+  const message = isSpanish
+    ? "👨‍💼 Soy Jose Carlos, diseñador UX/UI con más de 10 años de experiencia creando productos digitales centrados en las personas. Me apasiona transformar ideas en experiencias útiles y elegantes."
+    : "👨‍💼 I'm Jose Carlos, a UX/UI designer with over 10 years of experience crafting user-centered digital products. I love turning ideas into elegant and useful experiences.";
+
   const linkText = isSpanish ? "Ver más sobre mí" : "See more about me";
   const linkURL = "https://uxfol.io/p/josecarlos-design/about";
 
-  const aboutMeContainer = document.createElement("div");
-  aboutMeContainer.className = "bot-message";
-  aboutMeContainer.dataset.key = "aboutMe";
-  aboutMeContainer.style.display = "flex";
-  aboutMeContainer.style.alignItems = "center";
-  aboutMeContainer.style.gap = "16px";
-  aboutMeContainer.style.flexWrap = "wrap";
+  addMessage("bot", message, "aboutMe");
+
+  // Añadir imagen
+  const imgMessage = document.createElement("div");
+  imgMessage.className = "bot-message";
 
   const avatar = document.createElement("img");
-  avatar.src = "https://raw.githubusercontent.com/cromosomasbiodegradables/jose-chatbot/main/01.JPG";
+  avatar.src = "https://raw.githubusercontent.com/cromosomasbiodegradables/jose-chatbot/main/01.JPG"; // Asegúrate de subir esta imagen al repositorio
+  avatar.className = "avatar";
   avatar.alt = "Jose Carlos";
-  avatar.style.width = "140px";
-  avatar.style.borderRadius = "12px";
-  avatar.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
 
   const bubble = document.createElement("div");
   bubble.className = "bubble";
-  bubble.innerHTML = `
-    <p style="margin: 0 0 8px" data-key="aboutMe">${messageText}</p>
-    <a href="${linkURL}" target="_blank">${linkText}</a>
-  `;
+  bubble.innerHTML = `<a href="${linkURL}" target="_blank">${linkText}</a>`;
 
-  aboutMeContainer.appendChild(avatar);
-  aboutMeContainer.appendChild(bubble);
-  chatContainer.appendChild(aboutMeContainer);
+  imgMessage.appendChild(avatar);
+  imgMessage.appendChild(bubble);
+  chatContainer.appendChild(imgMessage);
   scrollToBottom();
 }
-
 
   </script>
 </body>
 </html>
-
 
