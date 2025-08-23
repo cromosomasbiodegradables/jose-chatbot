@@ -103,14 +103,25 @@
     }
     .bot-button:hover { background-color: #92c89b; }
 
+    /* Imagen tipo "bloque botón" para Sobre mí:
+       - misma anchura máxima que los botones (max-width: 300px)
+       - centrada (margen auto)
+       - altura aproximada a 3 botones (≈108px)
+       - object-fit cover para no deformar la foto */
     .about-image {
-      max-width: 100%; border-radius: 12px;
-      margin: 12px 0; display: block;
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      height: 108px;         /* altura ~ 3 botones apilados */
+      object-fit: cover;
+      border-radius: 12px;
+      margin: 8px auto;      /* centrada y con un poco de separación */
     }
 
     @media screen and (max-width: 480px) {
       .bot-button { font-size: 13px; padding: 9px 12px; }
       #chat-container { padding: 15px; }
+      .about-image { max-width: 220px; height: 88px; } /* ajuste móvil */
     }
 
     @keyframes fadeIn {
@@ -285,42 +296,55 @@
       });
     }
 
+    // === REORDENACIÓN: primero texto, luego imagen centrada (alto ~3 botones), luego link ===
     function showAboutMe() {
-      const msg = document.createElement("div");
-      msg.className = "bot-message";
-      msg.dataset.key = "aboutMe";
+      // 1) Mensaje de texto del bot (con dataset key para traducción)
+      addMessage("bot", texts[currentLanguage].aboutMeText, "aboutMe");
 
-      const avatar = document.createElement("img");
-      avatar.src = "https://cdn-icons-png.flaticon.com/512/10479/10479785.png";
-      avatar.className = "avatar";
-      avatar.alt = "bot";
+      // 2) Después, la imagen centrada (con un pequeño delay para animación progresiva)
+      setTimeout(() => {
+        const photoMsg = document.createElement("div");
+        photoMsg.className = "bot-message";
+        photoMsg.dataset.key = "aboutMePhoto"; // no se usa para traducción, pero queda identificada
 
-      const bubble = document.createElement("div");
-      bubble.className = "bubble";
-      bubble.innerText = texts[currentLanguage].aboutMeText;
+        // Container para centrar y dar padding lateral similar al de los botones
+        const photoContainer = document.createElement("div");
+        photoContainer.style.width = "100%";
+        photoContainer.style.display = "flex";
+        photoContainer.style.justifyContent = "center";
+        photoContainer.style.padding = "0 20px"; // mismo padding lateral del chat (20px)
 
-      msg.appendChild(avatar);
-      msg.appendChild(bubble);
-      chatContainer.appendChild(msg);
+        const img = document.createElement("img");
+        img.src = "https://raw.githubusercontent.com/cromosomasbiodegradables/jose-chatbot/main/01.JPG";
+        img.className = "about-image";
+        img.alt = "Jose Carlos";
 
-      const imgMsg = document.createElement("div");
-      imgMsg.className = "bot-message";
-      imgMsg.dataset.key = "aboutMeLink";
+        photoContainer.appendChild(img);
+        photoMsg.appendChild(photoContainer);
+        chatContainer.appendChild(photoMsg);
+        scrollToBottom();
+      }, 600);
 
-      const img = document.createElement("img");
-      img.src = "https://raw.githubusercontent.com/cromosomasbiodegradables/jose-chatbot/main/01.JPG";
-      img.className = "about-image";
-      img.alt = "Jose Carlos";
+      // 3) Finalmente, debajo, el mensaje con el link (con delay adicional)
+      setTimeout(() => {
+        const linkMsg = document.createElement("div");
+        linkMsg.className = "bot-message";
+        linkMsg.dataset.key = "aboutMeLink";
 
-      const bubble2 = document.createElement("div");
-      bubble2.className = "bubble";
-      bubble2.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank">${texts[currentLanguage].aboutMeLink}</a>`;
+        const avatar = document.createElement("img");
+        avatar.src = "https://cdn-icons-png.flaticon.com/512/10479/10479785.png";
+        avatar.className = "avatar";
+        avatar.alt = "bot";
 
-      imgMsg.appendChild(img);
-      imgMsg.appendChild(bubble2);
-      chatContainer.appendChild(imgMsg);
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
+        bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank">${texts[currentLanguage].aboutMeLink}</a>`;
 
-      scrollToBottom();
+        linkMsg.appendChild(avatar);
+        linkMsg.appendChild(bubble);
+        chatContainer.appendChild(linkMsg);
+        scrollToBottom();
+      }, 1200);
     }
 
     function translateUI() {
