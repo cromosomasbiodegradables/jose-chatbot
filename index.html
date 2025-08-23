@@ -107,10 +107,14 @@
     }
     .bot-button:hover { background-color: #92c89b; }
 
-    /* Imagen grande para la sección “Sobre mí” */
+    /* Foto “tipo botón”: centrada, sin estirar y con el mismo ancho máximo que los botones */
     .about-image {
-      max-width: 100%; border-radius: 12px;
-      margin: 12px 0; display: block;
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      border-radius: 12px;
+      display: block;
+      margin: 10px auto;
     }
 
     @media screen and (max-width: 480px) {
@@ -290,43 +294,47 @@
       });
     }
 
+    // === NUEVO ORDEN Y ANIMACIÓN PROGRESIVA PARA "SOBRE MÍ" ===
     function showAboutMe() {
-      const msg = document.createElement("div");
-      msg.className = "bot-message";
-      msg.dataset.key = "aboutMe";
-
-      const avatar = document.createElement("img");
-      avatar.src = "https://cdn-icons-png.flaticon.com/512/10479/10479785.png";
-      avatar.className = "avatar";
-      avatar.alt = "bot";
-
-      const bubble = document.createElement("div");
-      bubble.className = "bubble";
-      bubble.innerText = texts[currentLanguage].aboutMeText;
-
-      msg.appendChild(avatar);
-      msg.appendChild(bubble);
-      chatContainer.appendChild(msg);
-
-      // Mensaje con la foto grande y el link
-      const imgMsg = document.createElement("div");
-      imgMsg.className = "bot-message";
-      imgMsg.dataset.key = "aboutMeLink";
+      // 1) Foto centrada, tamaño tipo botón (sin estirar)
+      const photoMsg = document.createElement("div");
+      photoMsg.className = "bot-message";
+      photoMsg.dataset.key = "aboutMePhoto";
 
       const img = document.createElement("img");
       img.src = "https://raw.githubusercontent.com/cromosomasbiodegradables/jose-chatbot/main/01.JPG";
       img.className = "about-image";
       img.alt = "Jose Carlos";
 
-      const bubble2 = document.createElement("div");
-      bubble2.className = "bubble";
-      bubble2.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank">${texts[currentLanguage].aboutMeLink}</a>`;
-
-      imgMsg.appendChild(img);
-      imgMsg.appendChild(bubble2);
-      chatContainer.appendChild(imgMsg);
-
+      photoMsg.appendChild(img);
+      chatContainer.appendChild(photoMsg);
       scrollToBottom();
+
+      // 2) Debajo, mensaje del bot con el texto
+      setTimeout(() => {
+        addMessage("bot", texts[currentLanguage].aboutMeText, "aboutMe");
+
+        // 3) Debajo, otro mensaje con el link
+        setTimeout(() => {
+          const linkMsg = document.createElement("div");
+          linkMsg.className = "bot-message";
+          linkMsg.dataset.key = "aboutMeLink";
+
+          const avatar = document.createElement("img");
+          avatar.src = "https://cdn-icons-png.flaticon.com/512/10479/10479785.png";
+          avatar.className = "avatar";
+          avatar.alt = "bot";
+
+          const bubble = document.createElement("div");
+          bubble.className = "bubble";
+          bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank">${texts[currentLanguage].aboutMeLink}</a>`;
+
+          linkMsg.appendChild(avatar);
+          linkMsg.appendChild(bubble);
+          chatContainer.appendChild(linkMsg);
+          scrollToBottom();
+        }, 600);
+      }, 600);
     }
 
     function translateUI() {
