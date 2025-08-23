@@ -18,13 +18,9 @@
     }
 
     #header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 20px;
-      background-color: #ffffff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      flex: 0 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 20px; background-color: #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1); flex: 0 0 auto;
     }
     #header h1 { margin: 0; font-size: 18px; color: #333; }
     #header-controls { display: flex; align-items: center; gap: 10px; }
@@ -107,14 +103,9 @@
     }
     .bot-button:hover { background-color: #92c89b; }
 
-    /* Foto “tipo botón”: centrada, sin estirar y con el mismo ancho máximo que los botones */
     .about-image {
-      width: 100%;
-      max-width: 300px;
-      height: auto;
-      border-radius: 12px;
-      display: block;
-      margin: 10px auto;
+      max-width: 100%; border-radius: 12px;
+      margin: 12px 0; display: block;
     }
 
     @media screen and (max-width: 480px) {
@@ -294,47 +285,42 @@
       });
     }
 
-    // === NUEVO ORDEN Y ANIMACIÓN PROGRESIVA PARA "SOBRE MÍ" ===
     function showAboutMe() {
-      // 1) Foto centrada, tamaño tipo botón (sin estirar)
-      const photoMsg = document.createElement("div");
-      photoMsg.className = "bot-message";
-      photoMsg.dataset.key = "aboutMePhoto";
+      const msg = document.createElement("div");
+      msg.className = "bot-message";
+      msg.dataset.key = "aboutMe";
+
+      const avatar = document.createElement("img");
+      avatar.src = "https://cdn-icons-png.flaticon.com/512/10479/10479785.png";
+      avatar.className = "avatar";
+      avatar.alt = "bot";
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.innerText = texts[currentLanguage].aboutMeText;
+
+      msg.appendChild(avatar);
+      msg.appendChild(bubble);
+      chatContainer.appendChild(msg);
+
+      const imgMsg = document.createElement("div");
+      imgMsg.className = "bot-message";
+      imgMsg.dataset.key = "aboutMeLink";
 
       const img = document.createElement("img");
       img.src = "https://raw.githubusercontent.com/cromosomasbiodegradables/jose-chatbot/main/01.JPG";
       img.className = "about-image";
       img.alt = "Jose Carlos";
 
-      photoMsg.appendChild(img);
-      chatContainer.appendChild(photoMsg);
+      const bubble2 = document.createElement("div");
+      bubble2.className = "bubble";
+      bubble2.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank">${texts[currentLanguage].aboutMeLink}</a>`;
+
+      imgMsg.appendChild(img);
+      imgMsg.appendChild(bubble2);
+      chatContainer.appendChild(imgMsg);
+
       scrollToBottom();
-
-      // 2) Debajo, mensaje del bot con el texto
-      setTimeout(() => {
-        addMessage("bot", texts[currentLanguage].aboutMeText, "aboutMe");
-
-        // 3) Debajo, otro mensaje con el link
-        setTimeout(() => {
-          const linkMsg = document.createElement("div");
-          linkMsg.className = "bot-message";
-          linkMsg.dataset.key = "aboutMeLink";
-
-          const avatar = document.createElement("img");
-          avatar.src = "https://cdn-icons-png.flaticon.com/512/10479/10479785.png";
-          avatar.className = "avatar";
-          avatar.alt = "bot";
-
-          const bubble = document.createElement("div");
-          bubble.className = "bubble";
-          bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank">${texts[currentLanguage].aboutMeLink}</a>`;
-
-          linkMsg.appendChild(avatar);
-          linkMsg.appendChild(bubble);
-          chatContainer.appendChild(linkMsg);
-          scrollToBottom();
-        }, 600);
-      }, 600);
     }
 
     function translateUI() {
@@ -396,6 +382,13 @@
         userInput.value = "";
       }
     });
+
+    sendButton.onclick = () => {
+      const v = userInput.value.trim();
+      if (!v) return;
+      addMessage("user", v);
+      userInput.value = "";
+    };
   </script>
 </body>
 </html>
