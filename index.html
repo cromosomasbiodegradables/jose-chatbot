@@ -104,16 +104,16 @@
     .bot-button:hover { background-color: #92c89b; }
 
     /* Imagen tipo "bloque botón" para Sobre mí:
-       - misma anchura máxima que los botones (max-width: 300px)
+       - un poco más estrecha que los botones (max-width: 260px)
        - centrada (margen auto)
        - altura aproximada a 3 botones (≈108px)
-       - object-fit cover para no deformar la foto */
+       - object-fit: contain para que se vea COMPLETA y no se recorte */
     .about-image {
       display: block;
       width: 100%;
-      max-width: 300px;
+      max-width: 260px;
       height: 108px;         /* altura ~ 3 botones apilados */
-      object-fit: cover;
+      object-fit: contain;   /* antes: cover (recortaba) */
       border-radius: 12px;
       margin: 8px auto;      /* centrada y con un poco de separación */
     }
@@ -296,23 +296,19 @@
       });
     }
 
-    // === REORDENACIÓN: primero texto, luego imagen centrada (alto ~3 botones), luego link ===
+    // === NUEVO ORDEN: 1) FOTO  2) BUBBLE 1  3) BUBBLE 2  4) LINK (con animación progresiva) ===
     function showAboutMe() {
-      // 1) Mensaje de texto del bot (con dataset key para traducción)
-      addMessage("bot", texts[currentLanguage].aboutMeText, "aboutMe");
-
-      // 2) Después, la imagen centrada (con un pequeño delay para animación progresiva)
+      // 1) Foto primero (centrada, tamaño medio, completa)
       setTimeout(() => {
         const photoMsg = document.createElement("div");
         photoMsg.className = "bot-message";
-        photoMsg.dataset.key = "aboutMePhoto"; // no se usa para traducción, pero queda identificada
+        photoMsg.dataset.key = "aboutMePhoto";
 
-        // Container para centrar y dar padding lateral similar al de los botones
         const photoContainer = document.createElement("div");
         photoContainer.style.width = "100%";
         photoContainer.style.display = "flex";
         photoContainer.style.justifyContent = "center";
-        photoContainer.style.padding = "0 20px"; // mismo padding lateral del chat (20px)
+        photoContainer.style.padding = "0 20px";
 
         const img = document.createElement("img");
         img.src = "https://raw.githubusercontent.com/cromosomasbiodegradables/jose-chatbot/main/01.JPG";
@@ -325,7 +321,23 @@
         scrollToBottom();
       }, 600);
 
-      // 3) Finalmente, debajo, el mensaje con el link (con delay adicional)
+      // 2) & 3) Texto en dos burbujas (partimos el aboutMeText en 2 frases)
+      const full = texts[currentLanguage].aboutMeText;
+      const parts = full.split(/\. +/); // divide por el primer punto y espacio
+      const firstSentence = parts[0] ? parts[0] + "." : full;
+      const restText = full.slice(firstSentence.length).trim();
+
+      setTimeout(() => {
+        addMessage("bot", firstSentence, "aboutMe1");
+      }, 1000);
+
+      if (restText) {
+        setTimeout(() => {
+          addMessage("bot", restText, "aboutMe2");
+        }, 1400);
+      }
+
+      // 4) Link al final
       setTimeout(() => {
         const linkMsg = document.createElement("div");
         linkMsg.className = "bot-message";
@@ -344,7 +356,7 @@
         linkMsg.appendChild(bubble);
         chatContainer.appendChild(linkMsg);
         scrollToBottom();
-      }, 1200);
+      }, restText ? 1800 : 1400);
     }
 
     function translateUI() {
@@ -358,9 +370,16 @@
           const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerText = texts[currentLanguage][key];
         }
-        if (key === "aboutMe") {
+        // Actualiza las dos burbujas de "Sobre mí" tras cambiar de idioma
+        if (key === "aboutMe1" || key === "aboutMe2") {
+          const full = texts[currentLanguage].aboutMeText;
+          const parts = full.split(/\. +/);
+          const firstSentence = parts[0] ? parts[0] + "." : full;
+          const restText = full.slice(firstSentence.length).trim();
           const bubble = el.querySelector(".bubble");
-          if (bubble) bubble.innerText = texts[currentLanguage].aboutMeText;
+          if (bubble) {
+            bubble.innerText = key === "aboutMe1" ? firstSentence : restText;
+          }
         }
         if (key === "aboutMeLink") {
           const bubble = el.querySelector(".bubble");
