@@ -111,17 +111,18 @@
     .about-image {
       display: block;
       width: 100%;
-      max-width: 260px;
-      height: 108px;         /* altura ~ 3 botones apilados */
+      max-width: 312px;
+      height: 130px;         /* altura ~ 3 botones apilados */
       object-fit: contain;   /* antes: cover (recortaba) */
       border-radius: 12px;
       margin: 8px auto;      /* centrada y con un poco de separación */
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
     @media screen and (max-width: 480px) {
       .bot-button { font-size: 13px; padding: 9px 12px; }
       #chat-container { padding: 15px; }
-      .about-image { max-width: 220px; height: 88px; } /* ajuste móvil */
+      .about-image { max-width: 264px; height: 106px; } /* ajuste móvil */
     }
 
     @keyframes fadeIn {
