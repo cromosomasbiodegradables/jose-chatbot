@@ -126,6 +126,17 @@
       from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+    
+    /* Estilo para resaltar sección al hacer scroll */
+    .highlighted {
+      animation: highlight 2s ease;
+    }
+    
+    @keyframes highlight {
+      0% { background-color: transparent; }
+      50% { background-color: rgba(255, 255, 0, 0.2); }
+      100% { background-color: transparent; }
+    }
   </style>
 </head>
 <body>
@@ -148,7 +159,7 @@
   <script>
     const texts = {
       es: {
-        greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
+        greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarse hoy?",
         casesIntro: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
         blogIntro: "Aquí tienes algunos posts del blog con ideas sobre UX, diseño y procesos. ¿Cuál te gustaría leer?",
         options: [
@@ -156,7 +167,7 @@
           { text: "👤 Sobre mí", action: () => showAboutMe() },
           { text: "📄 Descargar CV", url: "https://github.com/cromosomasbiodegradables/jose-chatbot/raw/main/JoseTorres__UXUI.pdf" },
           { text: "✉️ Contacto", url: "https://uxfol.io/p/josecarlos-design/contact" },
-          { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
+          { text: "📝 Blog", action: () => showBlogPosts() }
         ],
         cases: [
           { text: "🧪 Caso 1: Rediseño de app médica", url: "https://uxfol.io/p/josecarlos-design/caso1" },
@@ -176,7 +187,8 @@
         send: "Enviar",
         downloadingCV: "📄 En unos segundos comenzará la descarga de mi CV…",
         aboutMeText: "👨‍💼 Soy Jose Carlos, diseñador UX/UI con más de 10 años de experiencia creando productos digitales centrados en las personas. Me apasiona transformar ideas en experiencias útiles y elegantes.",
-        aboutMeLink: "Ver más sobre mí"
+        aboutMeLink: "Ver más sobre mí",
+        alreadyShown: " (ya mostrado)"
       },
       en: {
         greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
@@ -187,7 +199,7 @@
           { text: "👤 About me", action: () => showAboutMe() },
           { text: "📄 Download CV", url: "https://github.com/cromosomasbiodegradables/jose-chatbot/raw/main/JoseTorres__UXUI.pdf" },
           { text: "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
-          { text: "📝 Blog", url: "https://uxfol.io/p/josecarlos-design/blog" }
+          { text: "📝 Blog", action: () => showBlogPosts() }
         ],
         cases: [
           { text: "🧪 Case 1: Medical app redesign", url: "https://uxfol.io/p/josecarlos-design/caso1" },
@@ -207,7 +219,8 @@
         send: "Send",
         downloadingCV: "📄 The CV download will start in a few seconds…",
         aboutMeText: "👨‍💼 I'm Jose Carlos, a UX/UI designer with over 10 years of experience crafting user-centered digital products. I love turning ideas into elegant and useful experiences.",
-        aboutMeLink: "See more about me"
+        aboutMeLink: "See more about me",
+        alreadyShown: " (already shown)"
       }
     };
 
@@ -218,6 +231,11 @@
     const languageToggle = document.getElementById("language-toggle");
 
     let currentLanguage = "es";
+    let contentState = {
+      casesShown: false,
+      aboutMeShown: false,
+      blogShown: false
+    };
 
     function scrollToBottom() {
       requestAnimationFrame(() => {
@@ -227,10 +245,25 @@
       });
     }
 
+    function scrollToElement(element) {
+      if (!element) return;
+      
+      element.classList.add('highlighted');
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      
+      // Quitar la clase de resaltado después de la animación
+      setTimeout(() => {
+        element.classList.remove('highlighted');
+      }, 2000);
+    }
+
     function addMessage(sender, text, key) {
       const message = document.createElement("div");
       message.className = sender === "bot" ? "bot-message" : "user-message";
-      if (key) message.dataset.key = key;
+      if (key) {
+        message.dataset.key = key;
+        message.id = key; // Añadir ID para poder hacer scroll a este elemento
+      }
 
       const avatar = document.createElement("img");
       avatar.src = sender === "bot"
@@ -247,6 +280,8 @@
       message.appendChild(bubble);
       chatContainer.appendChild(message);
       scrollToBottom();
+      
+      return message;
     }
 
     function showOptions() {
@@ -259,7 +294,16 @@
           const button = document.createElement("button");
           button.className = "bot-button";
           button.dataset.key = `option-${index}`;
-          button.innerText = texts[currentLanguage].options[index].text;
+          
+          // Si el contenido ya se mostró, añadir indicador
+          let buttonText = texts[currentLanguage].options[index].text;
+          if ((index === 0 && contentState.casesShown) || 
+              (index === 1 && contentState.aboutMeShown) || 
+              (index === 4 && contentState.blogShown)) {
+            buttonText += texts[currentLanguage].alreadyShown;
+          }
+          
+          button.innerText = buttonText;
 
           if (item.url) {
             if (/cv/i.test(item.text)) {
@@ -276,9 +320,6 @@
                   a.remove();
                 }, 1200);
               };
-            } else if (item.url && item.url.includes('/blog')) {
-              // Interceptar el link del blog y mostrar los posts en el chat
-              button.onclick = () => showBlogPosts();
             } else {
               button.onclick = () => window.open(item.url, "_blank");
             }
@@ -293,6 +334,14 @@
     }
 
     function showCaseButtons() {
+      // Si ya se mostraron los casos, hacer scroll a ellos
+      if (contentState.casesShown) {
+        const casesIntro = document.getElementById("casesIntro");
+        scrollToElement(casesIntro);
+        return;
+      }
+      
+      contentState.casesShown = true;
       addMessage("bot", texts[currentLanguage].casesIntro, "casesIntro");
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
@@ -309,15 +358,27 @@
           scrollToBottom();
         }, 800 + index * 400);
       });
+      
+      // Actualizar botones de opciones para reflejar que los casos se han mostrado
+      updateOptionsButtons();
     }
 
-    // === NUEVO ORDEN: 1) FOTO  2) BUBBLE 1  3) BUBBLE 2  4) LINK (con animación progresiva) ===
     function showAboutMe() {
+      // Si ya se mostró "Sobre mí", hacer scroll a ello
+      if (contentState.aboutMeShown) {
+        const aboutMePhoto = document.getElementById("aboutMePhoto");
+        scrollToElement(aboutMePhoto);
+        return;
+      }
+      
+      contentState.aboutMeShown = true;
+      
       // 1) Foto primero (centrada, tamaño medio, completa)
       setTimeout(() => {
         const photoMsg = document.createElement("div");
         photoMsg.className = "bot-message";
         photoMsg.dataset.key = "aboutMePhoto";
+        photoMsg.id = "aboutMePhoto";
 
         const photoContainer = document.createElement("div");
         photoContainer.style.width = "100%";
@@ -357,6 +418,7 @@
         const linkMsg = document.createElement("div");
         linkMsg.className = "bot-message";
         linkMsg.dataset.key = "aboutMeLink";
+        linkMsg.id = "aboutMeLink";
 
         const avatar = document.createElement("img");
         avatar.src = "https://cdn-icons-png.flaticon.com/512/10479/10479785.png";
@@ -372,10 +434,20 @@
         chatContainer.appendChild(linkMsg);
         scrollToBottom();
       }, restText ? 1800 : 1400);
+      
+      // Actualizar botones de opciones para reflejar que "Sobre mí" se ha mostrado
+      updateOptionsButtons();
     }
 
-    // === Nueva función: mostrar posts del blog (intro + 3 posts + ver todos) ===
     function showBlogPosts() {
+      // Si ya se mostraron los posts, hacer scroll a ellos
+      if (contentState.blogShown) {
+        const blogIntro = document.getElementById("blogIntro");
+        scrollToElement(blogIntro);
+        return;
+      }
+      
+      contentState.blogShown = true;
       addMessage("bot", texts[currentLanguage].blogIntro, "blogIntro");
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
@@ -396,6 +468,23 @@
           buttonsContainer.appendChild(button);
           scrollToBottom();
         }, 800 + index * 400);
+      });
+      
+      // Actualizar botones de opciones para reflejar que el blog se ha mostrado
+      updateOptionsButtons();
+    }
+
+    function updateOptionsButtons() {
+      // Actualizar los textos de los botones de opciones para mostrar qué contenido ya se ha mostrado
+      const optionButtons = document.querySelectorAll('.bot-button');
+      optionButtons.forEach((button, index) => {
+        if (index === 0 && contentState.casesShown) {
+          button.innerText = texts[currentLanguage].options[0].text + texts[currentLanguage].alreadyShown;
+        } else if (index === 1 && contentState.aboutMeShown) {
+          button.innerText = texts[currentLanguage].options[1].text + texts[currentLanguage].alreadyShown;
+        } else if (index === 4 && contentState.blogShown) {
+          button.innerText = texts[currentLanguage].options[4].text + texts[currentLanguage].alreadyShown;
+        }
       });
     }
 
@@ -431,7 +520,16 @@
         const key = btn.dataset.key;
         if (key && key.startsWith("option-")) {
           const idx = +key.split("-")[1];
-          btn.innerText = texts[currentLanguage].options[idx].text;
+          let buttonText = texts[currentLanguage].options[idx].text;
+          
+          // Añadir indicador de "ya mostrado" si corresponde
+          if ((idx === 0 && contentState.casesShown) || 
+              (idx === 1 && contentState.aboutMeShown) || 
+              (idx === 4 && contentState.blogShown)) {
+            buttonText += texts[currentLanguage].alreadyShown;
+          }
+          
+          btn.innerText = buttonText;
         }
         if (key && key.startsWith("case-")) {
           const idx = +key.split("-")[1];
@@ -457,6 +555,11 @@
 
     restartButton.onclick = () => {
       chatContainer.innerHTML = "";
+      contentState = {
+        casesShown: false,
+        aboutMeShown: false,
+        blogShown: false
+      };
       addMessage("bot", texts[currentLanguage].greeting, "greeting");
       showOptions();
     };
