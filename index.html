@@ -104,16 +104,13 @@
     .bot-button:hover { background-color: #92c89b; }
 
     /* Imagen tipo "bloque botón" para Sobre mí:
-       - un poco más estrecha que los botones (max-width: 260px)
-       - centrada (margen auto)
-       - altura aproximada a 3 botones (≈108px)
-       - object-fit: contain para que se vea COMPLETA y no se recorte */
+       tamaño aumentado +20% y sombra sutil */
     .about-image {
       display: block;
       width: 100%;
       max-width: 312px;
       height: 130px;         /* altura ~ 3 botones apilados */
-      object-fit: contain;   /* antes: cover (recortaba) */
+      object-fit: contain;   /* para que se vea COMPLETA y no se recorte */
       border-radius: 12px;
       margin: 8px auto;      /* centrada y con un poco de separación */
       filter: drop-shadow(0 6px 14px rgba(0,0,0,0.18)); /* sombra en la foto */
@@ -153,6 +150,7 @@
       es: {
         greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
         casesIntro: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
+        blogIntro: "Aquí tienes algunos posts del blog con ideas sobre UX, diseño y procesos. ¿Cuál te gustaría leer?",
         options: [
           { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
           { text: "👤 Sobre mí", action: () => showAboutMe() },
@@ -167,6 +165,12 @@
           { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
         ],
+        blogPosts: [
+          { text: "📝 Post 1: Microinteracciones que importan", url: "https://uxfol.io/p/josecarlos-design/post1" },
+          { text: "🎯 Post 2: Priorizar accesibilidad", url: "https://uxfol.io/p/josecarlos-design/post2" },
+          { text: "📐 Post 3: Diseño basado en métricas", url: "https://uxfol.io/p/josecarlos-design/post3" },
+          { text: "🔎 Ver todos los posts juntos", url: "https://uxfol.io/p/josecarlos-design/blog" }
+        ],
         restart: "Volver a empezar",
         placeholder: "Escribe tu respuesta aquí...",
         send: "Enviar",
@@ -177,6 +181,7 @@
       en: {
         greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
         casesIntro: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
+        blogIntro: "Here are some blog posts with ideas on UX, design and process. Which would you like to read?",
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
           { text: "👤 About me", action: () => showAboutMe() },
@@ -190,6 +195,12 @@
           { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔍 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
+        ],
+        blogPosts: [
+          { text: "📝 Post 1: Microinteractions that matter", url: "https://uxfol.io/p/josecarlos-design/post1" },
+          { text: "🎯 Post 2: Prioritizing accessibility", url: "https://uxfol.io/p/josecarlos-design/post2" },
+          { text: "📐 Post 3: Metrics-driven design", url: "https://uxfol.io/p/josecarlos-design/post3" },
+          { text: "🔎 View all posts together", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
         restart: "Restart",
         placeholder: "Type your response here...",
@@ -265,6 +276,9 @@
                   a.remove();
                 }, 1200);
               };
+            } else if (item.url && item.url.includes('/blog')) {
+              // Interceptar el link del blog y mostrar los posts en el chat
+              button.onclick = () => showBlogPosts();
             } else {
               button.onclick = () => window.open(item.url, "_blank");
             }
@@ -360,6 +374,31 @@
       }, restText ? 1800 : 1400);
     }
 
+    // === Nueva función: mostrar posts del blog (intro + 3 posts + ver todos) ===
+    function showBlogPosts() {
+      addMessage("bot", texts[currentLanguage].blogIntro, "blogIntro");
+      const buttonsContainer = document.createElement("div");
+      buttonsContainer.className = "buttons-container";
+      chatContainer.appendChild(buttonsContainer);
+
+      texts[currentLanguage].blogPosts.forEach((item, index) => {
+        setTimeout(() => {
+          const button = document.createElement("button");
+          button.className = "bot-button";
+          button.dataset.key = `blog-${index}`;
+          button.innerText = texts[currentLanguage].blogPosts[index].text;
+
+          // último botón ("ver todos") abre la url
+          if (item.url) {
+            button.onclick = () => window.open(item.url, "_blank");
+          }
+
+          buttonsContainer.appendChild(button);
+          scrollToBottom();
+        }, 800 + index * 400);
+      });
+    }
+
     function translateUI() {
       restartButton.innerText = texts[currentLanguage].restart;
       userInput.placeholder = texts[currentLanguage].placeholder;
@@ -367,7 +406,7 @@
 
       document.querySelectorAll("[data-key]").forEach(el => {
         const key = el.dataset.key;
-        if (key === "greeting" || key === "casesIntro" || key === "downloadingCV") {
+        if (key === "greeting" || key === "casesIntro" || key === "downloadingCV" || key === "blogIntro") {
           const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerText = texts[currentLanguage][key];
         }
@@ -397,6 +436,10 @@
         if (key && key.startsWith("case-")) {
           const idx = +key.split("-")[1];
           btn.innerText = texts[currentLanguage].cases[idx].text;
+        }
+        if (key && key.startsWith("blog-")) {
+          const idx = +key.split("-")[1];
+          btn.innerText = texts[currentLanguage].blogPosts[idx].text;
         }
       });
 
