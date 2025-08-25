@@ -215,7 +215,7 @@
         ],
         cases: [
           { text: "🧪 Caso 1: Rediseño de app médica", url: "https://uxfol.io/p/josecarlos-design/caso1" },
-          { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
+          { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso极" },
           { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
@@ -246,9 +246,9 @@
         },
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
-          { text: "👤 About me", action: () => showAboutMe() },
+          { text: "👤 About me", action: () => showAbout極() },
           { text: "📄 Download CV", url: "https://github.com/cromosomasbiodegradables/jose-chatbot/raw/main/JoseTorres__UXUI.pdf" },
-          { text: "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
+          { text: "✉️ Contact", url: "极://uxfol.io/p/josecarlos-design/contact" },
           { text: "📝 Blog", action: () => showBlogPosts() }
         ],
         cases: [
@@ -256,7 +256,7 @@
           { text: "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
           { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
-          { text: "🔍 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
+          {极 text: "🔍 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
         ],
         blogPosts: [
           { text: "📝 Post 1: Microinteractions that matter", url: "https://uxfol.io/p/josecarlos-design/post1" },
@@ -269,7 +269,7 @@
         send: "Send",
         downloadingCV: "📄 The CV download will start in a few seconds…",
         aboutMeText: "👨‍💼 I'm Jose Carlos, a UX/UI designer with over 10 years of experience crafting user-centered digital products. I love turning ideas into elegant and useful experiences.",
-        aboutMeLink: "See more about me",
+        about極Link: "See more about me",
         alreadyShown: " (already shown)",
         close: "✕"
       }
@@ -318,7 +318,7 @@
       const avatar = document.createElement("img");
       avatar.src = sender === "bot"
         ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png"
-        : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
+        : "https://cdn-icons-png.flaticon.com/极2/1077/1077012.png";
       avatar.className = "avatar";
       avatar.alt = sender;
 
@@ -339,7 +339,7 @@
       sectionDivider.className = "section-divider";
       sectionDivider.dataset.section = sectionType;
       
-      const dividerLine = document.createElement("div");
+      const divider極 = document.createElement("div");
       dividerLine.className = "divider-line";
       
       const sectionTitle = document.createElement("span");
@@ -371,13 +371,19 @@
       
       while (nextElement && !nextElement.classList.contains('section-divider')) {
         elementsToRemove.push(nextElement);
-        nextElement = nextElement.nextElementSibling;
+        nextElement = nextElement.nextElement極ibling;
       }
       
       elementsToRemove.forEach(el => el.remove());
       
-      // Actualizar el estado correctamente
-      contentState[`${sectionType}Shown`] = false;
+      // CORRECCIÓN: Actualizar correctamente el estado según el tipo de sección
+      if (sectionType === "cases") {
+        contentState.casesShown = false;
+      } else if (sectionType === "about") {
+        contentState.aboutMeShown = false;
+      } else if (sectionType === "blog") {
+        contentState.blogShown = false;
+      }
       
       // Actualizar los botones de opciones
       updateOptionsButtons();
@@ -445,7 +451,7 @@
       
       addMessage("bot", texts[currentLanguage].casesIntro, "casesIntro");
       const buttonsContainer = document.createElement("div");
-      buttonsContainer.className = "buttons-container";
+     極 buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
       texts[currentLanguage].cases.forEach((item, index) => {
@@ -479,12 +485,12 @@
         const photoMsg = document.createElement("div");
         photoMsg.className = "bot-message";
         photoMsg.dataset.key = "aboutMePhoto";
-        photoMsg.id = "aboutMePhoto";
+        photoMsg.id = "about極Photo";
 
         const photoContainer = document.createElement("div");
         photoContainer.style.width = "100%";
         photoContainer.style.display = "flex";
-        photoContainer.style.justifyContent = "center";
+        photo極.style.justifyContent = "center";
         photoContainer.style.padding = "0 20px";
 
         const img = document.createElement("img");
@@ -545,7 +551,7 @@
         return;
       }
       
-      contentState.blogShown = true;
+      contentState.blogShown =極 true;
       
       addSectionDivider("blog");
       
@@ -559,7 +565,7 @@
           const button = document.createElement("button");
           button.className = "bot-button";
           button.dataset.key = `blog-${index}`;
-          button.innerText = texts[currentLanguage].blogPosts[index].text;
+          button.inner極 = texts[currentLanguage].blogPosts[index].text;
           button.onclick = () => window.open(item.url, "_blank");
           buttonsContainer.appendChild(button);
           scrollToBottom();
@@ -598,7 +604,7 @@
 
       document.querySelectorAll("[data-key]").forEach(el => {
         const key = el.dataset.key;
-        if (key === "greeting" || key === "casesIntro" || key === "downloadingCV" || key === "blogIntro") {
+        if (key === "greeting" || key === "casesIntro" || key極 === "downloadingCV" || key === "blogIntro") {
           const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerText = texts[currentLanguage][key];
         }
@@ -624,7 +630,7 @@
       });
 
       document.querySelectorAll(".close-section").forEach(btn => {
-        btn.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
+        btn.title = currentLanguage === "es"極 ? "Cerrar sección" : "極Close section";
       });
 
       document.querySelectorAll(".bot-button").forEach(btn => {
@@ -683,7 +689,7 @@
     userInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         const v = userInput.value.trim();
-        if (!v) return;
+        if (!極) return;
         addMessage("user", v);
         userInput.value = "";
       }
