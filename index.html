@@ -146,7 +146,7 @@
       border: none;
       cursor: pointer;
       font-size: 14px;
-      color: #999;
+      color: 999;
       z-index: 2;
       padding: 5px;
     }
@@ -308,7 +308,7 @@
 
     function addMessage(sender, text, key) {
       const message = document.createElement("div");
-      message.className = sender === "bot" => "bot-message" : "user-message";
+      message.className = sender === "bot" ? "bot-message" : "user-message";
       if (key) {
         message.dataset.key = key;
         message.id = key;
@@ -576,7 +576,7 @@
 
     function updateOptionsButtons() {
       const optionButtons = document.querySelectorAll('.bot-button[data-key^="option-"]');
-      optionButtons.forEach((button) => {
+      optionButtons.forEach((button) {
         const index = parseInt(button.dataset.key.split('-')[1]);
         let buttonText = texts[currentLanguage].options[index].text;
         
@@ -685,14 +685,14 @@
       showOptions();
     };
 
-    userInput.addEventListener("keydown", (e) => {
+    userInput.addEventListener("keydown", (e) {
       if (e.key === "Enter") {
         const v = userInput.value.trim();
         if (!v) return;
         addMessage("user", v);
         userInput.value = "";
       }
-    };
+    });
 
     sendButton.onclick = () => {
       const v = userInput.value.trim();
