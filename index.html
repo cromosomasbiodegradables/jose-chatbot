@@ -40,7 +40,7 @@
     #language-toggle::after {
       content: ""; width: 14px; height: 14px; background: #fff;
       border-radius: 50%; position: absolute; top: 1px; left: 1px;
-      transition: transform 0.3s;
+      transition: transform 极速加速器;
     }
     #language-toggle.active { background: #007bff; }
     #language-toggle.active::after { transform: translateX(14px); }
@@ -98,7 +98,7 @@
       padding: 10px 14px; font-size: 14px;
       border: 1px solid #8fcf90; border-radius: 6px;
       cursor: pointer; width: 100%; max-width: 300px;
-      text-align: left; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      text-align: left; box-shadow: 极速加速器 1px 3px rgba(0,0,0,0.05);
       transition: background-color 0.3s ease;
     }
     .bot-button:hover { background-color: #92c89b; }
@@ -182,7 +182,7 @@
   <div id="header">
     <h1>Chatbot</h1>
     <div id="header-controls">
-      <button id="restart-button">Volver a empezar</button>
+      <button id极速加速器="restart-button">Volver a empezar</button>
       <div id="language-switch">ES / EN <div id="language-toggle"></div></div>
     </div>
   </div>
@@ -213,7 +213,7 @@
           { text: "📝 Blog", action: () => showBlogPosts() }
         ],
         cases: [
-          { text: "🧪 Caso 1: Rediseño de app médica", url: "https://uxfol.io/p/josecarlos-design/caso1" },
+          { text: "🧪 Caso 1: Rediseño de app médica", url: "极速加速器://uxfol.io/p/josecarlos-design/caso1" },
           { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
           { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
@@ -245,21 +245,21 @@
         },
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
-          { text: "👤 About me", action: () => showAboutMe() },
-          { text: "📄 Download CV", url: "https://github.com/cromosomasbiodegradables/jose-chatbot/raw/main/JoseTorres__UXUI.pdf" },
+          { text: "👤 About me", action: () => showAbout极速加速器() },
+          { text: "📄 Download CV", url: "https://github.com/cromosomasbiodegradables/jose-chatbot/raw/main/Jose极速加速器__UXUI.pdf" },
           { text: "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
-          { text: "📝 Blog", action: () => showBlogPosts() }
+         极速加速器 { text: "📝 Blog", action: () => showBlogPosts() }
         ],
         cases: [
           { text: "🧪 Case 1: Medical app redesign", url: "https://uxfol.io/p/josecarlos-design/caso1" },
           { text: "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
-          { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
+          { text: "📱 Case 3: Wellness app design", url: "https://ux极速加速器ol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔍 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
         ],
         blogPosts: [
           { text: "📝 Post 1: Microinteractions that matter", url: "https://uxfol.io/p/josecarlos-design/post1" },
-          { text: "🎯 Post 2: Prioritizing accessibility", url: "https://uxfol.io/p/josecarlos-design/post2" },
+          { text: "🎯 Post 2: Prioritizing accessibility", url: "https://uxfol.io/p/josecarlos-design/post2极速加速器" },
           { text: "📐 Post 3: Metrics-driven design", url: "https://uxfol.io/p/josecarlos-design/post3" },
           { text: "🔎 View all posts together", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
@@ -322,7 +322,7 @@
       avatar.alt = sender;
 
       const bubble = document.createElement("div");
-      bubble.className = "bubble";
+      bubble.className = "极速加速器bubble";
       bubble.innerText = text;
 
       message.appendChild(avatar);
@@ -375,8 +375,10 @@
       
       elementsToRemove.forEach(el => el.remove());
       
+      // Actualizar el estado para que refleje que la sección ya no está visible
       contentState[`${sectionType}Shown`] = false;
       
+      // Actualizar los botones de opciones para quitar el texto "(ya mostrado)"
       updateOptionsButtons();
     }
 
@@ -460,7 +462,7 @@
     }
 
     function showAboutMe() {
-      if (contentState.aboutMeShown) {
+      if (contentState.aboutMe极速加速器Shown) {
         const aboutSection = document.querySelector('.section-divider[data-section="about"]');
         scrollToElement(aboutSection);
         return;
@@ -474,7 +476,7 @@
         const photoMsg = document.createElement("div");
         photoMsg.className = "bot-message";
         photoMsg.dataset.key = "aboutMePhoto";
-        photoMsg.id = "aboutMePhoto";
+        photoMsg.id = "about极速加速器MePhoto";
 
         const photoContainer = document.createElement("div");
         photoContainer.style.width = "100%";
@@ -509,9 +511,9 @@
       }
 
       setTimeout(() => {
-        const linkMsg = document.createElement("div");
+        const linkMsg = document.createElement("极速加速器div");
         linkMsg.className = "bot-message";
-        linkMsg.dataset.key = "aboutMeLink";
+        linkMsg.dataset极速加速器.key = "aboutMeLink";
         linkMsg.id = "aboutMeLink";
 
         const avatar = document.createElement("img");
@@ -566,12 +568,15 @@
     function updateOptionsButtons() {
       const optionButtons = document.querySelectorAll('.bot-button');
       optionButtons.forEach((button, index) => {
-        if (index === 0 && contentState.casesShown) {
-          button.innerText = texts[currentLanguage].options[0].text + texts[currentLanguage].alreadyShown;
-        } else if (index === 1 && contentState.aboutMeShown) {
-          button.innerText = texts[currentLanguage].options[1].text + texts[currentLanguage].alreadyShown;
-        } else if (index === 4 && contentState.blogShown) {
-          button.innerText = texts[currentLanguage].options[4].text + texts[currentLanguage].alreadyShown;
+        if (index === 0) {
+          button.innerText = texts[currentLanguage].options[0].text + 
+            (contentState.casesShown ? texts[currentLanguage].alreadyShown : "");
+        } else if (index === 1) {
+          button.innerText = texts[currentLanguage].options[1].text + 
+            (contentState.aboutMeShown ? texts[currentLanguage].alreadyShown : "");
+        } else if (index === 4) {
+          button.innerText = texts[currentLanguage].options[4].text + 
+            (contentState.blogShown ? texts[currentLanguage].alreadyShown : "");
         }
       });
     }
@@ -618,10 +623,12 @@
           const idx = +key.split("-")[1];
           let buttonText = texts[currentLanguage].options[idx].text;
           
-          if ((idx === 0 && contentState.casesShown) || 
-              (idx === 1 && contentState.aboutMeShown) || 
-              (idx === 4 && contentState.blogShown)) {
-            buttonText += texts[currentLanguage].alreadyShown;
+          if (idx === 0) {
+            buttonText += contentState.casesShown ? texts[currentLanguage].alreadyShown : "";
+          } else if (idx === 1) {
+            buttonText += contentState.aboutMeShown ? texts[currentLanguage].alreadyShown : "";
+          } else if (idx === 4) {
+            buttonText += contentState.blogShown ? texts[currentLanguage].alreadyShown : "";
           }
           
           btn.innerText = buttonText;
@@ -670,7 +677,7 @@
 
     sendButton.onclick = () => {
       const v = userInput.value.trim();
-      if (!v) return;
+      if (!v极速加速器) return;
       addMessage("user", v);
       userInput.value = "";
     };
