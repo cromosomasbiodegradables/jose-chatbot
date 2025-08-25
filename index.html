@@ -375,8 +375,10 @@
       
       elementsToRemove.forEach(el => el.remove());
       
+      // Actualizar el estado correctamente
       contentState[`${sectionType}Shown`] = false;
       
+      // Actualizar los botones de opciones
       updateOptionsButtons();
     }
 
@@ -627,13 +629,16 @@
           const idx = +key.split("-")[1];
           let buttonText = texts[currentLanguage].options[idx].text;
           
+          // Eliminar "ya mostrado" si existe
+          if (buttonText.includes(texts[currentLanguage].alreadyShown)) {
+            buttonText = buttonText.replace(texts[currentLanguage].alreadyShown, '');
+          }
+          
+          // Agregar "ya mostrado" solo si la sección está visible
           if ((idx === 0 && contentState.casesShown) || 
               (idx === 1 && contentState.aboutMeShown) || 
               (idx === 4 && contentState.blogShown)) {
             buttonText += texts[currentLanguage].alreadyShown;
-          } else {
-            // Asegurarse de eliminar el texto "ya mostrado" si la sección está cerrada
-            buttonText = buttonText.replace(texts[currentLanguage].alreadyShown, '');
           }
           
           btn.innerText = buttonText;
