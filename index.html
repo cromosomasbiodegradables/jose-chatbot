@@ -191,7 +191,7 @@
   <div id="chat-container" aria-live="polite"></div>
 
   <div id="input-area">
-    <input type="text" id"user-input" placeholder="Escribe tu respuesta aquí..." />
+    <input type="text" id="user-input" placeholder="Escribe tu respuesta aquí..." />
     <button id="send-button">Enviar</button>
   </div>
 
@@ -376,14 +376,8 @@
       
       elementsToRemove.forEach(el => el.remove());
       
-      // CORRECCIÓN: Actualizar correctamente el estado según el tipo de sección
-      if (sectionType === "cases") {
-        contentState.casesShown = false;
-      } else if (sectionType === "about") {
-        contentState.aboutMeShown = false;
-      } else if (sectionType === "blog") {
-        contentState.blogShown = false;
-      }
+      // Actualizar el estado correctamente
+      contentState[`${sectionType}Shown`] = false;
       
       // Actualizar los botones de opciones
       updateOptionsButtons();
@@ -454,11 +448,11 @@
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
-      texts[currentLanguage].cases.forEach((item, index) {
+      texts[currentLanguage].cases.forEach((item, index) => {
         setTimeout(() => {
           const button = document.createElement("button");
           button.className = "bot-button";
-          button.dataset.key = `case-${index`;
+          button.dataset.key = `case-${index}`;
           button.innerText = texts[currentLanguage].cases[index].text;
           button.onclick = () => window.open(item.url, "_blank");
           buttonsContainer.appendChild(button);
