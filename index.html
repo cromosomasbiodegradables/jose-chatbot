@@ -431,8 +431,9 @@
     }
 
     function showCaseButtons() {
-      if (contentState.casesShown) {
-        const casesSection = document.querySelector('.section-divider[data-section="cases"]');
+      // Verificar si la sección ya está visible
+      const casesSection = document.querySelector('.section-divider[data-section="cases"]');
+      if (casesSection) {
         scrollToElement(casesSection);
         return;
       }
@@ -462,8 +463,9 @@
     }
 
     function showAboutMe() {
-      if (contentState.aboutMeShown) {
-        const aboutSection = document.querySelector('.section-divider[data-section="about"]');
+      // Verificar si la sección ya está visible
+      const aboutSection = document.querySelector('.section-divider[data-section="about"]');
+      if (aboutSection) {
         scrollToElement(aboutSection);
         return;
       }
@@ -535,8 +537,9 @@
     }
 
     function showBlogPosts() {
-      if (contentState.blogShown) {
-        const blogSection = document.querySelector('.section-divider[data-section="blog"]');
+      // Verificar si la sección ya está visible
+      const blogSection = document.querySelector('.section-divider[data-section="blog"]');
+      if (blogSection) {
         scrollToElement(blogSection);
         return;
       }
