@@ -564,15 +564,24 @@
     }
 
     function updateOptionsButtons() {
-      const optionButtons = document.querySelectorAll('.bot-button');
-      optionButtons.forEach((button, index) => {
-        if (index === 0 && contentState.casesShown) {
-          button.innerText = texts[currentLanguage].options[0].text + texts[currentLanguage].alreadyShown;
-        } else if (index === 1 && contentState.aboutMeShown) {
-          button.innerText = texts[currentLanguage].options[1].text + texts[currentLanguage].alreadyShown;
-        } else if (index === 4 && contentState.blogShown) {
-          button.innerText = texts[currentLanguage].options[4].text + texts[currentLanguage].alreadyShown;
+      const optionButtons = document.querySelectorAll('.bot-button[data-key^="option-"]');
+      optionButtons.forEach((button) => {
+        const index = parseInt(button.dataset.key.split('-')[1]);
+        let buttonText = texts[currentLanguage].options[index].text;
+        
+        // Eliminar cualquier texto de "ya mostrado" existente
+        if (buttonText.includes(texts[currentLanguage].alreadyShown)) {
+          buttonText = buttonText.replace(texts[currentLanguage].alreadyShown, '');
         }
+        
+        // Agregar "ya mostrado" solo si la sección está visible
+        if ((index === 0 && contentState.casesShown) || 
+            (index === 1 && contentState.aboutMeShown) || 
+            (index === 4 && contentState.blogShown)) {
+          buttonText += texts[currentLanguage].alreadyShown;
+        }
+        
+        button.innerText = buttonText;
       });
     }
 
@@ -622,6 +631,9 @@
               (idx === 1 && contentState.aboutMeShown) || 
               (idx === 4 && contentState.blogShown)) {
             buttonText += texts[currentLanguage].alreadyShown;
+          } else {
+            // Asegurarse de eliminar el texto "ya mostrado" si la sección está cerrada
+            buttonText = buttonText.replace(texts[currentLanguage].alreadyShown, '');
           }
           
           btn.innerText = buttonText;
