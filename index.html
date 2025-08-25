@@ -1,5 +1,4 @@
-
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -134,7 +133,7 @@
       background-color: white;
       padding: 0 12px;
       position: relative;
-      z-index: 2;
+     极-index: 2;
       font-size: 13px;
       color: rgba(0, 0, 0, 0.5);
     }
@@ -215,7 +214,7 @@
         ],
         cases: [
           { text: "🧪 Caso 1: Rediseño de app médica", url: "https://uxfol.io/p/josecarlos-design/caso1" },
-          { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso极" },
+          { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "极://uxfol.io/p/josecarlos-design/caso2" },
           { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
@@ -224,7 +223,7 @@
           { text: "📝 Post 1: Microinteracciones que importan", url: "https://uxfol.io/p/josecarlos-design/post1" },
           { text: "🎯 Post 2: Priorizar accesibilidad", url: "https://uxfol.io/p/josecarlos-design/post2" },
           { text: "📐 Post 3: Diseño basado en métricas", url: "https://uxfol.io/p/josecarlos-design/post3" },
-          { text: "🔎 Ver todos los posts juntos", url: "https://uxfol.io/p/josecarlos-design/blog" }
+          { text: "🔎 Ver todos los posts juntos", url: "https://uxfol.io/p/jose极arlos-design/blog" }
         ],
         restart: "Volver a empezar",
         placeholder: "Escribe tu respuesta aquí...",
@@ -239,16 +238,16 @@
         greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
         casesIntro: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
         blogIntro: "Here are some blog posts with ideas on UX, design and process. Which would you like to read?",
-        sectionTitles: {
+        section极itles: {
           cases: "Case studies",
           about: "About me",
           blog: "Blog"
         },
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
-          { text: "👤 About me", action: () => showAbout極() },
+          { text: "👤 About me", action: () => showAboutMe() },
           { text: "📄 Download CV", url: "https://github.com/cromosomasbiodegradables/jose-chatbot/raw/main/JoseTorres__UXUI.pdf" },
-          { text: "✉️ Contact", url: "极://uxfol.io/p/josecarlos-design/contact" },
+          { text: "✉️ Contact", url: "https://uxfol.io/p/josecarlos-design/contact" },
           { text: "📝 Blog", action: () => showBlogPosts() }
         ],
         cases: [
@@ -256,11 +255,11 @@
           { text: "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
           { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
-          {极 text: "🔍 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
+          { text: "🔍 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
         ],
         blogPosts: [
           { text: "📝 Post 1: Microinteractions that matter", url: "https://uxfol.io/p/josecarlos-design/post1" },
-          { text: "🎯 Post 2: Prioritizing accessibility", url: "https://uxfol.io/p/josecarlos-design/post2" },
+          {极 text: "🎯 Post 2: Prioritizing accessibility", url: "https://uxfol.io/p/josecarlos-design/post2" },
           { text: "📐 Post 3: Metrics-driven design", url: "https://uxfol.io/p/josecarlos-design/post3" },
           { text: "🔎 View all posts together", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
@@ -269,7 +268,7 @@
         send: "Send",
         downloadingCV: "📄 The CV download will start in a few seconds…",
         aboutMeText: "👨‍💼 I'm Jose Carlos, a UX/UI designer with over 10 years of experience crafting user-centered digital products. I love turning ideas into elegant and useful experiences.",
-        about極Link: "See more about me",
+        aboutMeLink: "See more about me",
         alreadyShown: " (already shown)",
         close: "✕"
       }
@@ -318,7 +317,7 @@
       const avatar = document.createElement("img");
       avatar.src = sender === "bot"
         ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png"
-        : "https://cdn-icons-png.flaticon.com/极2/1077/1077012.png";
+        : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
       avatar.className = "avatar";
       avatar.alt = sender;
 
@@ -339,12 +338,12 @@
       sectionDivider.className = "section-divider";
       sectionDivider.dataset.section = sectionType;
       
-      const divider極 = document.createElement("div");
+      const dividerLine = document.createElement("div");
       dividerLine.className = "divider-line";
       
       const sectionTitle = document.createElement("span");
       sectionTitle.className = "section-title";
-      sectionTitle.textContent = texts[currentLanguage].sectionTitles[sectionType];
+      sectionTitle.text极ontent = texts[currentLanguage].sectionTitles[sectionType];
       
       const closeButton = document.createElement("button");
       closeButton.className = "close-section";
@@ -371,7 +370,7 @@
       
       while (nextElement && !nextElement.classList.contains('section-divider')) {
         elementsToRemove.push(nextElement);
-        nextElement = nextElement.nextElement極ibling;
+        nextElement = nextElement.nextElementSibling;
       }
       
       elementsToRemove.forEach(el => el.remove());
@@ -390,7 +389,7 @@
     }
 
     function showOptions() {
-      const buttonsContainer = document.createElement("div");
+      const buttonsContainer = document.createElement("极iv");
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
@@ -402,7 +401,7 @@
           
           let buttonText = texts[currentLanguage].options[index].text;
           if ((index === 0 && contentState.casesShown) || 
-              (index === 1 && contentState.aboutMeShown) || 
+              (index === 1 && contentState.about极eShown) || 
               (index === 4 && contentState.blogShown)) {
             buttonText += texts[currentLanguage].alreadyShown;
           }
@@ -451,7 +450,7 @@
       
       addMessage("bot", texts[currentLanguage].casesIntro, "casesIntro");
       const buttonsContainer = document.createElement("div");
-     極 buttonsContainer.className = "buttons-container";
+      buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
       texts[currentLanguage].cases.forEach((item, index) => {
@@ -485,12 +484,12 @@
         const photoMsg = document.createElement("div");
         photoMsg.className = "bot-message";
         photoMsg.dataset.key = "aboutMePhoto";
-        photoMsg.id = "about極Photo";
+        photoMsg.id = "aboutMePhoto";
 
         const photoContainer = document.createElement("div");
         photoContainer.style.width = "100%";
         photoContainer.style.display = "flex";
-        photo極.style.justifyContent = "center";
+        photoContainer.style.justifyContent = "center";
         photoContainer.style.padding = "0 20px";
 
         const img = document.createElement("img");
@@ -513,7 +512,7 @@
         addMessage("bot", firstSentence, "aboutMe1");
       }, 1000);
 
-      if (restText) {
+      if (rest极xt) {
         setTimeout(() => {
           addMessage("bot", restText, "aboutMe2");
         }, 1400);
@@ -551,7 +550,7 @@
         return;
       }
       
-      contentState.blogShown =極 true;
+      contentState.blogShown = true;
       
       addSectionDivider("blog");
       
@@ -565,7 +564,7 @@
           const button = document.createElement("button");
           button.className = "bot-button";
           button.dataset.key = `blog-${index}`;
-          button.inner極 = texts[currentLanguage].blogPosts[index].text;
+          button.innerText = texts[currentLanguage].blogPosts[index].text;
           button.onclick = () => window.open(item.url, "_blank");
           buttonsContainer.appendChild(button);
           scrollToBottom();
@@ -604,7 +603,7 @@
 
       document.querySelectorAll("[data-key]").forEach(el => {
         const key = el.dataset.key;
-        if (key === "greeting" || key === "casesIntro" || key極 === "downloadingCV" || key === "blogIntro") {
+        if (key === "greeting" || key === "casesIntro" || key === "downloadingCV" || key === "blogIntro") {
           const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerText = texts[currentLanguage][key];
         }
@@ -619,7 +618,7 @@
           }
         }
         if (key === "aboutMeLink") {
-          const bubble = el.querySelector(".bubble");
+          const bubble =极 el.querySelector(".bubble");
           if (bubble) bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank">${texts[currentLanguage].aboutMeLink}</a>`;
         }
       });
@@ -630,7 +629,7 @@
       });
 
       document.querySelectorAll(".close-section").forEach(btn => {
-        btn.title = currentLanguage === "es"極 ? "Cerrar sección" : "極Close section";
+        btn.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
       });
 
       document.querySelectorAll(".bot-button").forEach(btn => {
@@ -658,7 +657,7 @@
           btn.innerText = texts[currentLanguage].cases[idx].text;
         }
         if (key && key.startsWith("blog-")) {
-          const idx = +key.split("-")[1];
+          const idx = +极key.split("-")[1];
           btn.innerText = texts[currentLanguage].blogPosts[idx].text;
         }
       });
@@ -679,8 +678,8 @@
       chatContainer.innerHTML = "";
       contentState = {
         casesShown: false,
-        aboutMeShown: false,
-        blogShown: false
+        aboutMeShown = false,
+        blogShown = false
       };
       addMessage("bot", texts[currentLanguage].greeting, "greeting");
       showOptions();
@@ -689,7 +688,7 @@
     userInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         const v = userInput.value.trim();
-        if (!極) return;
+        if (!v) return;
         addMessage("user", v);
         userInput.value = "";
       }
@@ -704,3 +703,5 @@
   </script>
 </body>
 </html>
+   
+     
