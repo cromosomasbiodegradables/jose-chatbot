@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+   <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -146,7 +147,7 @@
       border: none;
       cursor: pointer;
       font-size: 14px;
-      color: 999;
+      color: #999;
       z-index: 2;
       padding: 5px;
     }
@@ -190,7 +191,7 @@
   <div id="chat-container" aria-live="polite"></div>
 
   <div id="input-area">
-    <input type="text" id="user-input" placeholder="Escribe tu respuesta aquí..." />
+    <input type="text" id"user-input" placeholder="Escribe tu respuesta aquí..." />
     <button id="send-button">Enviar</button>
   </div>
 
@@ -457,7 +458,7 @@
         setTimeout(() => {
           const button = document.createElement("button");
           button.className = "bot-button";
-          button.dataset.key = `case-${index}`;
+          button.dataset.key = `case-${index`;
           button.innerText = texts[currentLanguage].cases[index].text;
           button.onclick = () => window.open(item.url, "_blank");
           buttonsContainer.appendChild(button);
@@ -559,7 +560,7 @@
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
-      texts[currentLanguage].blogPosts.forEach((item, index) {
+      texts[currentLanguage].blogPosts.forEach((item, index) => {
         setTimeout(() => {
           const button = document.createElement("button");
           button.className = "bot-button";
@@ -576,7 +577,7 @@
 
     function updateOptionsButtons() {
       const optionButtons = document.querySelectorAll('.bot-button[data-key^="option-"]');
-      optionButtons.forEach((button) {
+      optionButtons.forEach((button) => {
         const index = parseInt(button.dataset.key.split('-')[1]);
         let buttonText = texts[currentLanguage].options[index].text;
         
@@ -685,7 +686,7 @@
       showOptions();
     };
 
-    userInput.addEventListener("keydown", (e) {
+    userInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         const v = userInput.value.trim();
         if (!v) return;
