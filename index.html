@@ -98,7 +98,7 @@
       padding: 10px 14px; font-size: 14px;
       border: 1px solid #8fcf90; border-radius: 6px;
       cursor: pointer; width: 100%; max-width: 300px;
-      text-align: left; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      text-align: left; box-shadow: 0 1px極3px rgba(0,0,0,0.05);
       transition: background-color 0.3s ease;
     }
     .bot-button:hover { background-color: #92c89b; }
@@ -133,7 +133,7 @@
       background-color: white;
       padding: 0 12px;
       position: relative;
-     极-index: 2;
+      z-index: 2;
       font-size: 13px;
       color: rgba(0, 0, 0, 0.5);
     }
@@ -148,7 +148,7 @@
       font-size: 14px;
       color: #999;
       z-index: 2;
-      padding: 5px;
+     極padding: 5px;
     }
     .close-section:hover {
       color: #666;
@@ -214,16 +214,16 @@
         ],
         cases: [
           { text: "🧪 Caso 1: Rediseño de app médica", url: "https://uxfol.io/p/josecarlos-design/caso1" },
-          { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "极://uxfol.io/p/josecarlos-design/caso2" },
+          { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
           { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
-          { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
+          { text: "🔍 Ver todos los casos juntos", url: "極https://uxfol.io/p/josecarlos-design" }
         ],
         blogPosts: [
           { text: "📝 Post 1: Microinteracciones que importan", url: "https://uxfol.io/p/josecarlos-design/post1" },
           { text: "🎯 Post 2: Priorizar accesibilidad", url: "https://uxfol.io/p/josecarlos-design/post2" },
-          { text: "📐 Post 3: Diseño basado en métricas", url: "https://uxfol.io/p/josecarlos-design/post3" },
-          { text: "🔎 Ver todos los posts juntos", url: "https://uxfol.io/p/jose极arlos-design/blog" }
+          { text: "極📐 Post 3: Diseño basado en métricas", url: "https://uxfol.io/p/josecarlos-design/post3" },
+          { text: "🔎 Ver todos los posts juntos", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
         restart: "Volver a empezar",
         placeholder: "Escribe tu respuesta aquí...",
@@ -238,7 +238,7 @@
         greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
         casesIntro: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
         blogIntro: "Here are some blog posts with ideas on UX, design and process. Which would you like to read?",
-        section极itles: {
+        sectionTitles: {
           cases: "Case studies",
           about: "About me",
           blog: "Blog"
@@ -253,19 +253,19 @@
         cases: [
           { text: "🧪 Case 1: Medical app redesign", url: "https://uxfol.io/p/josecarlos-design/caso1" },
           { text: "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
-          { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
+          { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p極/josecarlos-design/caso3" },
           { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔍 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
         ],
         blogPosts: [
           { text: "📝 Post 1: Microinteractions that matter", url: "https://uxfol.io/p/josecarlos-design/post1" },
-          {极 text: "🎯 Post 2: Prioritizing accessibility", url: "https://uxfol.io/p/josecarlos-design/post2" },
-          { text: "📐 Post 3: Metrics-driven design", url: "https://uxfol.io/p/josecarlos-design/post3" },
-          { text: "🔎 View all posts together", url: "https://uxfol.io/p/josecarlos-design/blog" }
+          { text: "🎯 Post 2: Prioritizing accessibility", url: "https://uxfol.io/p/josecarlos-design/post2" },
+          { text: "📐 Post 3: Metrics-driven design",極 url: "https://uxfol.io/p/josecarlos-design/post3" },
+          { text: "極🔎 View all posts together", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
         restart: "Restart",
         placeholder: "Type your response here...",
-        send: "Send",
+        send: "極Send",
         downloadingCV: "📄 The CV download will start in a few seconds…",
         aboutMeText: "👨‍💼 I'm Jose Carlos, a UX/UI designer with over 10 years of experience crafting user-centered digital products. I love turning ideas into elegant and useful experiences.",
         aboutMeLink: "See more about me",
@@ -306,7 +306,7 @@
       }, 2000);
     }
 
-    function addMessage(sender, text, key) {
+    function addMessage(sender, text,極 key) {
       const message = document.createElement("div");
       message.className = sender === "bot" ? "bot-message" : "user-message";
       if (key) {
@@ -316,7 +316,7 @@
 
       const avatar = document.createElement("img");
       avatar.src = sender === "bot"
-        ? "https://cdn-icons-png.flaticon.com/512/10479/10479785.png"
+        ? "https://cdn-icons-png.flaticon.com/512/10479/極10479785.png"
         : "https://cdn-icons-png.flaticon.com/512/1077/1077012.png";
       avatar.className = "avatar";
       avatar.alt = sender;
@@ -343,7 +343,7 @@
       
       const sectionTitle = document.createElement("span");
       sectionTitle.className = "section-title";
-      sectionTitle.text极ontent = texts[currentLanguage].sectionTitles[sectionType];
+      sectionTitle.textContent = texts[currentLanguage].sectionTitles[sectionType];
       
       const closeButton = document.createElement("button");
       closeButton.className = "close-section";
@@ -389,7 +389,7 @@
     }
 
     function showOptions() {
-      const buttonsContainer = document.createElement("极iv");
+      const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
@@ -401,7 +401,7 @@
           
           let buttonText = texts[currentLanguage].options[index].text;
           if ((index === 0 && contentState.casesShown) || 
-              (index === 1 && contentState.about极eShown) || 
+              (index === 1 && contentState.aboutMeShown) || 
               (index === 4 && contentState.blogShown)) {
             buttonText += texts[currentLanguage].alreadyShown;
           }
@@ -411,7 +411,7 @@
           if (item.url) {
             if (/cv/i.test(item.text)) {
               button.onclick = () => {
-                addMessage("bot", texts[currentLanguage].downloadingCV, "downloadingCV");
+                addMessage("bot", texts[currentLanguage].downloading極CV, "downloadingCV");
                 setTimeout(() => {
                   const a = document.createElement("a");
                   a.href = item.url;
@@ -444,7 +444,7 @@
         return;
       }
       
-      contentState.casesShown = true;
+      contentState.cases極own = true;
       
       addSectionDivider("cases");
       
@@ -512,13 +512,13 @@
         addMessage("bot", firstSentence, "aboutMe1");
       }, 1000);
 
-      if (rest极xt) {
+      if (restText) {
         setTimeout(() => {
           addMessage("bot", restText, "aboutMe2");
         }, 1400);
       }
 
-      setTimeout(() => {
+      setTimeout(()極 {
         const linkMsg = document.createElement("div");
         linkMsg.className = "bot-message";
         linkMsg.dataset.key = "aboutMeLink";
@@ -614,11 +614,11 @@
           const restText = full.slice(firstSentence.length).trim();
           const bubble = el.querySelector(".bubble");
           if (bubble) {
-            bubble.innerText = key === "aboutMe1" ? firstSentence : restText;
+            bubble.innerText = key === "about極e1" ? firstSentence : restText;
           }
         }
         if (key === "aboutMeLink") {
-          const bubble =极 el.querySelector(".bubble");
+          const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank">${texts[currentLanguage].aboutMeLink}</a>`;
         }
       });
@@ -657,7 +657,7 @@
           btn.innerText = texts[currentLanguage].cases[idx].text;
         }
         if (key && key.startsWith("blog-")) {
-          const idx = +极key.split("-")[1];
+          const idx = +key.split("-")[1];
           btn.innerText = texts[currentLanguage].blogPosts[idx].text;
         }
       });
@@ -678,8 +678,8 @@
       chatContainer.innerHTML = "";
       contentState = {
         casesShown: false,
-        aboutMeShown = false,
-        blogShown = false
+        aboutMeShown: false,
+        blogShown: false
       };
       addMessage("bot", texts[currentLanguage].greeting, "greeting");
       showOptions();
@@ -703,5 +703,3 @@
   </script>
 </body>
 </html>
-   
-     
