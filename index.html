@@ -308,7 +308,7 @@
 
     function addMessage(sender, text, key) {
       const message = document.createElement("div");
-      message.className = sender === "bot" ? "bot-message" : "user-message";
+      message.className = sender === "bot" => "bot-message" : "user-message";
       if (key) {
         message.dataset.key = key;
         message.id = key;
@@ -375,8 +375,14 @@
       
       elementsToRemove.forEach(el => el.remove());
       
-      // Actualizar el estado correctamente
-      contentState[`${sectionType}Shown`] = false;
+      // CORRECCIÓN: Actualizar correctamente el estado según el tipo de sección
+      if (sectionType === "cases") {
+        contentState.casesShown = false;
+      } else if (sectionType === "about") {
+        contentState.aboutMeShown = false;
+      } else if (sectionType === "blog") {
+        contentState.blogShown = false;
+      }
       
       // Actualizar los botones de opciones
       updateOptionsButtons();
@@ -447,7 +453,7 @@
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
-      texts[currentLanguage].cases.forEach((item, index) => {
+      texts[currentLanguage].cases.forEach((item, index) {
         setTimeout(() => {
           const button = document.createElement("button");
           button.className = "bot-button";
@@ -553,7 +559,7 @@
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
-      texts[currentLanguage].blogPosts.forEach((item, index) => {
+      texts[currentLanguage].blogPosts.forEach((item, index) {
         setTimeout(() => {
           const button = document.createElement("button");
           button.className = "bot-button";
@@ -686,7 +692,7 @@
         addMessage("user", v);
         userInput.value = "";
       }
-    });
+    };
 
     sendButton.onclick = () => {
       const v = userInput.value.trim();
