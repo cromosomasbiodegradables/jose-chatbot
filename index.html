@@ -103,23 +103,62 @@
     }
     .bot-button:hover { background-color: #92c89b; }
 
-    /* Imagen tipo "bloque botón" para Sobre mí:
-       tamaño aumentado +20% y sombra sutil */
     .about-image {
       display: block;
       width: 100%;
       max-width: 312px;
-      height: 130px;         /* altura ~ 3 botones apilados */
-      object-fit: contain;   /* para que se vea COMPLETA y no se recorte */
+      height: 130px;
+      object-fit: contain;
       border-radius: 12px;
-      margin: 8px auto;      /* centrada y con un poco de separación */
-      filter: drop-shadow(0 6px 14px rgba(0,0,0,0.18)); /* sombra en la foto */
+      margin: 8px auto;
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,0.18));
+    }
+
+    /* Nuevos estilos para el separador de sección */
+    .section-divider {
+      margin: 25px 0 15px 0;
+      position: relative;
+      text-align: center;
+    }
+    .divider-line {
+      border-top: 1px solid #E2DBDB;
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+    .section-title {
+      display: inline-block;
+      background-color: white;
+      padding: 0 12px;
+      position: relative;
+      z-index: 2;
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.5);
+    }
+    .close-section {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: #999;
+      z-index: 2;
+      padding: 5px;
+    }
+    .close-section:hover {
+      color: #666;
     }
 
     @media screen and (max-width: 480px) {
       .bot-button { font-size: 13px; padding: 9px 12px; }
       #chat-container { padding: 15px; }
-      .about-image { max-width: 264px; height: 106px; } /* ajuste móvil */
+      .about-image { max-width: 264px; height: 106px; }
+      .section-title { font-size: 12px; }
     }
 
     @keyframes fadeIn {
@@ -127,7 +166,6 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     
-    /* Estilo para resaltar sección al hacer scroll */
     .highlighted {
       animation: highlight 2s ease;
     }
@@ -135,7 +173,7 @@
     @keyframes highlight {
       0% { background-color: transparent; }
       50% { background-color: rgba(255, 255, 0, 0.2); }
-      100% { background-color: transparent; }
+      100% { background-color: transparent;
     }
   </style>
 </head>
@@ -162,6 +200,11 @@
         greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarse hoy?",
         casesIntro: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
         blogIntro: "Aquí tienes algunos posts del blog con ideas sobre UX, diseño y procesos. ¿Cuál te gustaría leer?",
+        sectionTitles: {
+          cases: "Casos de estudio",
+          about: "Sobre mí",
+          blog: "Blog"
+        },
         options: [
           { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
           { text: "👤 Sobre mí", action: () => showAboutMe() },
@@ -188,12 +231,18 @@
         downloadingCV: "📄 En unos segundos comenzará la descarga de mi CV…",
         aboutMeText: "👨‍💼 Soy Jose Carlos, diseñador UX/UI con más de 10 años de experiencia creando productos digitales centrados en las personas. Me apasiona transformar ideas en experiencias útiles y elegantes.",
         aboutMeLink: "Ver más sobre mí",
-        alreadyShown: " (ya mostrado)"
+        alreadyShown: " (ya mostrado)",
+        close: "✕"
       },
       en: {
         greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
         casesIntro: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
         blogIntro: "Here are some blog posts with ideas on UX, design and process. Which would you like to read?",
+        sectionTitles: {
+          cases: "Case studies",
+          about: "About me",
+          blog: "Blog"
+        },
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
           { text: "👤 About me", action: () => showAboutMe() },
@@ -220,7 +269,8 @@
         downloadingCV: "📄 The CV download will start in a few seconds…",
         aboutMeText: "👨‍💼 I'm Jose Carlos, a UX/UI designer with over 10 years of experience crafting user-centered digital products. I love turning ideas into elegant and useful experiences.",
         aboutMeLink: "See more about me",
-        alreadyShown: " (already shown)"
+        alreadyShown: " (already shown)",
+        close: "✕"
       }
     };
 
@@ -251,7 +301,6 @@
       element.classList.add('highlighted');
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       
-      // Quitar la clase de resaltado después de la animación
       setTimeout(() => {
         element.classList.remove('highlighted');
       }, 2000);
@@ -262,7 +311,7 @@
       message.className = sender === "bot" ? "bot-message" : "user-message";
       if (key) {
         message.dataset.key = key;
-        message.id = key; // Añadir ID para poder hacer scroll a este elemento
+        message.id = key;
       }
 
       const avatar = document.createElement("img");
@@ -284,6 +333,53 @@
       return message;
     }
 
+    function addSectionDivider(sectionType) {
+      const sectionDivider = document.createElement("div");
+      sectionDivider.className = "section-divider";
+      sectionDivider.dataset.section = sectionType;
+      
+      const dividerLine = document.createElement("div");
+      dividerLine.className = "divider-line";
+      
+      const sectionTitle = document.createElement("span");
+      sectionTitle.className = "section-title";
+      sectionTitle.textContent = texts[currentLanguage].sectionTitles[sectionType];
+      
+      const closeButton = document.createElement("button");
+      closeButton.className = "close-section";
+      closeButton.innerHTML = texts[currentLanguage].close;
+      closeButton.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
+      closeButton.onclick = function() {
+        removeSection(sectionType);
+      };
+      
+      sectionDivider.appendChild(dividerLine);
+      sectionDivider.appendChild(sectionTitle);
+      sectionDivider.appendChild(closeButton);
+      
+      chatContainer.appendChild(sectionDivider);
+      return sectionDivider;
+    }
+
+    function removeSection(sectionType) {
+      const sectionDivider = document.querySelector(`.section-divider[data-section="${sectionType}"]`);
+      if (!sectionDivider) return;
+      
+      let nextElement = sectionDivider.nextElementSibling;
+      const elementsToRemove = [sectionDivider];
+      
+      while (nextElement && !nextElement.classList.contains('section-divider')) {
+        elementsToRemove.push(nextElement);
+        nextElement = nextElement.nextElementSibling;
+      }
+      
+      elementsToRemove.forEach(el => el.remove());
+      
+      contentState[`${sectionType}Shown`] = false;
+      
+      updateOptionsButtons();
+    }
+
     function showOptions() {
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
@@ -295,7 +391,6 @@
           button.className = "bot-button";
           button.dataset.key = `option-${index}`;
           
-          // Si el contenido ya se mostró, añadir indicador
           let buttonText = texts[currentLanguage].options[index].text;
           if ((index === 0 && contentState.casesShown) || 
               (index === 1 && contentState.aboutMeShown) || 
@@ -334,14 +429,16 @@
     }
 
     function showCaseButtons() {
-      // Si ya se mostraron los casos, hacer scroll a ellos
       if (contentState.casesShown) {
-        const casesIntro = document.getElementById("casesIntro");
-        scrollToElement(casesIntro);
+        const casesSection = document.querySelector('.section-divider[data-section="cases"]');
+        scrollToElement(casesSection);
         return;
       }
       
       contentState.casesShown = true;
+      
+      addSectionDivider("cases");
+      
       addMessage("bot", texts[currentLanguage].casesIntro, "casesIntro");
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
@@ -359,21 +456,20 @@
         }, 800 + index * 400);
       });
       
-      // Actualizar botones de opciones para reflejar que los casos se han mostrado
       updateOptionsButtons();
     }
 
     function showAboutMe() {
-      // Si ya se mostró "Sobre mí", hacer scroll a ello
       if (contentState.aboutMeShown) {
-        const aboutMePhoto = document.getElementById("aboutMePhoto");
-        scrollToElement(aboutMePhoto);
+        const aboutSection = document.querySelector('.section-divider[data-section="about"]');
+        scrollToElement(aboutSection);
         return;
       }
       
       contentState.aboutMeShown = true;
       
-      // 1) Foto primero (centrada, tamaño medio, completa)
+      addSectionDivider("about");
+      
       setTimeout(() => {
         const photoMsg = document.createElement("div");
         photoMsg.className = "bot-message";
@@ -397,9 +493,8 @@
         scrollToBottom();
       }, 600);
 
-      // 2) & 3) Texto en dos burbujas (partimos el aboutMeText en 2 frases)
       const full = texts[currentLanguage].aboutMeText;
-      const parts = full.split(/\. +/); // divide por el primer punto y espacio
+      const parts = full.split(/\. +/);
       const firstSentence = parts[0] ? parts[0] + "." : full;
       const restText = full.slice(firstSentence.length).trim();
 
@@ -413,7 +508,6 @@
         }, 1400);
       }
 
-      // 4) Link al final
       setTimeout(() => {
         const linkMsg = document.createElement("div");
         linkMsg.className = "bot-message";
@@ -435,19 +529,20 @@
         scrollToBottom();
       }, restText ? 1800 : 1400);
       
-      // Actualizar botones de opciones para reflejar que "Sobre mí" se ha mostrado
       updateOptionsButtons();
     }
 
     function showBlogPosts() {
-      // Si ya se mostraron los posts, hacer scroll a ellos
       if (contentState.blogShown) {
-        const blogIntro = document.getElementById("blogIntro");
-        scrollToElement(blogIntro);
+        const blogSection = document.querySelector('.section-divider[data-section="blog"]');
+        scrollToElement(blogSection);
         return;
       }
       
       contentState.blogShown = true;
+      
+      addSectionDivider("blog");
+      
       addMessage("bot", texts[currentLanguage].blogIntro, "blogIntro");
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
@@ -459,23 +554,16 @@
           button.className = "bot-button";
           button.dataset.key = `blog-${index}`;
           button.innerText = texts[currentLanguage].blogPosts[index].text;
-
-          // último botón ("ver todos") abre la url
-          if (item.url) {
-            button.onclick = () => window.open(item.url, "_blank");
-          }
-
+          button.onclick = () => window.open(item.url, "_blank");
           buttonsContainer.appendChild(button);
           scrollToBottom();
         }, 800 + index * 400);
       });
       
-      // Actualizar botones de opciones para reflejar que el blog se ha mostrado
       updateOptionsButtons();
     }
 
     function updateOptionsButtons() {
-      // Actualizar los textos de los botones de opciones para mostrar qué contenido ya se ha mostrado
       const optionButtons = document.querySelectorAll('.bot-button');
       optionButtons.forEach((button, index) => {
         if (index === 0 && contentState.casesShown) {
@@ -499,7 +587,6 @@
           const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerText = texts[currentLanguage][key];
         }
-        // Actualiza las dos burbujas de "Sobre mí" tras cambiar de idioma
         if (key === "aboutMe1" || key === "aboutMe2") {
           const full = texts[currentLanguage].aboutMeText;
           const parts = full.split(/\. +/);
@@ -516,13 +603,21 @@
         }
       });
 
+      document.querySelectorAll(".section-title").forEach(title => {
+        const section = title.parentElement.dataset.section;
+        title.textContent = texts[currentLanguage].sectionTitles[section];
+      });
+
+      document.querySelectorAll(".close-section").forEach(btn => {
+        btn.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
+      });
+
       document.querySelectorAll(".bot-button").forEach(btn => {
         const key = btn.dataset.key;
         if (key && key.startsWith("option-")) {
           const idx = +key.split("-")[1];
           let buttonText = texts[currentLanguage].options[idx].text;
           
-          // Añadir indicador de "ya mostrado" si corresponde
           if ((idx === 0 && contentState.casesShown) || 
               (idx === 1 && contentState.aboutMeShown) || 
               (idx === 4 && contentState.blogShown)) {
