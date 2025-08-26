@@ -173,7 +173,7 @@
     @keyframes highlight {
       0% { background-color: transparent; }
       50% { background-color: rgba(255, 255, 0, 0.2); }
-      100% { background-color: transparent;
+      100% { background-color: transparent; }
     }
   </style>
 </head>
@@ -375,8 +375,12 @@
       
       elementsToRemove.forEach(el => el.remove());
       
-      // Actualizar el estado correctamente
-      contentState[`${sectionType}Shown`] = false;
+      // Actualizar el estado correctamente (fix: 'about' usa la clave aboutMeShown)
+      if (sectionType === 'about') {
+        contentState.aboutMeShown = false;
+      } else {
+        contentState[`${sectionType}Shown`] = false;
+      }
       
       // Actualizar los botones de opciones
       updateOptionsButtons();
@@ -393,14 +397,15 @@
           button.className = "bot-button";
           button.dataset.key = `option-${index}`;
           
-          let buttonText = texts[currentLanguage].options[index].text;
+          // Base text y añadido condicional de "ya mostrado"
+          let baseText = texts[currentLanguage].options[index].text;
           if ((index === 0 && contentState.casesShown) || 
               (index === 1 && contentState.aboutMeShown) || 
               (index === 4 && contentState.blogShown)) {
-            buttonText += texts[currentLanguage].alreadyShown;
+            baseText += texts[currentLanguage].alreadyShown;
           }
           
-          button.innerText = buttonText;
+          button.innerText = baseText;
 
           if (item.url) {
             if (/cv/i.test(item.text)) {
@@ -572,20 +577,15 @@
       const optionButtons = document.querySelectorAll('.bot-button[data-key^="option-"]');
       optionButtons.forEach((button) => {
         const index = parseInt(button.dataset.key.split('-')[1]);
-        let buttonText = texts[currentLanguage].options[index].text;
-        
-        // Eliminar cualquier texto de "ya mostrado" existente
-        if (buttonText.includes(texts[currentLanguage].alreadyShown)) {
-          buttonText = buttonText.replace(texts[currentLanguage].alreadyShown, '');
-        }
-        
-        // Agregar "ya mostrado" solo si la sección está visible
+        const baseText = texts[currentLanguage].options[index].text;
+        let buttonText = baseText;
+
         if ((index === 0 && contentState.casesShown) || 
             (index === 1 && contentState.aboutMeShown) || 
             (index === 4 && contentState.blogShown)) {
           buttonText += texts[currentLanguage].alreadyShown;
         }
-        
+
         button.innerText = buttonText;
       });
     }
@@ -626,24 +626,18 @@
         btn.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
       });
 
+      // Actualizar textos de botones (opciones, casos y blog)
       document.querySelectorAll(".bot-button").forEach(btn => {
         const key = btn.dataset.key;
         if (key && key.startsWith("option-")) {
           const idx = +key.split("-")[1];
-          let buttonText = texts[currentLanguage].options[idx].text;
-          
-          // Eliminar "ya mostrado" si existe
-          if (buttonText.includes(texts[currentLanguage].alreadyShown)) {
-            buttonText = buttonText.replace(texts[currentLanguage].alreadyShown, '');
-          }
-          
-          // Agregar "ya mostrado" solo si la sección está visible
+          const baseText = texts[currentLanguage].options[idx].text;
+          let buttonText = baseText;
           if ((idx === 0 && contentState.casesShown) || 
               (idx === 1 && contentState.aboutMeShown) || 
               (idx === 4 && contentState.blogShown)) {
             buttonText += texts[currentLanguage].alreadyShown;
           }
-          
           btn.innerText = buttonText;
         }
         if (key && key.startsWith("case-")) {
