@@ -47,13 +47,17 @@
 
     #chat-container {
       flex: 1 1 auto; min-height: 0; width: 100%; max-width: 600px;
-      margin: 20px auto 0 auto; background-color: #ffffff;
+      margin: 20px auto 20px auto; /* ✅ margen inferior simétrico */
+      background-color: #ffffff;
       border-radius: 12px; padding: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       overflow-y: auto; display: flex; flex-direction: column;
       overscroll-behavior: contain; scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
     }
+
+    /* ✅ cuando el input está visible, acercamos el container al input */
+    body.has-input #chat-container { margin-bottom: 0; }
 
     .bot-message, .user-message {
       display: flex; align-items: flex-start; margin: 10px 0;
@@ -585,6 +589,7 @@
       contactFormStep = 0;
       contactFormData = { name: "", company: "", message: "" };
       inputArea.style.display = "flex";
+      document.body.classList.add('has-input'); /* ✅ señalamos que hay input visible */
       askNextContactQuestion();
     }
 
@@ -641,6 +646,7 @@
       contactFormStep = 0;
       contactFormData = { name: "", company: "", message: "" };
       inputArea.style.display = "none";
+      document.body.classList.remove('has-input'); /* ✅ quitamos la clase al ocultar el input */
     }
     // -------- /CONTACTO --------
 
@@ -768,5 +774,3 @@
   </script>
 </body>
 </html>
-
-
