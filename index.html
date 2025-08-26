@@ -155,7 +155,9 @@
       z-index: 2;
       padding: 5px;
     }
-    .close-section:hover { color: #666; }
+    .close-section:hover {
+      color: #666;
+    }
 
     @media screen and (max-width: 480px) {
       .bot-button { font-size: 13px; padding: 9px 12px; }
@@ -175,6 +177,34 @@
       50% { background-color: rgba(255, 255, 0, 0.2); }
       100% { background-color: transparent; }
     }
+
+    /* ✅ Estilos compactos para datos de contacto con botón copiar */
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 2px;
+    }
+    .contact-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;         /* más pequeño para datos largos */
+      line-height: 1.3;
+      word-break: break-word;
+    }
+    .contact-label { color: rgba(0,0,0,0.7); white-space: nowrap; }
+    .contact-value { color: #222; }
+    .copy-btn {
+      border: 1px solid #b7dcb8;
+      background: #e9f7ea;
+      border-radius: 6px;
+      font-size: 12px;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+    .copy-btn:hover { background: #dff2e2; }
   </style>
 </head>
 <body>
@@ -224,16 +254,22 @@
         contactPrompt: "¿Quieres que te escriba yo o prefieres escribirme tú?",
         contactButtons: { writeMe: "📝 Quiero que me escribas tú", writeYou: "📄 Prefiero escribirte yo" },
         contactMyData: {
-          emailLabel: "✉️ Email", phoneLabel: "📱 Teléfono", linkedinLabel: "💼 LinkedIn",
-          email: "tuemail@ejemplo.com", phone: "+34 600 000 000",
-          linkedinUrl: "https://linkedin.com/in/tuperfil", linkedinText: "linkedin.com/in/tuperfil"
+          emailLabel: "✉️ Email",
+          phoneLabel: "📱 Teléfono",
+          linkedinLabel: "💼 LinkedIn",
+          wechatLabel: "💬 WeChat",
+          email: "jose.carlos.torres.sanchez@gmail.com",
+          phone: "+34 659104561",
+          linkedinText: "https://www.linkedin.com/in/jose-carlos-torres-sanchez/",
+          wechat: "JCTS1986"
         },
         formQuestions: ["¿Cuál es tu nombre?", "¿De qué empresa vienes?", "¿Cuál es tu mensaje?"],
         formSummaryTitle: "Perfecto, recibí tus datos:",
         formSend: "✅ Enviar", formCancel: "❌ Cancelar",
         restart: "Volver a empezar", placeholder: "Escribe tu respuesta aquí...", send: "Enviar",
         aboutMeText: "👨‍💼 Soy Jose Carlos, diseñador UX/UI con más de 10 años de experiencia creando productos digitales centrados en las personas. Me apasiona transformar ideas en experiencias útiles y elegantes.",
-        aboutMeLink: "Ver más sobre mí", alreadyShown: " (ya mostrado)", close: "✕"
+        aboutMeLink: "Ver más sobre mí", alreadyShown: " (ya mostrado)", close: "✕",
+        copy: "Copiar"
       },
       en: {
         greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
@@ -263,16 +299,22 @@
         contactPrompt: "Do you want me to write to you, or do you prefer to write to me?",
         contactButtons: { writeMe: "📝 I want you to write to me", writeYou: "📄 I prefer to write to you" },
         contactMyData: {
-          emailLabel: "✉️ Email", phoneLabel: "📱 Phone", linkedinLabel: "💼 LinkedIn",
-          email: "youremail@example.com", phone: "+34 600 000 000",
-          linkedinUrl: "https://linkedin.com/in/yourprofile", linkedinText: "linkedin.com/in/yourprofile"
+          emailLabel: "✉️ Email",
+          phoneLabel: "📱 Phone",
+          linkedinLabel: "💼 LinkedIn",
+          wechatLabel: "💬 WeChat",
+          email: "jose.carlos.torres.sanchez@gmail.com",
+          phone: "+34 659104561",
+          linkedinText: "https://www.linkedin.com/in/jose-carlos-torres-sanchez/",
+          wechat: "JCTS1986"
         },
         formQuestions: ["What's your name?","Which company are you from?","What's your message?"],
         formSummaryTitle: "Great, I received your details:",
         formSend: "✅ Send", formCancel: "❌ Cancel",
         restart: "Restart", placeholder: "Type your response here...", send: "Send",
         aboutMeText: "👨‍💼 I'm Jose Carlos, a UX/UI designer with over 10 years of experience crafting user-centered digital products. I love turning ideas into elegant and useful experiences.",
-        aboutMeLink: "See more about me", alreadyShown: " (already shown)", close: "✕"
+        aboutMeLink: "See more about me", alreadyShown: " (already shown)", close: "✕",
+        copy: "Copy"
       }
     };
 
@@ -553,14 +595,13 @@
 
       addSectionDivider("contact");
 
-      // ✅ Mostrar el texto del bot inmediatamente (como en las otras secciones)
+      // Texto del bot primero
       addMessage("bot", texts[currentLanguage].contactPrompt, "contactPrompt");
 
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
-      // ✅ Botones escalonados después del texto (800ms y 1200ms)
       setTimeout(() => {
         const btnWriteYou = document.createElement("button");
         btnWriteYou.className = "bot-button";
@@ -584,10 +625,74 @@
       updateOptionsButtons();
     }
 
+    function copyToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+      }
+    }
+
     function showMyContactData() {
       const d = texts[currentLanguage].contactMyData;
-      const msg = `${d.emailLabel}: ${d.email}\n${d.phoneLabel}: ${d.phone}\n${d.linkedinLabel}: ${d.linkedinText}`;
-      addMessage("bot", msg, "contactData");
+
+      // Creamos un mensaje tipo bot con HTML para filas + botón copiar
+      const message = document.createElement("div");
+      message.className = "bot-message";
+      message.dataset.key = "contactData";
+      message.id = "contactData";
+
+      const avatar = document.createElement("img");
+      avatar.src = "https://cdn-icons-png.flaticon.com/512/10479/10479785.png";
+      avatar.className = "avatar";
+      avatar.alt = "bot";
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.innerHTML = `
+        <div class="contact-list">
+          <div class="contact-row">
+            <span class="contact-label">${d.emailLabel}</span>
+            <span class="contact-value" data-field="email">${d.email}</span>
+            <button class="copy-btn" data-copy="email">📋 ${texts[currentLanguage].copy}</button>
+          </div>
+          <div class="contact-row">
+            <span class="contact-label">${d.phoneLabel}</span>
+            <span class="contact-value" data-field="phone">${d.phone}</span>
+            <button class="copy-btn" data-copy="phone">📋 ${texts[currentLanguage].copy}</button>
+          </div>
+          <div class="contact-row">
+            <span class="contact-label">${d.linkedinLabel}</span>
+            <span class="contact-value" data-field="linkedinText">${d.linkedinText}</span>
+            <button class="copy-btn" data-copy="linkedinText">📋 ${texts[currentLanguage].copy}</button>
+          </div>
+          <div class="contact-row">
+            <span class="contact-label">${d.wechatLabel}</span>
+            <span class="contact-value" data-field="wechat">${d.wechat}</span>
+            <button class="copy-btn" data-copy="wechat">📋 ${texts[currentLanguage].copy}</button>
+          </div>
+        </div>
+      `;
+
+      message.appendChild(avatar);
+      message.appendChild(bubble);
+      chatContainer.appendChild(message);
+
+      // Listeners de copia
+      bubble.querySelectorAll(".copy-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const field = btn.getAttribute("data-copy");
+          const valEl = bubble.querySelector(`.contact-value[data-field="${field}"]`);
+          if (valEl) copyToClipboard(valEl.textContent.trim());
+        });
+      });
+
+      scrollToBottom();
     }
 
     function startContactForm() {
@@ -706,7 +811,25 @@
           const d = texts[currentLanguage].contactMyData;
           const bubble = el.querySelector(".bubble");
           if (bubble) {
-            bubble.innerText = `${d.emailLabel}: ${d.email}\n${d.phoneLabel}: ${d.phone}\n${d.linkedinLabel}: ${d.linkedinText}`;
+            // Actualizamos labels, valores y texto del botón copiar
+            const pairs = [
+              ["emailLabel","email"],
+              ["phoneLabel","phone"],
+              ["linkedinLabel","linkedinText"],
+              ["wechatLabel","wechat"]
+            ];
+            const rows = bubble.querySelectorAll(".contact-row");
+            pairs.forEach(([, field], idx) => {
+              const labelEl = rows[idx]?.querySelector(".contact-label");
+              const valEl = rows[idx]?.querySelector(`.contact-value[data-field="${field}"]`);
+              const btnEl = rows[idx]?.querySelector(".copy-btn");
+              if (labelEl) {
+                const labelKey = pairs[idx][0];
+                labelEl.textContent = d[labelKey];
+              }
+              if (valEl) valEl.textContent = d[field];
+              if (btnEl) btnEl.innerHTML = `📋 ${texts[currentLanguage].copy}`;
+            });
           }
         }
         if (/^contactQ[0-2]$/.test(key)) {
