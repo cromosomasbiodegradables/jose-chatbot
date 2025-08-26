@@ -554,28 +554,37 @@
       contentState.contactShown = true;
 
       addSectionDivider("contact");
-      addMessage("bot", texts[currentLanguage].contactPrompt, "contactPrompt");
+
+      // ✅ Animación escalonada igual que otras secciones
+      setTimeout(() => {
+        addMessage("bot", texts[currentLanguage].contactPrompt, "contactPrompt");
+      }, 600);
 
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
-      const btnWriteYou = document.createElement("button");
-      btnWriteYou.className = "bot-button";
-      btnWriteYou.dataset.key = "contact-writeyou";
-      btnWriteYou.innerText = texts[currentLanguage].contactButtons.writeYou;
-      btnWriteYou.onclick = showMyContactData;
-      buttonsContainer.appendChild(btnWriteYou);
+      setTimeout(() => {
+        const btnWriteYou = document.createElement("button");
+        btnWriteYou.className = "bot-button";
+        btnWriteYou.dataset.key = "contact-writeyou";
+        btnWriteYou.innerText = texts[currentLanguage].contactButtons.writeYou;
+        btnWriteYou.onclick = showMyContactData;
+        buttonsContainer.appendChild(btnWriteYou);
+        scrollToBottom();
+      }, 1000);
 
-      const btnWriteMe = document.createElement("button");
-      btnWriteMe.className = "bot-button";
-      btnWriteMe.dataset.key = "contact-writeme";
-      btnWriteMe.innerText = texts[currentLanguage].contactButtons.writeMe;
-      btnWriteMe.onclick = startContactForm;
-      buttonsContainer.appendChild(btnWriteMe);
+      setTimeout(() => {
+        const btnWriteMe = document.createElement("button");
+        btnWriteMe.className = "bot-button";
+        btnWriteMe.dataset.key = "contact-writeme";
+        btnWriteMe.innerText = texts[currentLanguage].contactButtons.writeMe;
+        btnWriteMe.onclick = startContactForm;
+        buttonsContainer.appendChild(btnWriteMe);
+        scrollToBottom();
+      }, 1400);
 
       updateOptionsButtons();
-      scrollToBottom();
     }
 
     function showMyContactData() {
@@ -690,6 +699,31 @@
           const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank">${texts[currentLanguage].aboutMeLink}</a>`;
         }
+
+        /* ✅ Traducciones específicas de Contacto */
+        if (key === "contactPrompt") {
+          const bubble = el.querySelector(".bubble");
+          if (bubble) bubble.innerText = texts[currentLanguage].contactPrompt;
+        }
+        if (key === "contactData") {
+          const d = texts[currentLanguage].contactMyData;
+          const bubble = el.querySelector(".bubble");
+          if (bubble) {
+            bubble.innerText = `${d.emailLabel}: ${d.email}\n${d.phoneLabel}: ${d.phone}\n${d.linkedinLabel}: ${d.linkedinText}`;
+          }
+        }
+        if (/^contactQ[0-2]$/.test(key)) {
+          const idx = parseInt(key.replace("contactQ", ""), 10);
+          const bubble = el.querySelector(".bubble");
+          if (bubble) bubble.innerText = texts[currentLanguage].formQuestions[idx];
+        }
+        if (key === "contactSummary") {
+          const bubble = el.querySelector(".bubble");
+          if (bubble) {
+            const title = texts[currentLanguage].formSummaryTitle;
+            bubble.innerText = `${title}\n👤 ${contactFormData.name}\n🏢 ${contactFormData.company}\n💬 ${contactFormData.message}`;
+          }
+        }
       });
 
       document.querySelectorAll(".section-title").forEach(title => {
@@ -723,6 +757,7 @@
           const idx = +key.split("-")[1];
           btn.innerText = texts[currentLanguage].blogPosts[idx].text;
         }
+        /* ✅ Botones Contacto + acciones */
         if (key === "contact-writeyou") btn.innerText = texts[currentLanguage].contactButtons.writeYou;
         if (key === "contact-writeme") btn.innerText = texts[currentLanguage].contactButtons.writeMe;
         if (key === "contact-send") btn.innerText = texts[currentLanguage].formSend;
