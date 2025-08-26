@@ -75,7 +75,7 @@
     }
 
     #input-area {
-      display: none; /* 👈 Oculto por defecto */
+      display: none; /* OCULTO por defecto */
       justify-content: center;
       margin: 12px auto 20px auto; max-width: 600px; width: 100%;
       flex: 0 0 auto;
@@ -400,7 +400,7 @@
         contentState.aboutMeShown = false;
       } else if (sectionType === 'contact') {
         contentState.contactShown = false;
-        resetContactForm(); // ocultar input si estaba activo
+        resetContactForm(); // oculta input si estaba activo
       } else {
         contentState[`${sectionType}Shown`] = false;
       }
@@ -459,6 +459,7 @@
       const casesSection = document.querySelector('.section-divider[data-section="cases"]');
       if (casesSection) { scrollToElement(casesSection); return; }
       contentState.casesShown = true;
+      
       addSectionDivider("cases");
       addMessage("bot", texts[currentLanguage].casesIntro, "casesIntro");
       const buttonsContainer = document.createElement("div");
@@ -476,12 +477,14 @@
           scrollToBottom();
         }, 800 + index * 400);
       });
+      
       updateOptionsButtons();
     }
 
     function showAboutMe() {
       const aboutSection = document.querySelector('.section-divider[data-section="about"]');
       if (aboutSection) { scrollToElement(aboutSection); return; }
+      
       contentState.aboutMeShown = true;
       addSectionDivider("about");
       
@@ -514,6 +517,7 @@
       const restText = full.slice(firstSentence.length).trim();
 
       setTimeout(() => { addMessage("bot", firstSentence, "aboutMe1"); }, 1000);
+
       if (restText) {
         setTimeout(() => { addMessage("bot", restText, "aboutMe2"); }, 1400);
       }
@@ -538,14 +542,17 @@
         chatContainer.appendChild(linkMsg);
         scrollToBottom();
       }, restText ? 1800 : 1400);
+      
       updateOptionsButtons();
     }
 
     function showBlogPosts() {
       const blogSection = document.querySelector('.section-divider[data-section="blog"]');
       if (blogSection) { scrollToElement(blogSection); return; }
+      
       contentState.blogShown = true;
       addSectionDivider("blog");
+      
       addMessage("bot", texts[currentLanguage].blogIntro, "blogIntro");
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
@@ -562,6 +569,7 @@
           scrollToBottom();
         }, 800 + index * 400);
       });
+      
       updateOptionsButtons();
     }
 
@@ -804,3 +812,4 @@
   </script>
 </body>
 </html>
+
