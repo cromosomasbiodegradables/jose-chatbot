@@ -232,7 +232,6 @@
         formSummaryTitle: "Perfecto, recibí tus datos:",
         formSend: "✅ Enviar", formCancel: "❌ Cancelar",
         restart: "Volver a empezar", placeholder: "Escribe tu respuesta aquí...", send: "Enviar",
-        downloadingCV: "📄 En unos segundos comenzará la descarga de mi CV…",
         aboutMeText: "👨‍💼 Soy Jose Carlos, diseñador UX/UI con más de 10 años de experiencia creando productos digitales centrados en las personas. Me apasiona transformar ideas en experiencias útiles y elegantes.",
         aboutMeLink: "Ver más sobre mí", alreadyShown: " (ya mostrado)", close: "✕"
       },
@@ -272,7 +271,6 @@
         formSummaryTitle: "Great, I received your details:",
         formSend: "✅ Send", formCancel: "❌ Cancel",
         restart: "Restart", placeholder: "Type your response here...", send: "Send",
-        downloadingCV: "📄 The CV download will start in a few seconds…",
         aboutMeText: "👨‍💼 I'm Jose Carlos, a UX/UI designer with over 10 years of experience crafting user-centered digital products. I love turning ideas into elegant and useful experiences.",
         aboutMeLink: "See more about me", alreadyShown: " (already shown)", close: "✕"
       }
@@ -555,15 +553,14 @@
 
       addSectionDivider("contact");
 
-      // ✅ Animación escalonada igual que otras secciones
-      setTimeout(() => {
-        addMessage("bot", texts[currentLanguage].contactPrompt, "contactPrompt");
-      }, 600);
+      // ✅ Mostrar el texto del bot inmediatamente (como en las otras secciones)
+      addMessage("bot", texts[currentLanguage].contactPrompt, "contactPrompt");
 
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
+      // ✅ Botones escalonados después del texto (800ms y 1200ms)
       setTimeout(() => {
         const btnWriteYou = document.createElement("button");
         btnWriteYou.className = "bot-button";
@@ -572,7 +569,7 @@
         btnWriteYou.onclick = showMyContactData;
         buttonsContainer.appendChild(btnWriteYou);
         scrollToBottom();
-      }, 1000);
+      }, 800);
 
       setTimeout(() => {
         const btnWriteMe = document.createElement("button");
@@ -582,7 +579,7 @@
         btnWriteMe.onclick = startContactForm;
         buttonsContainer.appendChild(btnWriteMe);
         scrollToBottom();
-      }, 1400);
+      }, 1200);
 
       updateOptionsButtons();
     }
