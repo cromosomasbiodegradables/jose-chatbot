@@ -74,8 +74,9 @@
       background-color: #cce5ff; color: #003366; text-align: right;
     }
 
+    /* 🔴 Oculto por defecto (solo se muestra en Contacto > Formulario) */
     #input-area {
-      display: none; /* OCULTO por defecto */
+      display: none;
       justify-content: center;
       margin: 12px auto 20px auto; max-width: 600px; width: 100%;
       flex: 0 0 auto;
@@ -115,7 +116,6 @@
       filter: drop-shadow(0 6px 14px rgba(0,0,0,0.18));
     }
 
-    /* Nuevos estilos para el separador de sección */
     .section-divider {
       margin: 25px 0 15px 0;
       position: relative;
@@ -151,9 +151,7 @@
       z-index: 2;
       padding: 5px;
     }
-    .close-section:hover {
-      color: #666;
-    }
+    .close-section:hover { color: #666; }
 
     @media screen and (max-width: 480px) {
       .bot-button { font-size: 13px; padding: 9px 12px; }
@@ -167,10 +165,7 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     
-    .highlighted {
-      animation: highlight 2s ease;
-    }
-    
+    .highlighted { animation: highlight 2s ease; }
     @keyframes highlight {
       0% { background-color: transparent; }
       50% { background-color: rgba(255, 255, 0, 0.2); }
@@ -201,12 +196,7 @@
         greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarse hoy?",
         casesIntro: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
         blogIntro: "Aquí tienes algunos posts del blog con ideas sobre UX, diseño y procesos. ¿Cuál te gustaría leer?",
-        sectionTitles: {
-          cases: "Casos de estudio",
-          about: "Sobre mí",
-          blog: "Blog",
-          contact: "Contacto"
-        },
+        sectionTitles: { cases: "Casos de estudio", about: "Sobre mí", blog: "Blog", contact: "Contacto" },
         options: [
           { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
           { text: "👤 Sobre mí", action: () => showAboutMe() },
@@ -214,47 +204,39 @@
           { text: "✉️ Contacto", action: () => showContact() },
           { text: "📝 Blog", action: () => showBlogPosts() }
         ],
-        contactPrompt: "¿Quieres que te escriba yo o prefieres escribirme tú?",
-        contactButtons: {
-          writeMe: "📝 Quiero que me escribas tú",
-          writeYou: "📄 Prefiero escribirte yo"
-        },
-        contactMyData: {
-          emailLabel: "✉️ Email",
-          phoneLabel: "📱 Teléfono",
-          linkedinLabel: "💼 LinkedIn",
-          email: "tuemail@ejemplo.com",
-          phone: "+34 600 000 000",
-          linkedinUrl: "https://linkedin.com/in/tuperfil",
-          linkedinText: "linkedin.com/in/tuperfil"
-        },
-        formQuestions: [
-          "¿Cuál es tu nombre?",
-          "¿De qué empresa vienes?",
-          "¿Cuál es tu mensaje?"
+        cases: [
+          { text: "🧪 Caso 1: Rediseño de app médica", url: "https://uxfol.io/p/josecarlos-design/caso1" },
+          { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
+          { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
+          { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
+          { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
         ],
+        blogPosts: [
+          { text: "📝 Post 1: Microinteracciones que importan", url: "https://uxfol.io/p/josecarlos-design/post1" },
+          { text: "🎯 Post 2: Priorizar accesibilidad", url: "https://uxfol.io/p/josecarlos-design/post2" },
+          { text: "📐 Post 3: Diseño basado en métricas", url: "https://uxfol.io/p/josecarlos-design/post3" },
+          { text: "🔎 Ver todos los posts juntos", url: "https://uxfol.io/p/josecarlos-design/blog" }
+        ],
+        contactPrompt: "¿Quieres que te escriba yo o prefieres escribirme tú?",
+        contactButtons: { writeMe: "📝 Quiero que me escribas tú", writeYou: "📄 Prefiero escribirte yo" },
+        contactMyData: {
+          emailLabel: "✉️ Email", phoneLabel: "📱 Teléfono", linkedinLabel: "💼 LinkedIn",
+          email: "tuemail@ejemplo.com", phone: "+34 600 000 000",
+          linkedinUrl: "https://linkedin.com/in/tuperfil", linkedinText: "linkedin.com/in/tuperfil"
+        },
+        formQuestions: ["¿Cuál es tu nombre?", "¿De qué empresa vienes?", "¿Cuál es tu mensaje?"],
         formSummaryTitle: "Perfecto, recibí tus datos:",
-        formSend: "✅ Enviar",
-        formCancel: "❌ Cancelar",
-        restart: "Volver a empezar",
-        placeholder: "Escribe tu respuesta aquí...",
-        send: "Enviar",
+        formSend: "✅ Enviar", formCancel: "❌ Cancelar",
+        restart: "Volver a empezar", placeholder: "Escribe tu respuesta aquí...", send: "Enviar",
         downloadingCV: "📄 En unos segundos comenzará la descarga de mi CV…",
         aboutMeText: "👨‍💼 Soy Jose Carlos, diseñador UX/UI con más de 10 años de experiencia creando productos digitales centrados en las personas. Me apasiona transformar ideas en experiencias útiles y elegantes.",
-        aboutMeLink: "Ver más sobre mí",
-        alreadyShown: " (ya mostrado)",
-        close: "✕"
+        aboutMeLink: "Ver más sobre mí", alreadyShown: " (ya mostrado)", close: "✕"
       },
       en: {
         greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
         casesIntro: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
         blogIntro: "Here are some blog posts with ideas on UX, design and process. Which would you like to read?",
-        sectionTitles: {
-          cases: "Case studies",
-          about: "About me",
-          blog: "Blog",
-          contact: "Contact"
-        },
+        sectionTitles: { cases: "Case studies", about: "About me", blog: "Blog", contact: "Contact" },
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
           { text: "👤 About me", action: () => showAboutMe() },
@@ -262,36 +244,33 @@
           { text: "✉️ Contact", action: () => showContact() },
           { text: "📝 Blog", action: () => showBlogPosts() }
         ],
-        contactPrompt: "Do you want me to write to you, or do you prefer to write to me?",
-        contactButtons: {
-          writeMe: "📝 I want you to write to me",
-          writeYou: "📄 I prefer to write to you"
-        },
-        contactMyData: {
-          emailLabel: "✉️ Email",
-          phoneLabel: "📱 Phone",
-          linkedinLabel: "💼 LinkedIn",
-          email: "youremail@example.com",
-          phone: "+34 600 000 000",
-          linkedinUrl: "https://linkedin.com/in/yourprofile",
-          linkedinText: "linkedin.com/in/yourprofile"
-        },
-        formQuestions: [
-          "What's your name?",
-          "Which company are you from?",
-          "What's your message?"
+        cases: [
+          { text: "🧪 Case 1: Medical app redesign", url: "https://uxfol.io/p/josecarlos-design/caso1" },
+          { text: "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
+          { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
+          { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
+          { text: "🔎 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
         ],
+        blogPosts: [
+          { text: "📝 Post 1: Microinteractions that matter", url: "https://uxfol.io/p/josecarlos-design/post1" },
+          { text: "🎯 Post 2: Prioritizing accessibility", url: "https://uxfol.io/p/josecarlos-design/post2" },
+          { text: "📐 Post 3: Metrics-driven design", url: "https://uxfol.io/p/josecarlos-design/post3" },
+          { text: "🔎 View all posts together", url: "https://uxfol.io/p/josecarlos-design/blog" }
+        ],
+        contactPrompt: "Do you want me to write to you, or do you prefer to write to me?",
+        contactButtons: { writeMe: "📝 I want you to write to me", writeYou: "📄 I prefer to write to you" },
+        contactMyData: {
+          emailLabel: "✉️ Email", phoneLabel: "📱 Phone", linkedinLabel: "💼 LinkedIn",
+          email: "youremail@example.com", phone: "+34 600 000 000",
+          linkedinUrl: "https://linkedin.com/in/yourprofile", linkedinText: "linkedin.com/in/yourprofile"
+        },
+        formQuestions: ["What's your name?","Which company are you from?","What's your message?"],
         formSummaryTitle: "Great, I received your details:",
-        formSend: "✅ Send",
-        formCancel: "❌ Cancel",
-        restart: "Restart",
-        placeholder: "Type your response here...",
-        send: "Send",
+        formSend: "✅ Send", formCancel: "❌ Cancel",
+        restart: "Restart", placeholder: "Type your response here...", send: "Send",
         downloadingCV: "📄 The CV download will start in a few seconds…",
         aboutMeText: "👨‍💼 I'm Jose Carlos, a UX/UI designer with over 10 years of experience crafting user-centered digital products. I love turning ideas into elegant and useful experiences.",
-        aboutMeLink: "See more about me",
-        alreadyShown: " (already shown)",
-        close: "✕"
+        aboutMeLink: "See more about me", alreadyShown: " (already shown)", close: "✕"
       }
     };
 
@@ -310,7 +289,7 @@
       contactShown: false
     };
 
-    // Estado del formulario de contacto
+    // ---- Estado Contacto (formulario) ----
     let contactFormActive = false;
     let contactFormStep = 0;
     let contactFormData = { name: "", company: "", message: "" };
@@ -369,9 +348,7 @@
       closeButton.className = "close-section";
       closeButton.innerHTML = texts[currentLanguage].close;
       closeButton.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
-      closeButton.onclick = function() {
-        removeSection(sectionType);
-      };
+      closeButton.onclick = function() { removeSection(sectionType); };
       
       sectionDivider.appendChild(dividerLine);
       sectionDivider.appendChild(sectionTitle);
@@ -392,15 +369,13 @@
         elementsToRemove.push(nextElement);
         nextElement = nextElement.nextElementSibling;
       }
-      
       elementsToRemove.forEach(el => el.remove());
       
-      // Actualizar estado
       if (sectionType === 'about') {
         contentState.aboutMeShown = false;
       } else if (sectionType === 'contact') {
         contentState.contactShown = false;
-        resetContactForm(); // oculta input si estaba activo
+        resetContactForm();
       } else {
         contentState[`${sectionType}Shown`] = false;
       }
@@ -458,10 +433,11 @@
     function showCaseButtons() {
       const casesSection = document.querySelector('.section-divider[data-section="cases"]');
       if (casesSection) { scrollToElement(casesSection); return; }
-      contentState.casesShown = true;
       
+      contentState.casesShown = true;
       addSectionDivider("cases");
       addMessage("bot", texts[currentLanguage].casesIntro, "casesIntro");
+      
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
@@ -477,7 +453,6 @@
           scrollToBottom();
         }, 800 + index * 400);
       });
-      
       updateOptionsButtons();
     }
 
@@ -517,10 +492,7 @@
       const restText = full.slice(firstSentence.length).trim();
 
       setTimeout(() => { addMessage("bot", firstSentence, "aboutMe1"); }, 1000);
-
-      if (restText) {
-        setTimeout(() => { addMessage("bot", restText, "aboutMe2"); }, 1400);
-      }
+      if (restText) setTimeout(() => { addMessage("bot", restText, "aboutMe2"); }, 1400);
 
       setTimeout(() => {
         const linkMsg = document.createElement("div");
@@ -542,7 +514,6 @@
         chatContainer.appendChild(linkMsg);
         scrollToBottom();
       }, restText ? 1800 : 1400);
-      
       updateOptionsButtons();
     }
 
@@ -552,8 +523,8 @@
       
       contentState.blogShown = true;
       addSectionDivider("blog");
-      
       addMessage("bot", texts[currentLanguage].blogIntro, "blogIntro");
+      
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
@@ -569,11 +540,10 @@
           scrollToBottom();
         }, 800 + index * 400);
       });
-      
       updateOptionsButtons();
     }
 
-    // ======= CONTACTO =======
+    // ---------- CONTACTO ----------
     function showContact() {
       const contactSection = document.querySelector('.section-divider[data-section="contact"]');
       if (contactSection) { scrollToElement(contactSection); return; }
@@ -586,7 +556,6 @@
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
-      // Botón: Prefiero escribirte yo (mostrar datos)
       const btnWriteYou = document.createElement("button");
       btnWriteYou.className = "bot-button";
       btnWriteYou.dataset.key = "contact-writeyou";
@@ -594,7 +563,6 @@
       btnWriteYou.onclick = showMyContactData;
       buttonsContainer.appendChild(btnWriteYou);
 
-      // Botón: Quiero que me escribas tú (formulario)
       const btnWriteMe = document.createElement("button");
       btnWriteMe.className = "bot-button";
       btnWriteMe.dataset.key = "contact-writeme";
@@ -616,7 +584,7 @@
       contactFormActive = true;
       contactFormStep = 0;
       contactFormData = { name: "", company: "", message: "" };
-      inputArea.style.display = "flex"; // mostrar barra de escribir
+      inputArea.style.display = "flex";
       askNextContactQuestion();
     }
 
@@ -625,7 +593,6 @@
       if (contactFormStep < questions.length) {
         addMessage("bot", questions[contactFormStep], `contactQ${contactFormStep}`);
       } else {
-        // Resumen
         const summaryTitle = texts[currentLanguage].formSummaryTitle;
         const summary = `${summaryTitle}\n👤 ${contactFormData.name}\n🏢 ${contactFormData.company}\n💬 ${contactFormData.message}`;
         addMessage("bot", summary, "contactSummary");
@@ -673,9 +640,9 @@
       contactFormActive = false;
       contactFormStep = 0;
       contactFormData = { name: "", company: "", message: "" };
-      inputArea.style.display = "none"; // ocultar barra
+      inputArea.style.display = "none";
     }
-    // ======= /CONTACTO =======
+    // -------- /CONTACTO --------
 
     function updateOptionsButtons() {
       const optionButtons = document.querySelectorAll('.bot-button[data-key^="option-"]');
@@ -711,9 +678,7 @@
           const firstSentence = parts[0] ? parts[0] + "." : full;
           const restText = full.slice(firstSentence.length).trim();
           const bubble = el.querySelector(".bubble");
-          if (bubble) {
-            bubble.innerText = key === "aboutMe1" ? firstSentence : restText;
-          }
+          if (bubble) bubble.innerText = key === "aboutMe1" ? firstSentence : restText;
         }
         if (key === "aboutMeLink") {
           const bubble = el.querySelector(".bubble");
@@ -730,7 +695,6 @@
         btn.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
       });
 
-      // Actualizar textos de botones (opciones, casos, contacto y blog)
       document.querySelectorAll(".bot-button").forEach(btn => {
         const key = btn.dataset.key;
         if (key && key.startsWith("option-")) {
@@ -753,18 +717,10 @@
           const idx = +key.split("-")[1];
           btn.innerText = texts[currentLanguage].blogPosts[idx].text;
         }
-        if (key === "contact-writeyou") {
-          btn.innerText = texts[currentLanguage].contactButtons.writeYou;
-        }
-        if (key === "contact-writeme") {
-          btn.innerText = texts[currentLanguage].contactButtons.writeMe;
-        }
-        if (key === "contact-send") {
-          btn.innerText = texts[currentLanguage].formSend;
-        }
-        if (key === "contact-cancel") {
-          btn.innerText = texts[currentLanguage].formCancel;
-        }
+        if (key === "contact-writeyou") btn.innerText = texts[currentLanguage].contactButtons.writeYou;
+        if (key === "contact-writeme") btn.innerText = texts[currentLanguage].contactButtons.writeMe;
+        if (key === "contact-send") btn.innerText = texts[currentLanguage].formSend;
+        if (key === "contact-cancel") btn.innerText = texts[currentLanguage].formCancel;
       });
 
       scrollToBottom();
@@ -812,4 +768,5 @@
   </script>
 </body>
 </html>
+
 
