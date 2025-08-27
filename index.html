@@ -230,7 +230,7 @@
         greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarse hoy?",
         casesIntro: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
         blogIntro: "Aquí tienes algunos posts del blog con ideas sobre UX, diseño y procesos. ¿Cuál te gustaría leer?",
-        sectionTitles: { cases: "Casos de estudio", about: "Sobre mí", blog: "Blog", contact: "Contacto" },
+        sectionTitles: { cases: "Casos de estudio", case1: "Caso 1", about: "Sobre mí", blog: "Blog", contact: "Contacto" },
         options: [
           { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
           { text: "👤 Sobre mí", action: () => showAboutMe() },
@@ -239,12 +239,18 @@
           { text: "📝 Blog", action: () => showBlogPosts() }
         ],
         cases: [
-          { text: "🧪 Caso 1: Rediseño de app médica", url: "https://uxfol.io/p/josecarlos-design/caso1" },
+          { text: "🧪 AI-Driven Live-Chat Design", url: "https://uxfol.io/p/josecarlos-design/275f9f2c" },
           { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
           { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
         ],
+        /* ✅ Teaser corto del Caso 1 */
+        case1Teaser: {
+          hook: "Aumenté la conversión del chat en vivo con IA + UX pragmático.",
+          bullets: "• Embudos de conversación claros\n• Handoff humano sin fricción",
+          cta: "Ver caso completo"
+        },
         blogPosts: [
           { text: "📝 Post 1: Microinteracciones que importan", url: "https://uxfol.io/p/josecarlos-design/post1" },
           { text: "🎯 Post 2: Priorizar accesibilidad", url: "https://uxfol.io/p/josecarlos-design/post2" },
@@ -275,7 +281,7 @@
         greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
         casesIntro: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
         blogIntro: "Here are some blog posts with ideas on UX, design and process. Which would you like to read?",
-        sectionTitles: { cases: "Case studies", about: "About me", blog: "Blog", contact: "Contact" },
+        sectionTitles: { cases: "Case studies", case1: "Case 1", about: "About me", blog: "Blog", contact: "Contact" },
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
           { text: "👤 About me", action: () => showAboutMe() },
@@ -284,12 +290,18 @@
           { text: "📝 Blog", action: () => showBlogPosts() }
         ],
         cases: [
-          { text: "🧪 Case 1: Medical app redesign", url: "https://uxfol.io/p/josecarlos-design/caso1" },
+          { text: "🧪 AI-Driven Live-Chat Design", url: "https://uxfol.io/p/josecarlos-design/275f9f2c" },
           { text: "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
           { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔎 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
         ],
+        /* ✅ Short teaser for Case 1 */
+        case1Teaser: {
+          hook: "Boosted live-chat conversion with pragmatic AI + UX.",
+          bullets: "• Clear conversational funnels\n• Frictionless human handoff",
+          cta: "View full case"
+        },
         blogPosts: [
           { text: "📝 Post 1: Microinteractions that matter", url: "https://uxfol.io/p/josecarlos-design/post1" },
           { text: "🎯 Post 2: Prioritizing accessibility", url: "https://uxfol.io/p/josecarlos-design/post2" },
@@ -330,7 +342,9 @@
       casesShown: false,
       aboutMeShown: false,
       blogShown: false,
-      contactShown: false
+      contactShown: false,
+      /* ✅ estado del teaser del Caso 1 */
+      case1Shown: false
     };
 
     // ---- Estado Contacto (formulario) ----
@@ -424,6 +438,8 @@
         contentState[`${sectionType}Shown`] = false;
       }
       updateOptionsButtons();
+      /* ✅ actualizar textos de botones de casos cuando se cierra */
+      updateCasesButtons();
     }
 
     function showOptions() {
@@ -492,9 +508,16 @@
           button.className = "bot-button";
           button.dataset.key = `case-${index}`;
           button.innerText = texts[currentLanguage].cases[index].text;
-          button.onclick = () => window.open(item.url, "_blank");
+          /* ✅ caso 1 abre teaser; el resto abre link directo */
+          if (index === 0) {
+            button.onclick = showCase1;
+          } else {
+            button.onclick = () => window.open(item.url, "_blank");
+          }
           buttonsContainer.appendChild(button);
           scrollToBottom();
+          /* actualizar etiqueta (ya mostrado) si aplica */
+          updateCasesButtons();
         }, 800 + index * 400);
       });
       updateOptionsButtons();
@@ -641,7 +664,7 @@
     function showMyContactData() {
       const d = texts[currentLanguage].contactMyData;
 
-      // Creamos un mensaje tipo bot con HTML para filas + botón copiar
+      // Mensaje tipo bot con filas + botón copiar
       const message = document.createElement("div");
       message.className = "bot-message";
       message.dataset.key = "contactData";
@@ -761,6 +784,54 @@
     }
     // -------- /CONTACTO --------
 
+    /* ========== CASO 1: Teaser con divider, animación y estado ========== */
+    function showCase1() {
+      const case1Section = document.querySelector('.section-divider[data-section="case1"]');
+      if (case1Section) { scrollToElement(case1Section); return; }
+
+      contentState.case1Shown = true;
+      addSectionDivider("case1");
+
+      // Mensajes escalonados: hook -> bullets -> botón CTA
+      setTimeout(() => {
+        addMessage("bot", texts[currentLanguage].case1Teaser.hook, "case1Hook");
+      }, 600);
+
+      setTimeout(() => {
+        addMessage("bot", texts[currentLanguage].case1Teaser.bullets, "case1Bullets");
+      }, 1000);
+
+      setTimeout(() => {
+        const buttonsContainer = document.createElement("div");
+        buttonsContainer.className = "buttons-container";
+        chatContainer.appendChild(buttonsContainer);
+
+        const ctaBtn = document.createElement("button");
+        ctaBtn.className = "bot-button";
+        ctaBtn.dataset.key = "case1-cta";
+        ctaBtn.innerText = texts[currentLanguage].case1Teaser.cta;
+        ctaBtn.onclick = () => window.open(texts[currentLanguage].cases[0].url, "_blank");
+        buttonsContainer.appendChild(ctaBtn);
+        scrollToBottom();
+      }, 1400);
+
+      // Actualizar el texto del botón del caso a "(ya mostrado)"
+      updateCasesButtons();
+    }
+
+    function updateCasesButtons() {
+      const caseButtons = document.querySelectorAll('.bot-button[data-key^="case-"]');
+      caseButtons.forEach((btn) => {
+        const idx = +btn.dataset.key.split('-')[1];
+        let label = texts[currentLanguage].cases[idx].text;
+        if (idx === 0 && contentState.case1Shown) {
+          label += texts[currentLanguage].alreadyShown;
+        }
+        btn.innerText = label;
+      });
+    }
+    /* ========== /CASO 1 ========== */
+
     function updateOptionsButtons() {
       const optionButtons = document.querySelectorAll('.bot-button[data-key^="option-"]');
       optionButtons.forEach((button) => {
@@ -844,6 +915,16 @@
             bubble.innerText = `${title}\n👤 ${contactFormData.name}\n🏢 ${contactFormData.company}\n💬 ${contactFormData.message}`;
           }
         }
+
+        /* ✅ Traducciones específicas del teaser del Caso 1 */
+        if (key === "case1Hook") {
+          const bubble = el.querySelector(".bubble");
+          if (bubble) bubble.innerText = texts[currentLanguage].case1Teaser.hook;
+        }
+        if (key === "case1Bullets") {
+          const bubble = el.querySelector(".bubble");
+          if (bubble) bubble.innerText = texts[currentLanguage].case1Teaser.bullets;
+        }
       });
 
       document.querySelectorAll(".section-title").forEach(title => {
@@ -871,10 +952,14 @@
         }
         if (key && key.startsWith("case-")) {
           const idx = +key.split("-")[1];
-          btn.innerText = texts[currentLanguage].cases[idx].text;
+          let label = texts[currentLanguage].cases[idx].text;
+          if (idx === 0 && contentState.case1Shown) {
+            label += texts[currentLanguage].alreadyShown;
+          }
+          btn.innerText = label;
         }
         if (key && key.startsWith("blog-")) {
-          const idx = +key.split("-")[1];
+          const idx = +key.split("-')[1];
           btn.innerText = texts[currentLanguage].blogPosts[idx].text;
         }
         /* ✅ Botones Contacto + acciones */
@@ -882,6 +967,8 @@
         if (key === "contact-writeme") btn.innerText = texts[currentLanguage].contactButtons.writeMe;
         if (key === "contact-send") btn.innerText = texts[currentLanguage].formSend;
         if (key === "contact-cancel") btn.innerText = texts[currentLanguage].formCancel;
+        /* ✅ CTA del Caso 1 */
+        if (key === "case1-cta") btn.innerText = texts[currentLanguage].case1Teaser.cta;
       });
 
       scrollToBottom();
@@ -902,7 +989,8 @@
         casesShown: false,
         aboutMeShown: false,
         blogShown: false,
-        contactShown: false
+        contactShown: false,
+        case1Shown: false
       };
       resetContactForm();
       addMessage("bot", texts[currentLanguage].greeting, "greeting");
@@ -929,3 +1017,4 @@
   </script>
 </body>
 </html>
+
