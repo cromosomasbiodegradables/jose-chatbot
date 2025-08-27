@@ -122,14 +122,11 @@
       margin: 25px 0 15px 0;
       position: relative;
       text-align: center;
-      width: 100%;
     }
     .divider-line {
       border-top: 1px solid #E2DBDB;
       position: absolute;
       top: 50%;
-      left: 0;
-      right: 0;
       width: 100%;
       transform: translateY(-50%);
       z-index: 1;
@@ -215,7 +212,7 @@
         greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarse hoy?",
         casesIntro: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
         blogIntro: "Aquí tienes algunos posts del blog con ideas sobre UX, diseño y procesos. ¿Cuál te gustaría leer?",
-        sectionTitles: { cases: "Casos de estudio", case1: "Caso 1", about: "Sobre mí", blog: "Blog", contact: "Contacto" },
+        sectionTitles: { cases: "Casos de estudio", case1: "Caso 1", case2: "Caso 2", case3: "Caso 3", case4: "Caso 4", about: "Sobre mí", blog: "Blog", contact: "Contacto" },
         options: [
           { text: "🎨 Casos de estudio", action: () => showCaseButtons() },
           { text: "👤 Sobre mí", action: () => showAboutMe() },
@@ -225,14 +222,29 @@
         ],
         cases: [
           { text: "🧪 Caso 1: Diseño de Live-chat con IA", url: "https://uxfol.io/p/josecarlos-design/275f9f2c" },
-          { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
-          { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
-          { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
-          { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
+          { text: "🛍️ Caso 2: Rediseño de software de automatización", url: "https://uxfol.io/p/josecarlos-design/a41ff54e" },
+          { text: "📱 Caso 3: Plataforma B2B de diamantes (experiencias de lujo)", url: "https://uxfol.io/p/josecarlos-design/01c7718b" },
+          { text: "🌍 Caso 4: Plataforma B2B de diamantes (v2)", url: "https://uxfol.io/p/josecarlos-design/01c7718b" },
+          { text: "🔎 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
         ],
         case1Teaser: {
           hook: "Rediseño del live-chat con IA para agentes: menos tiempo de respuesta y mayor satisfacción.",
           bullets: "• Sugerencias «SmartReply» trazables al documento origen<br>• Hasta 3 opciones por turno, editables y posteables<br>• Feedback del agente para mejorar el modelo",
+          cta: "Ver caso completo"
+        },
+        case2Teaser: {
+          hook: "Rediseño integral de un software de automatización para mejorar visibilidad, control y eficiencia.",
+          bullets: "• Navegación simplificada en flujos complejos<br>• Paneles accionables y estados claros para ejecuciones",
+          cta: "Ver caso completo"
+        },
+        case3Teaser: {
+          hook: "Elevar una plataforma B2B de diamantes con experiencias de lujo y confianza en cada interacción.",
+          bullets: "• Catálogo premium y filtros expertos<br>• Flujo de compra B2B claro y verificable",
+          cta: "Ver caso completo"
+        },
+        case4Teaser: {
+          hook: "Extensión de la plataforma B2B con patrones de lujo reutilizables y visión a futuro.",
+          bullets: "• Componentes UI coherentes a escala<br>• Descubrimiento y checkout B2B optimizados",
           cta: "Ver caso completo"
         },
         blogPosts: [
@@ -266,7 +278,7 @@
         greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
         casesIntro: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
         blogIntro: "Here are some blog posts with ideas on UX, design and process. Which would you like to read?",
-        sectionTitles: { cases: "Case studies", case1: "User Case 1", about: "About me", blog: "Blog", contact: "Contact" },
+        sectionTitles: { cases: "Case studies", case1: "User Case 1", case2: "User Case 2", case3: "User Case 3", case4: "User Case 4", about: "About me", blog: "Blog", contact: "Contact" },
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
           { text: "👤 About me", action: () => showAboutMe() },
@@ -276,14 +288,29 @@
         ],
         cases: [
           { text: "🧪 Case 1: AI-Driven Live-chat Design", url: "https://uxfol.io/p/josecarlos-design/275f9f2c" },
-          { text: "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
-          { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
-          { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
+          { text: "🛍️ Case 2: Automation Software Redesign", url: "https://uxfol.io/p/josecarlos-design/a41ff54e" },
+          { text: "📱 Case 3: Elevating B2B Diamonds Platform with Luxury UX", url: "https://uxfol.io/p/josecarlos-design/01c7718b" },
+          { text: "🌍 Case 4: Elevating B2B Diamonds Platform (v2)", url: "https://uxfol.io/p/josecarlos-design/01c7718b" },
           { text: "🔎 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
         ],
         case1Teaser: {
           hook: "AI-assisted live-chat for agents: faster replies and higher CSAT.",
           bullets: "• «SmartReply» suggestions with source traceability<br>• Up to 3 options per turn, editable & postable<br>• Agent feedback loop to improve the model",
+          cta: "View full case"
+        },
+        case2Teaser: {
+          hook: "A full redesign of an automation platform to improve visibility, control, and efficiency.",
+          bullets: "• Simplified navigation across complex flows<br>• Actionable dashboards and clear run states",
+          cta: "View full case"
+        },
+        case3Teaser: {
+          hook: "Elevating a B2B diamonds platform with luxury-grade experiences and trust signals.",
+          bullets: "• Premium catalog & expert filters<br>• Clear, verifiable B2B purchase flow",
+          cta: "View full case"
+        },
+        case4Teaser: {
+          hook: "Extending the B2B platform with reusable luxury patterns and a future roadmap.",
+          bullets: "• Scalable, coherent UI components<br>• Optimized discovery & B2B checkout",
           cta: "View full case"
         },
         blogPosts: [
@@ -328,7 +355,10 @@
       aboutMeShown: false,
       blogShown: false,
       contactShown: false,
-      case1Shown: false
+      case1Shown: false,
+      case2Shown: false,
+      case3Shown: false,
+      case4Shown: false
     };
 
     // ---- Estado Contacto (formulario) ----
@@ -423,7 +453,11 @@
       }
 
       if (sectionType === 'cases') {
-        contentState.case1Shown = false; // resetea “(ya mostrado)”
+        // resetea “(ya mostrado)” de todos los casos
+        contentState.case1Shown = false;
+        contentState.case2Shown = false;
+        contentState.case3Shown = false;
+        contentState.case4Shown = false;
       }
 
       updateOptionsButtons();
@@ -496,11 +530,20 @@
           button.className = "bot-button";
           button.dataset.key = `case-${index}`;
           button.innerText = texts[currentLanguage].cases[index].text;
+
           if (index === 0) {
             button.onclick = showCase1;
+          } else if (index === 1) {
+            button.onclick = showCase2;
+          } else if (index === 2) {
+            button.onclick = showCase3;
+          } else if (index === 3) {
+            button.onclick = showCase4;
           } else {
-            button.onclick = () => window.open(item.url, "_blank");
+            // index 4 "Ver todos los casos juntos" -> no hacer nada por ahora
+            button.onclick = () => {};
           }
+
           buttonsContainer.appendChild(button);
           scrollToBottom();
           updateCasesButtons();
@@ -770,7 +813,6 @@
 
     /* ========== CASO 1: Teaser inline con DIVIDER debajo del botón 1 ========== */
     function showCase1() {
-      // Toggle: si ya está abierto, ciérralo
       const existingBlock = document.getElementById('case1TeaserBlock');
       const existingDivider = document.getElementById('case1Divider');
       if (existingBlock || existingDivider) {
@@ -786,12 +828,10 @@
 
       contentState.case1Shown = true;
 
-      // Divider inline
       const divider = document.createElement('div');
       divider.className = 'section-divider';
       divider.dataset.section = 'case1';
       divider.id = 'case1Divider';
-      divider.style.alignSelf = 'stretch';
 
       const dividerLine = document.createElement('div');
       dividerLine.className = 'divider-line';
@@ -817,55 +857,302 @@
       divider.appendChild(sectionTitle);
       divider.appendChild(closeButton);
 
-      // Contenedor de mensajes del teaser
       const block = document.createElement('div');
       block.id = 'case1TeaserBlock';
 
-      // Inserción inline: divider y luego bloque justo después del botón del Caso 1
+      const m1 = document.createElement('div');
+      m1.className = 'bot-message';
+      m1.dataset.key = 'case1Hook';
+      m1.id = 'case1Hook';
+      m1.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble">${texts[currentLanguage].case1Teaser.hook}</div>
+      `;
+      block.appendChild(m1);
+
+      const m2 = document.createElement('div');
+      m2.className = 'bot-message';
+      m2.dataset.key = 'case1Bullets';
+      m2.id = 'case1Bullets';
+      m2.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble">${texts[currentLanguage].case1Teaser.bullets}</div>
+      `;
+      block.appendChild(m2);
+
+      const m3 = document.createElement('div');
+      m3.className = 'bot-message';
+      m3.dataset.key = 'case1Link';
+      m3.id = 'case1Link';
+      m3.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble"><a href="${texts[currentLanguage].cases[0].url}" target="_blank">${texts[currentLanguage].case1Teaser.cta}</a></div>
+      `;
+      block.appendChild(m3);
+
       caseBtn.insertAdjacentElement('afterend', divider);
       divider.insertAdjacentElement('afterend', block);
 
-      // Bubbles con los mismos tiempos/animación que el resto
-      setTimeout(() => {
-        const m1 = document.createElement('div');
-        m1.className = 'bot-message';
-        m1.dataset.key = 'case1Hook';
-        m1.id = 'case1Hook';
-        m1.innerHTML = `
-          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble">${texts[currentLanguage].case1Teaser.hook}</div>
-        `;
-        block.appendChild(m1);
-        // 🔧 Cambio: scroll suave SIN resaltar (evita doble animación)
-        m1.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 600);
+      scrollToElement(m1);
 
-      setTimeout(() => {
-        const m2 = document.createElement('div');
-        m2.className = 'bot-message';
-        m2.dataset.key = 'case1Bullets';
-        m2.id = 'case1Bullets';
-        m2.innerHTML = `
-          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble">${texts[currentLanguage].case1Teaser.bullets}</div>
-        `;
-        block.appendChild(m2);
-        scrollToBottom();
-      }, 1000);
+      updateCasesButtons();
+    }
 
-      setTimeout(() => {
-        const m3 = document.createElement('div');
-        m3.className = 'bot-message';
-        m3.dataset.key = 'case1Link';
-        m3.id = 'case1Link';
-        m3.innerHTML = `
-          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble"><a href="${texts[currentLanguage].cases[0].url}" target="_blank">${texts[currentLanguage].case1Teaser.cta}</a></div>
-        `;
-        block.appendChild(m3);
-        scrollToBottom();
-      }, 1400);
+    /* ========== CASO 2 ========== */
+    function showCase2() {
+      const existingBlock = document.getElementById('case2TeaserBlock');
+      const existingDivider = document.getElementById('case2Divider');
+      if (existingBlock || existingDivider) {
+        if (existingBlock) existingBlock.remove();
+        if (existingDivider) existingDivider.remove();
+        contentState.case2Shown = false;
+        updateCasesButtons();
+        return;
+      }
 
+      const caseBtn = document.querySelector('.bot-button[data-key="case-1"]');
+      if (!caseBtn) return;
+
+      contentState.case2Shown = true;
+
+      const divider = document.createElement('div');
+      divider.className = 'section-divider';
+      divider.dataset.section = 'case2';
+      divider.id = 'case2Divider';
+
+      const dividerLine = document.createElement('div');
+      dividerLine.className = 'divider-line';
+
+      const sectionTitle = document.createElement('span');
+      sectionTitle.className = 'section-title';
+      sectionTitle.textContent = texts[currentLanguage].sectionTitles['case2'];
+
+      const closeButton = document.createElement('button');
+      closeButton.className = 'close-section';
+      closeButton.innerHTML = texts[currentLanguage].close;
+      closeButton.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
+      closeButton.onclick = function () {
+        const blk = document.getElementById('case2TeaserBlock');
+        const div = document.getElementById('case2Divider');
+        if (blk) blk.remove();
+        if (div) div.remove();
+        contentState.case2Shown = false;
+        updateCasesButtons();
+      };
+
+      divider.appendChild(dividerLine);
+      divider.appendChild(sectionTitle);
+      divider.appendChild(closeButton);
+
+      const block = document.createElement('div');
+      block.id = 'case2TeaserBlock';
+
+      const m1 = document.createElement('div');
+      m1.className = 'bot-message';
+      m1.dataset.key = 'case2Hook';
+      m1.id = 'case2Hook';
+      m1.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble">${texts[currentLanguage].case2Teaser.hook}</div>
+      `;
+      block.appendChild(m1);
+
+      const m2 = document.createElement('div');
+      m2.className = 'bot-message';
+      m2.dataset.key = 'case2Bullets';
+      m2.id = 'case2Bullets';
+      m2.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble">${texts[currentLanguage].case2Teaser.bullets}</div>
+      `;
+      block.appendChild(m2);
+
+      const m3 = document.createElement('div');
+      m3.className = 'bot-message';
+      m3.dataset.key = 'case2Link';
+      m3.id = 'case2Link';
+      m3.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble"><a href="${texts[currentLanguage].cases[1].url}" target="_blank">${texts[currentLanguage].case2Teaser.cta}</a></div>
+      `;
+      block.appendChild(m3);
+
+      caseBtn.insertAdjacentElement('afterend', divider);
+      divider.insertAdjacentElement('afterend', block);
+
+      scrollToElement(m1);
+      updateCasesButtons();
+    }
+
+    /* ========== CASO 3 ========== */
+    function showCase3() {
+      const existingBlock = document.getElementById('case3TeaserBlock');
+      const existingDivider = document.getElementById('case3Divider');
+      if (existingBlock || existingDivider) {
+        if (existingBlock) existingBlock.remove();
+        if (existingDivider) existingDivider.remove();
+        contentState.case3Shown = false;
+        updateCasesButtons();
+        return;
+      }
+
+      const caseBtn = document.querySelector('.bot-button[data-key="case-2"]');
+      if (!caseBtn) return;
+
+      contentState.case3Shown = true;
+
+      const divider = document.createElement('div');
+      divider.className = 'section-divider';
+      divider.dataset.section = 'case3';
+      divider.id = 'case3Divider';
+
+      const dividerLine = document.createElement('div');
+      dividerLine.className = 'divider-line';
+
+      const sectionTitle = document.createElement('span');
+      sectionTitle.className = 'section-title';
+      sectionTitle.textContent = texts[currentLanguage].sectionTitles['case3'];
+
+      const closeButton = document.createElement('button');
+      closeButton.className = 'close-section';
+      closeButton.innerHTML = texts[currentLanguage].close;
+      closeButton.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
+      closeButton.onclick = function () {
+        const blk = document.getElementById('case3TeaserBlock');
+        const div = document.getElementById('case3Divider');
+        if (blk) blk.remove();
+        if (div) div.remove();
+        contentState.case3Shown = false;
+        updateCasesButtons();
+      };
+
+      divider.appendChild(dividerLine);
+      divider.appendChild(sectionTitle);
+      divider.appendChild(closeButton);
+
+      const block = document.createElement('div');
+      block.id = 'case3TeaserBlock';
+
+      const m1 = document.createElement('div');
+      m1.className = 'bot-message';
+      m1.dataset.key = 'case3Hook';
+      m1.id = 'case3Hook';
+      m1.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble">${texts[currentLanguage].case3Teaser.hook}</div>
+      `;
+      block.appendChild(m1);
+
+      const m2 = document.createElement('div');
+      m2.className = 'bot-message';
+      m2.dataset.key = 'case3Bullets';
+      m2.id = 'case3Bullets';
+      m2.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble">${texts[currentLanguage].case3Teaser.bullets}</div>
+      `;
+      block.appendChild(m2);
+
+      const m3 = document.createElement('div');
+      m3.className = 'bot-message';
+      m3.dataset.key = 'case3Link';
+      m3.id = 'case3Link';
+      m3.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble"><a href="${texts[currentLanguage].cases[2].url}" target="_blank">${texts[currentLanguage].case3Teaser.cta}</a></div>
+      `;
+      block.appendChild(m3);
+
+      caseBtn.insertAdjacentElement('afterend', divider);
+      divider.insertAdjacentElement('afterend', block);
+
+      scrollToElement(m1);
+      updateCasesButtons();
+    }
+
+    /* ========== CASO 4 ========== */
+    function showCase4() {
+      const existingBlock = document.getElementById('case4TeaserBlock');
+      const existingDivider = document.getElementById('case4Divider');
+      if (existingBlock || existingDivider) {
+        if (existingBlock) existingBlock.remove();
+        if (existingDivider) existingDivider.remove();
+        contentState.case4Shown = false;
+        updateCasesButtons();
+        return;
+      }
+
+      const caseBtn = document.querySelector('.bot-button[data-key="case-3"]');
+      if (!caseBtn) return;
+
+      contentState.case4Shown = true;
+
+      const divider = document.createElement('div');
+      divider.className = 'section-divider';
+      divider.dataset.section = 'case4';
+      divider.id = 'case4Divider';
+
+      const dividerLine = document.createElement('div');
+      dividerLine.className = 'divider-line';
+
+      const sectionTitle = document.createElement('span');
+      sectionTitle.className = 'section-title';
+      sectionTitle.textContent = texts[currentLanguage].sectionTitles['case4'];
+
+      const closeButton = document.createElement('button');
+      closeButton.className = 'close-section';
+      closeButton.innerHTML = texts[currentLanguage].close;
+      closeButton.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
+      closeButton.onclick = function () {
+        const blk = document.getElementById('case4TeaserBlock');
+        const div = document.getElementById('case4Divider');
+        if (blk) blk.remove();
+        if (div) div.remove();
+        contentState.case4Shown = false;
+        updateCasesButtons();
+      };
+
+      divider.appendChild(dividerLine);
+      divider.appendChild(sectionTitle);
+      divider.appendChild(closeButton);
+
+      const block = document.createElement('div');
+      block.id = 'case4TeaserBlock';
+
+      const m1 = document.createElement('div');
+      m1.className = 'bot-message';
+      m1.dataset.key = 'case4Hook';
+      m1.id = 'case4Hook';
+      m1.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble">${texts[currentLanguage].case4Teaser.hook}</div>
+      `;
+      block.appendChild(m1);
+
+      const m2 = document.createElement('div');
+      m2.className = 'bot-message';
+      m2.dataset.key = 'case4Bullets';
+      m2.id = 'case4Bullets';
+      m2.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble">${texts[currentLanguage].case4Teaser.bullets}</div>
+      `;
+      block.appendChild(m2);
+
+      const m3 = document.createElement('div');
+      m3.className = 'bot-message';
+      m3.dataset.key = 'case4Link';
+      m3.id = 'case4Link';
+      m3.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble"><a href="${texts[currentLanguage].cases[3].url}" target="_blank">${texts[currentLanguage].case4Teaser.cta}</a></div>
+      `;
+      block.appendChild(m3);
+
+      caseBtn.insertAdjacentElement('afterend', divider);
+      divider.insertAdjacentElement('afterend', block);
+
+      scrollToElement(m1);
       updateCasesButtons();
     }
 
@@ -874,13 +1161,14 @@
       caseButtons.forEach(function(btn){
         const idx = +btn.dataset.key.split('-')[1];
         let label = texts[currentLanguage].cases[idx].text;
-        if (idx === 0 && contentState.case1Shown) {
-          label += texts[currentLanguage].alreadyShown;
-        }
+        if (idx === 0 && contentState.case1Shown) label += texts[currentLanguage].alreadyShown;
+        if (idx === 1 && contentState.case2Shown) label += texts[currentLanguage].alreadyShown;
+        if (idx === 2 && contentState.case3Shown) label += texts[currentLanguage].alreadyShown;
+        if (idx === 3 && contentState.case4Shown) label += texts[currentLanguage].alreadyShown;
         btn.innerText = label;
       });
     }
-    /* ========== /CASO 1 ========== */
+    /* ========== /CASOS ========== */
 
     function updateOptionsButtons() {
       const optionButtons = document.querySelectorAll('.bot-button[data-key^="option-"]');
@@ -962,19 +1250,25 @@
           }
         }
 
-        // Teaser caso 1
-        if (key === "case1Hook" && bubble) {
-          bubble.innerText = texts[currentLanguage].case1Teaser.hook;
-        }
-        if (key === "case1Bullets" && bubble) {
-          bubble.innerHTML = texts[currentLanguage].case1Teaser.bullets;
-        }
-        if (key === "case1Link" && bubble) {
-          bubble.innerHTML = `<a href="${texts[currentLanguage].cases[0].url}" target="_blank">${texts[currentLanguage].case1Teaser.cta}</a>`;
-        }
+        // Teasers casos 1-4
+        if (key === "case1Hook" && bubble) bubble.innerText = texts[currentLanguage].case1Teaser.hook;
+        if (key === "case1Bullets" && bubble) bubble.innerHTML = texts[currentLanguage].case1Teaser.bullets;
+        if (key === "case1Link" && bubble) bubble.innerHTML = `<a href="${texts[currentLanguage].cases[0].url}" target="_blank">${texts[currentLanguage].case1Teaser.cta}</a>`;
+
+        if (key === "case2Hook" && bubble) bubble.innerText = texts[currentLanguage].case2Teaser.hook;
+        if (key === "case2Bullets" && bubble) bubble.innerHTML = texts[currentLanguage].case2Teaser.bullets;
+        if (key === "case2Link" && bubble) bubble.innerHTML = `<a href="${texts[currentLanguage].cases[1].url}" target="_blank">${texts[currentLanguage].case2Teaser.cta}</a>`;
+
+        if (key === "case3Hook" && bubble) bubble.innerText = texts[currentLanguage].case3Teaser.hook;
+        if (key === "case3Bullets" && bubble) bubble.innerHTML = texts[currentLanguage].case3Teaser.bullets;
+        if (key === "case3Link" && bubble) bubble.innerHTML = `<a href="${texts[currentLanguage].cases[2].url}" target="_blank">${texts[currentLanguage].case3Teaser.cta}</a>`;
+
+        if (key === "case4Hook" && bubble) bubble.innerText = texts[currentLanguage].case4Teaser.hook;
+        if (key === "case4Bullets" && bubble) bubble.innerHTML = texts[currentLanguage].case4Teaser.bullets;
+        if (key === "case4Link" && bubble) bubble.innerHTML = `<a href="${texts[currentLanguage].cases[3].url}" target="_blank">${texts[currentLanguage].case4Teaser.cta}</a>`;
       });
 
-      // Títulos de los dividers (incluye el inline 'case1' si está abierto)
+      // Títulos de los dividers (incluye los inline 'case1..4' si están abiertos)
       const titles = document.querySelectorAll(".section-title");
       titles.forEach(function(title){
         const section = title.parentElement && title.parentElement.dataset ? title.parentElement.dataset.section : null;
@@ -1006,9 +1300,10 @@
         if (key && key.indexOf("case-") === 0) {
           const idx = +key.split("-")[1];
           let label = texts[currentLanguage].cases[idx].text;
-          if (idx === 0 && contentState.case1Shown) {
-            label += texts[currentLanguage].alreadyShown;
-          }
+          if (idx === 0 && contentState.case1Shown) label += texts[currentLanguage].alreadyShown;
+          if (idx === 1 && contentState.case2Shown) label += texts[currentLanguage].alreadyShown;
+          if (idx === 2 && contentState.case3Shown) label += texts[currentLanguage].alreadyShown;
+          if (idx === 3 && contentState.case4Shown) label += texts[currentLanguage].alreadyShown;
           btn.innerText = label;
         }
         if (key && key.indexOf("blog-") === 0) {
@@ -1040,7 +1335,10 @@
         aboutMeShown: false,
         blogShown: false,
         contactShown: false,
-        case1Shown: false
+        case1Shown: false,
+        case2Shown: false,
+        case3Shown: false,
+        case4Shown: false
       };
       resetContactForm();
       addMessage("bot", texts[currentLanguage].greeting, "greeting");
