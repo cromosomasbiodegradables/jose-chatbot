@@ -221,16 +221,15 @@
           { text: "📝 Blog", action: () => showBlogPosts() }
         ],
         cases: [
-          { text: "🧪 Caso 1: AI-Driven Live-Chat Design", url: "https://uxfol.io/p/josecarlos-design/275f9f2c" },
+          { text: "🧪 Caso 1: Diseño de chat en vivo potenciado por IA", url: "https://uxfol.io/p/josecarlos-design/275f9f2c" },
           { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
           { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
         ],
-        /* 👉 Versión ultra-corta */
         case1Teaser: {
-          hook: "Rediseñamos un chat en vivo con IA para que los agentes respondan más rápido y mejor.",
-          bullets: "• 35% menos tiempo de respuesta\n• +14% satisfacción de clientes\n• 90% adopción por los agentes",
+          hook: "Aumenté la conversión del chat en vivo con IA + UX pragmático.",
+          bullets: "• Embudos de conversación claros\n• Handoff humano sin fricción",
           cta: "Ver caso completo"
         },
         blogPosts: [
@@ -279,10 +278,9 @@
           { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔎 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
         ],
-        /* 👉 Ultra-short version */
         case1Teaser: {
-          hook: "We redesigned a live-chat system with AI so agents respond faster and better.",
-          bullets: "• 35% faster response time\n• +14% customer satisfaction\n• 90% agent adoption",
+          hook: "Boosted live-chat conversion with pragmatic AI + UX.",
+          bullets: "• Clear conversational funnels\n• Frictionless human handoff",
           cta: "View full case"
         },
         blogPosts: [
@@ -777,7 +775,7 @@
         addMessage("bot", texts[currentLanguage].case1Teaser.bullets, "case1Bullets");
       }, 1000);
 
-      // Enlace como bubble (estilo "Sobre mí")
+      // Link como bubble (estilo "Sobre mí")
       setTimeout(() => {
         const linkMsg = document.createElement("div");
         linkMsg.className = "bot-message";
@@ -897,7 +895,7 @@
           }
         }
 
-        // Traducción del teaser del caso 1
+        // Traducciones del teaser del caso 1
         if (key === "case1Hook") {
           const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerText = texts[currentLanguage].case1Teaser.hook;
@@ -1003,3 +1001,4 @@
       
       
       
+
