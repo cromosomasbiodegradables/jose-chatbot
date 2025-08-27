@@ -155,7 +155,7 @@
     }
     .close-section:hover { color: #666; }
 
-    /* Asegura ancho completo para dividers insertados dentro del contenedor de botones */
+    /* Dividers inline a ancho completo dentro de contenedor de botones */
     .buttons-container > .section-divider { width: 100%; align-self: stretch; }
 
     @media screen and (max-width: 480px) {
@@ -819,7 +819,7 @@
       const caseBtn = document.querySelector(`.bot-button[data-key="case-${caseIdx}"]`);
       if (!caseBtn) return;
 
-      // Si ya está, toggle -> cerrar
+      // Toggle: cerrar si ya está abierto
       const existingBlock = document.getElementById(`${key}TeaserBlock`);
       const existingDivider = document.getElementById(`${key}Divider`);
       if (existingBlock || existingDivider) {
@@ -876,7 +876,7 @@
       const teaser = texts[currentLanguage][`${key}Teaser`];
       const url = texts[currentLanguage].cases[caseIdx].url;
 
-      // Bubbles progresivos (sin highlight extra)
+      // Bubbles progresivos con timings iguales que en otras secciones (800/1200/1600)
       setTimeout(() => {
         const m1 = document.createElement('div');
         m1.className = 'bot-message';
@@ -888,7 +888,7 @@
         `;
         block.appendChild(m1);
         scrollToBottom();
-      }, 600);
+      }, 800);
 
       setTimeout(() => {
         const m2 = document.createElement('div');
@@ -901,7 +901,7 @@
         `;
         block.appendChild(m2);
         scrollToBottom();
-      }, 1000);
+      }, 1200);
 
       setTimeout(() => {
         const m3 = document.createElement('div');
@@ -914,7 +914,7 @@
         `;
         block.appendChild(m3);
         scrollToBottom();
-      }, 1400);
+      }, 1600);
 
       updateCasesButtons();
     }
