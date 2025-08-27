@@ -122,13 +122,14 @@
       margin: 25px 0 15px 0;
       position: relative;
       text-align: center;
+      width: 100%;              /* asegura ancho completo incluso dentro de contenedores centrados */
     }
     .divider-line {
       border-top: 1px solid #E2DBDB;
       position: absolute;
       top: 50%;
-      left: 0;             /* asegura el ancho completo */
-      right: 0;            /* asegura el ancho completo */
+      left: 0;                  /* línea realmente a ancho completo */
+      right: 0;
       width: 100%;
       transform: translateY(-50%);
       z-index: 1;
@@ -785,11 +786,12 @@
 
       contentState.case1Shown = true;
 
-      // Divider inline (idéntico a los otros)
+      // Divider inline (igual a los otros) y estirado dentro del contenedor de botones
       const divider = document.createElement('div');
       divider.className = 'section-divider';
       divider.dataset.section = 'case1';
       divider.id = 'case1Divider';
+      divider.style.alignSelf = 'stretch';
 
       const dividerLine = document.createElement('div');
       dividerLine.className = 'divider-line';
@@ -815,49 +817,53 @@
       divider.appendChild(sectionTitle);
       divider.appendChild(closeButton);
 
-      // Bloque de mensajes del teaser
+      // Contenedor de mensajes del teaser
       const block = document.createElement('div');
       block.id = 'case1TeaserBlock';
-
-      // bubble 1: hook
-      const m1 = document.createElement('div');
-      m1.className = 'bot-message';
-      m1.dataset.key = 'case1Hook';
-      m1.id = 'case1Hook';
-      m1.innerHTML = `
-        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-        <div class="bubble">${texts[currentLanguage].case1Teaser.hook}</div>
-      `;
-      block.appendChild(m1);
-
-      // bubble 2: bullets
-      const m2 = document.createElement('div');
-      m2.className = 'bot-message';
-      m2.dataset.key = 'case1Bullets';
-      m2.id = 'case1Bullets';
-      m2.innerHTML = `
-        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-        <div class="bubble">${texts[currentLanguage].case1Teaser.bullets}</div>
-      `;
-      block.appendChild(m2);
-
-      // bubble 3: link
-      const m3 = document.createElement('div');
-      m3.className = 'bot-message';
-      m3.dataset.key = 'case1Link';
-      m3.id = 'case1Link';
-      m3.innerHTML = `
-        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-        <div class="bubble"><a href="${texts[currentLanguage].cases[0].url}" target="_blank">${texts[currentLanguage].case1Teaser.cta}</a></div>
-      `;
-      block.appendChild(m3);
 
       // Inserción inline: divider y luego bloque justo después del botón del Caso 1
       caseBtn.insertAdjacentElement('afterend', divider);
       divider.insertAdjacentElement('afterend', block);
 
-      // Enfoca el primer bubble
-      scrollToElement(m1);
+      // Bubbles con los mismos tiempos/animación que el resto
+      setTimeout(() => {
+        const m1 = document.createElement('div');
+        m1.className = 'bot-message';
+        m1.dataset.key = 'case1Hook';
+        m1.id = 'case1Hook';
+        m1.innerHTML = `
+          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+          <div class="bubble">${texts[currentLanguage].case1Teaser.hook}</div>
+        `;
+        block.appendChild(m1);
+        scrollToElement(m1);
+      }, 600);
+
+      setTimeout(() => {
+        const m2 = document.createElement('div');
+        m2.className = 'bot-message';
+        m2.dataset.key = 'case1Bullets';
+        m2.id = 'case1Bullets';
+        m2.innerHTML = `
+          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+          <div class="bubble">${texts[currentLanguage].case1Teaser.bullets}</div>
+        `;
+        block.appendChild(m2);
+        scrollToBottom();
+      }, 1000);
+
+      setTimeout(() => {
+        const m3 = document.createElement('div');
+        m3.className = 'bot-message';
+        m3.dataset.key = 'case1Link';
+        m3.id = 'case1Link';
+        m3.innerHTML = `
+          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+          <div class="bubble"><a href="${texts[currentLanguage].cases[0].url}" target="_blank">${texts[currentLanguage].case1Teaser.cta}</a></div>
+        `;
+        block.appendChild(m3);
+        scrollToBottom();
+      }, 1400);
 
       updateCasesButtons();
     }
