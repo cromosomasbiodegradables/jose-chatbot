@@ -408,7 +408,7 @@
         elementsToRemove.push(nextElement);
         nextElement = nextElement.nextElementSibling;
       }
-      elementsToRemove.forEach(el => el.remove());
+      elementsToRemove.forEach(function(el){ el.remove(); });
       
       if (sectionType === 'about') {
         contentState.aboutMeShown = false;
@@ -416,7 +416,7 @@
         contentState.contactShown = false;
         resetContactForm();
       } else {
-        contentState[`${sectionType}Shown`] = false;
+        contentState[sectionType + 'Shown'] = false;
       }
 
       if (sectionType === 'cases') {
@@ -687,10 +687,11 @@
       message.appendChild(bubble);
       chatContainer.appendChild(message);
 
-      bubble.querySelectorAll(".copy-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
+      const copyBtns = bubble.querySelectorAll(".copy-btn");
+      copyBtns.forEach(function(btn){
+        btn.addEventListener("click", function(){
           const field = btn.getAttribute("data-copy");
-          const valEl = bubble.querySelector(`.contact-value[data-field="${field}"]`);
+          const valEl = bubble.querySelector('.contact-value[data-field="'+field+'"]');
           if (valEl) copyToClipboard(valEl.textContent.trim());
         });
       });
@@ -766,7 +767,7 @@
 
     /* ========== CASO 1: Teaser inline con DIVIDER debajo del botón 1 ========== */
     function showCase1() {
-      // Si ya está abierto, cerramos (toggle)
+      // Toggle: si ya está abierto, ciérralo
       const existingBlock = document.getElementById('case1TeaserBlock');
       const existingDivider = document.getElementById('case1Divider');
       if (existingBlock || existingDivider) {
@@ -782,7 +783,7 @@
 
       contentState.case1Shown = true;
 
-      // Divider inline (igual estilo que el resto)
+      // Divider inline
       const divider = document.createElement('div');
       divider.className = 'section-divider';
       divider.dataset.section = 'case1';
@@ -861,7 +862,7 @@
 
     function updateCasesButtons() {
       const caseButtons = document.querySelectorAll('.bot-button[data-key^="case-"]');
-      caseButtons.forEach((btn) => {
+      caseButtons.forEach(function(btn){
         const idx = +btn.dataset.key.split('-')[1];
         let label = texts[currentLanguage].cases[idx].text;
         if (idx === 0 && contentState.case1Shown) {
@@ -894,10 +895,12 @@
       userInput.placeholder = texts[currentLanguage].placeholder;
       sendButton.innerText = texts[currentLanguage].send;
 
-      document.querySelectorAll("[data-key]").forEach(el => {
+      const keyed = document.querySelectorAll("[data-key]");
+      keyed.forEach(function(el){
         const key = el.dataset.key;
+        const bubble = el.querySelector ? el.querySelector(".bubble") : null;
+
         if (key === "greeting" || key === "casesIntro" || key === "downloadingCV" || key === "blogIntro") {
-          const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerText = texts[currentLanguage][key];
         }
         if (key === "aboutMe1" || key === "aboutMe2") {
@@ -905,83 +908,81 @@
           const parts = full.split(/\. +/);
           const firstSentence = parts[0] ? parts[0] + "." : full;
           const restText = full.slice(firstSentence.length).trim();
-          const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerText = key === "aboutMe1" ? firstSentence : restText;
         }
         if (key === "aboutMeLink") {
-          const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank">${texts[currentLanguage].aboutMeLink}</a>`;
         }
 
         if (key === "contactPrompt") {
-          const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerText = texts[currentLanguage].contactPrompt;
         }
         if (key === "contactData") {
           const d = texts[currentLanguage].contactMyData;
-          const bubble = el.querySelector(".bubble");
           if (bubble) {
+            const rows = bubble.querySelectorAll(".contact-row");
             const pairs = [
               ["emailLabel","email"],
               ["phoneLabel","phone"],
               ["linkedinLabel","linkedinText"],
               ["wechatLabel","wechat"]
             ];
-            const rows = bubble.querySelectorAll(".contact-row");
-            pairs.forEach(([, field], idx) => {
-              const labelEl = rows[idx]?.querySelector(".contact-label");
-              const valEl = rows[idx]?.querySelector(`.contact-value[data-field="${field}"]`);
-              const btnEl = rows[idx]?.querySelector(".copy-btn");
-              if (labelEl) {
-                const labelKey = pairs[idx][0];
-                labelEl.textContent = d[labelKey];
+            pairs.forEach(function(pair, idx){
+              const labelKey = pair[0];
+              const field = pair[1];
+              const row = rows[idx];
+              if (row) {
+                const labelEl = row.querySelector(".contact-label");
+                const valEl = row.querySelector('.contact-value[data-field="'+field+'"]');
+                const btnEl = row.querySelector(".copy-btn");
+                if (labelEl) labelEl.textContent = d[labelKey];
+                if (valEl) valEl.textContent = d[field];
+                if (btnEl) btnEl.innerHTML = `📋 ${texts[currentLanguage].copy}`;
               }
-              if (valEl) valEl.textContent = d[field];
-              if (btnEl) btnEl.innerHTML = `📋 ${texts[currentLanguage].copy}`;
             });
           }
         }
         if (/^contactQ[0-2]$/.test(key)) {
           const idx = parseInt(key.replace("contactQ", ""), 10);
-          const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerText = texts[currentLanguage].formQuestions[idx];
         }
         if (key === "contactSummary") {
-          const bubble = el.querySelector(".bubble");
           if (bubble) {
             const title = texts[currentLanguage].formSummaryTitle;
             bubble.innerText = `${title}\n👤 ${contactFormData.name}\n🏢 ${contactFormData.company}\n💬 ${contactFormData.message}`;
           }
         }
 
-        // Traducciones del teaser del caso 1
-        if (key === "case1Hook") {
-          const bubble = el.querySelector(".bubble");
-          if (bubble) bubble.innerText = texts[currentLanguage].case1Teaser.hook;
+        // Teaser caso 1
+        if (key === "case1Hook" && bubble) {
+          bubble.innerText = texts[currentLanguage].case1Teaser.hook;
         }
-        if (key === "case1Bullets") {
-          const bubble = el.querySelector(".bubble");
-          if (bubble) bubble.innerHTML = texts[currentLanguage].case1Teaser.bullets;
+        if (key === "case1Bullets" && bubble) {
+          bubble.innerHTML = texts[currentLanguage].case1Teaser.bullets;
         }
-        if (key === "case1Link") {
-          const bubble = el.querySelector(".bubble");
-          if (bubble) bubble.innerHTML = `<a href="${texts[currentLanguage].cases[0].url}" target="_blank">${texts[currentLanguage].case1Teaser.cta}</a>`;
+        if (key === "case1Link" && bubble) {
+          bubble.innerHTML = `<a href="${texts[currentLanguage].cases[0].url}" target="_blank">${texts[currentLanguage].case1Teaser.cta}</a>`;
         }
       });
 
       // Títulos de los dividers (incluye el inline 'case1' si está abierto)
-      document.querySelectorAll(".section-title").forEach(title => {
-        const section = title.parentElement.dataset.section;
-        title.textContent = texts[currentLanguage].sectionTitles[section];
+      const titles = document.querySelectorAll(".section-title");
+      titles.forEach(function(title){
+        const section = title.parentElement && title.parentElement.dataset ? title.parentElement.dataset.section : null;
+        if (section && texts[currentLanguage].sectionTitles[section]) {
+          title.textContent = texts[currentLanguage].sectionTitles[section];
+        }
       });
 
-      document.querySelectorAll(".close-section").forEach(btn => {
+      const closeBtns = document.querySelectorAll(".close-section");
+      closeBtns.forEach(function(btn){
         btn.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
       });
 
-      document.querySelectorAll(".bot-button").forEach(btn => {
+      const allButtons = document.querySelectorAll(".bot-button");
+      allButtons.forEach(function(btn){
         const key = btn.dataset.key;
-        if (key && key.startsWith("option-")) {
+        if (key && key.indexOf("option-") === 0) {
           const idx = +key.split("-")[1];
           const baseText = texts[currentLanguage].options[idx].text;
           let buttonText = baseText;
@@ -993,15 +994,15 @@
           }
           btn.innerText = buttonText;
         }
-        if (key && key.startsWith("case-")) {
-          const idx = +key.split("-')[1];
+        if (key && key.indexOf("case-") === 0) {
+          const idx = +key.split("-")[1];
           let label = texts[currentLanguage].cases[idx].text;
           if (idx === 0 && contentState.case1Shown) {
             label += texts[currentLanguage].alreadyShown;
           }
           btn.innerText = label;
         }
-        if (key && key.startsWith("blog-")) {
+        if (key && key.indexOf("blog-") === 0) {
           const idx = +key.split("-")[1];
           btn.innerText = texts[currentLanguage].blogPosts[idx].text;
         }
