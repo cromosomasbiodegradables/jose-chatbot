@@ -47,7 +47,7 @@
 
     #chat-container {
       flex: 1 1 auto; min-height: 0; width: 100%; max-width: 600px;
-      margin: 20px auto 20px auto; /* ✅ margen inferior simétrico */
+      margin: 20px auto 20px auto;
       background-color: #ffffff;
       border-radius: 12px; padding: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -56,7 +56,6 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    /* ✅ cuando el input está visible, acercamos el container al input */
     body.has-input #chat-container { margin-bottom: 0; }
 
     .bot-message, .user-message {
@@ -78,7 +77,6 @@
       background-color: #cce5ff; color: #003366; text-align: right;
     }
 
-    /* 🔴 Oculto por defecto (solo se muestra en Contacto > Formulario) */
     #input-area {
       display: none;
       justify-content: center;
@@ -155,9 +153,7 @@
       z-index: 2;
       padding: 5px;
     }
-    .close-section:hover {
-      color: #666;
-    }
+    .close-section:hover { color: #666; }
 
     @media screen and (max-width: 480px) {
       .bot-button { font-size: 13px; padding: 9px 12px; }
@@ -178,31 +174,17 @@
       100% { background-color: transparent; }
     }
 
-    /* ✅ Estilos compactos para datos de contacto con botón copiar */
-    .contact-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-top: 2px;
-    }
+    /* Datos de contacto compactos + copiar */
+    .contact-list { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
     .contact-row {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;         /* más pequeño para datos largos */
-      line-height: 1.3;
-      word-break: break-word;
+      display: grid; grid-template-columns: auto 1fr auto;
+      align-items: center; gap: 8px; font-size: 13px; line-height: 1.3; word-break: break-word;
     }
     .contact-label { color: rgba(0,0,0,0.7); white-space: nowrap; }
     .contact-value { color: #222; }
     .copy-btn {
-      border: 1px solid #b7dcb8;
-      background: #e9f7ea;
-      border-radius: 6px;
-      font-size: 12px;
-      padding: 4px 8px;
-      cursor: pointer;
+      border: 1px solid #b7dcb8; background: #e9f7ea; border-radius: 6px;
+      font-size: 12px; padding: 4px 8px; cursor: pointer;
     }
     .copy-btn:hover { background: #dff2e2; }
   </style>
@@ -245,7 +227,6 @@
           { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
         ],
-        /* ✅ Teaser corto del Caso 1 */
         case1Teaser: {
           hook: "Aumenté la conversión del chat en vivo con IA + UX pragmático.",
           bullets: "• Embudos de conversación claros\n• Handoff humano sin fricción",
@@ -258,7 +239,7 @@
           { text: "🔎 Ver todos los posts juntos", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
         contactPrompt: "¿Quieres que te escriba yo o prefieres escribirme tú?",
-        contactButtons: { writeMe: "📝 Quiero que me escribas tú", writeYou: "📄 Prefiero escribirte yo" },
+        contactButtons: { writeMe: "📝 Quiero que me escribas tú", writeYou: "📄 Prefiero escribirme yo" },
         contactMyData: {
           emailLabel: "✉️ Email",
           phoneLabel: "📱 Teléfono",
@@ -275,7 +256,8 @@
         restart: "Volver a empezar", placeholder: "Escribe tu respuesta aquí...", send: "Enviar",
         aboutMeText: "👨‍💼 Soy Jose Carlos, diseñador UX/UI con más de 10 años de experiencia creando productos digitales centrados en las personas. Me apasiona transformar ideas en experiencias útiles y elegantes.",
         aboutMeLink: "Ver más sobre mí", alreadyShown: " (ya mostrado)", close: "✕",
-        copy: "Copiar"
+        copy: "Copiar",
+        downloadingCV: "📄 En unos segundos comenzará la descarga de mi CV…"
       },
       en: {
         greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
@@ -296,7 +278,6 @@
           { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔎 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
         ],
-        /* ✅ Short teaser for Case 1 */
         case1Teaser: {
           hook: "Boosted live-chat conversion with pragmatic AI + UX.",
           bullets: "• Clear conversational funnels\n• Frictionless human handoff",
@@ -305,7 +286,7 @@
         blogPosts: [
           { text: "📝 Post 1: Microinteractions that matter", url: "https://uxfol.io/p/josecarlos-design/post1" },
           { text: "🎯 Post 2: Prioritizing accessibility", url: "https://uxfol.io/p/josecarlos-design/post2" },
-          { text: "📐 Post 3: Metrics-driven design", url: "https://uxfol.io/p/josecarlos-design/post3" },
+          { text: "📐 Metrics-driven design", url: "https://uxfol.io/p/josecarlos-design/post3" },
           { text: "🔎 View all posts together", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
         contactPrompt: "Do you want me to write to you, or do you prefer to write to me?",
@@ -326,7 +307,8 @@
         restart: "Restart", placeholder: "Type your response here...", send: "Send",
         aboutMeText: "👨‍💼 I'm Jose Carlos, a UX/UI designer with over 10 years of experience crafting user-centered digital products. I love turning ideas into elegant and useful experiences.",
         aboutMeLink: "See more about me", alreadyShown: " (already shown)", close: "✕",
-        copy: "Copy"
+        copy: "Copy",
+        downloadingCV: "📄 The CV download will start in a few seconds…"
       }
     };
 
@@ -343,7 +325,6 @@
       aboutMeShown: false,
       blogShown: false,
       contactShown: false,
-      /* ✅ estado del teaser del Caso 1 */
       case1Shown: false
     };
 
@@ -438,7 +419,6 @@
         contentState[`${sectionType}Shown`] = false;
       }
       updateOptionsButtons();
-      /* ✅ actualizar textos de botones de casos cuando se cierra */
       updateCasesButtons();
     }
 
@@ -508,7 +488,6 @@
           button.className = "bot-button";
           button.dataset.key = `case-${index}`;
           button.innerText = texts[currentLanguage].cases[index].text;
-          /* ✅ caso 1 abre teaser; el resto abre link directo */
           if (index === 0) {
             button.onclick = showCase1;
           } else {
@@ -516,7 +495,6 @@
           }
           buttonsContainer.appendChild(button);
           scrollToBottom();
-          /* actualizar etiqueta (ya mostrado) si aplica */
           updateCasesButtons();
         }, 800 + index * 400);
       });
@@ -618,7 +596,6 @@
 
       addSectionDivider("contact");
 
-      // Texto del bot primero
       addMessage("bot", texts[currentLanguage].contactPrompt, "contactPrompt");
 
       const buttonsContainer = document.createElement("div");
@@ -664,7 +641,6 @@
     function showMyContactData() {
       const d = texts[currentLanguage].contactMyData;
 
-      // Mensaje tipo bot con filas + botón copiar
       const message = document.createElement("div");
       message.className = "bot-message";
       message.dataset.key = "contactData";
@@ -706,7 +682,6 @@
       message.appendChild(bubble);
       chatContainer.appendChild(message);
 
-      // Listeners de copia
       bubble.querySelectorAll(".copy-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           const field = btn.getAttribute("data-copy");
@@ -723,7 +698,7 @@
       contactFormStep = 0;
       contactFormData = { name: "", company: "", message: "" };
       inputArea.style.display = "flex";
-      document.body.classList.add('has-input'); /* ✅ señalamos que hay input visible */
+      document.body.classList.add('has-input');
       askNextContactQuestion();
     }
 
@@ -780,7 +755,7 @@
       contactFormStep = 0;
       contactFormData = { name: "", company: "", message: "" };
       inputArea.style.display = "none";
-      document.body.classList.remove('has-input'); /* ✅ quitamos la clase al ocultar el input */
+      document.body.classList.remove('has-input');
     }
     // -------- /CONTACTO --------
 
@@ -792,7 +767,6 @@
       contentState.case1Shown = true;
       addSectionDivider("case1");
 
-      // Mensajes escalonados: hook -> bullets -> botón CTA
       setTimeout(() => {
         addMessage("bot", texts[currentLanguage].case1Teaser.hook, "case1Hook");
       }, 600);
@@ -815,7 +789,6 @@
         scrollToBottom();
       }, 1400);
 
-      // Actualizar el texto del botón del caso a "(ya mostrado)"
       updateCasesButtons();
     }
 
@@ -873,7 +846,6 @@
           if (bubble) bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank">${texts[currentLanguage].aboutMeLink}</a>`;
         }
 
-        /* ✅ Traducciones específicas de Contacto */
         if (key === "contactPrompt") {
           const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerText = texts[currentLanguage].contactPrompt;
@@ -882,7 +854,6 @@
           const d = texts[currentLanguage].contactMyData;
           const bubble = el.querySelector(".bubble");
           if (bubble) {
-            // Actualizamos labels, valores y texto del botón copiar
             const pairs = [
               ["emailLabel","email"],
               ["phoneLabel","phone"],
@@ -916,7 +887,6 @@
           }
         }
 
-        /* ✅ Traducciones específicas del teaser del Caso 1 */
         if (key === "case1Hook") {
           const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerText = texts[currentLanguage].case1Teaser.hook;
@@ -959,15 +929,13 @@
           btn.innerText = label;
         }
         if (key && key.startsWith("blog-")) {
-          const idx = +key.split("-')[1];
+          const idx = +key.split("-")[1];
           btn.innerText = texts[currentLanguage].blogPosts[idx].text;
         }
-        /* ✅ Botones Contacto + acciones */
         if (key === "contact-writeyou") btn.innerText = texts[currentLanguage].contactButtons.writeYou;
         if (key === "contact-writeme") btn.innerText = texts[currentLanguage].contactButtons.writeMe;
         if (key === "contact-send") btn.innerText = texts[currentLanguage].formSend;
         if (key === "contact-cancel") btn.innerText = texts[currentLanguage].formCancel;
-        /* ✅ CTA del Caso 1 */
         if (key === "case1-cta") btn.innerText = texts[currentLanguage].case1Teaser.cta;
       });
 
@@ -1017,4 +985,5 @@
   </script>
 </body>
 </html>
+
 
