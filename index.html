@@ -221,7 +221,7 @@
           { text: "📝 Blog", action: () => showBlogPosts() }
         ],
         cases: [
-          { text: "🧪 Caso 1: Diseño de chat en vivo potenciado por IA", url: "https://uxfol.io/p/josecarlos-design/275f9f2c" },
+          { text: "🧪 Caso 1: AI-Driven Live-Chat Design", url: "https://uxfol.io/p/josecarlos-design/275f9f2c" },
           { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
           { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
@@ -418,6 +418,12 @@
       } else {
         contentState[`${sectionType}Shown`] = false;
       }
+
+      // ✅ Si se cierra "Casos", también reseteamos el estado del teaser del Caso 1
+      if (sectionType === 'cases') {
+        contentState.case1Shown = false;
+      }
+
       updateOptionsButtons();
       updateCasesButtons();
     }
@@ -759,43 +765,64 @@
     }
     // -------- /CONTACTO --------
 
-    /* ========== CASO 1: Teaser con divider, animación y estado (link como bubble) ========== */
+    /* ========== CASO 1: Teaser inline debajo del botón 1 ========== */
     function showCase1() {
-      const case1Section = document.querySelector('.section-divider[data-section="case1"]');
-      if (case1Section) { scrollToElement(case1Section); return; }
+      // Si ya existe el teaser, hace toggle (lo elimina)
+      const existing = document.getElementById('case1TeaserBlock');
+      if (existing) {
+        existing.remove();
+        contentState.case1Shown = false;
+        updateCasesButtons();
+        return;
+      }
+
+      const caseBtn = document.querySelector('.bot-button[data-key="case-0"]');
+      if (!caseBtn) return;
 
       contentState.case1Shown = true;
-      addSectionDivider("case1");
 
-      setTimeout(() => {
-        addMessage("bot", texts[currentLanguage].case1Teaser.hook, "case1Hook");
-      }, 600);
+      // contenedor bloque para poder borrarlo fácil
+      const block = document.createElement('div');
+      block.id = 'case1TeaserBlock';
 
-      setTimeout(() => {
-        addMessage("bot", texts[currentLanguage].case1Teaser.bullets, "case1Bullets");
-      }, 1000);
+      // bubble 1: hook
+      const m1 = document.createElement('div');
+      m1.className = 'bot-message';
+      m1.dataset.key = 'case1Hook';
+      m1.id = 'case1Hook';
+      m1.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble">${texts[currentLanguage].case1Teaser.hook}</div>
+      `;
+      block.appendChild(m1);
 
-      // Link como bubble (estilo "Sobre mí")
-      setTimeout(() => {
-        const linkMsg = document.createElement("div");
-        linkMsg.className = "bot-message";
-        linkMsg.dataset.key = "case1Link";
-        linkMsg.id = "case1Link";
+      // bubble 2: bullets
+      const m2 = document.createElement('div');
+      m2.className = 'bot-message';
+      m2.dataset.key = 'case1Bullets';
+      m2.id = 'case1Bullets';
+      m2.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble">${texts[currentLanguage].case1Teaser.bullets.replace(/\n/g,'<br>')}</div>
+      `;
+      block.appendChild(m2);
 
-        const avatar = document.createElement("img");
-        avatar.src = "https://cdn-icons-png.flaticon.com/512/10479/10479785.png";
-        avatar.className = "avatar";
-        avatar.alt = "bot";
+      // bubble 3: link como en "Sobre mí"
+      const m3 = document.createElement('div');
+      m3.className = 'bot-message';
+      m3.dataset.key = 'case1Link';
+      m3.id = 'case1Link';
+      m3.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble"><a href="${texts[currentLanguage].cases[0].url}" target="_blank">${texts[currentLanguage].case1Teaser.cta}</a></div>
+      `;
+      block.appendChild(m3);
 
-        const bubble = document.createElement("div");
-        bubble.className = "bubble";
-        bubble.innerHTML = `<a href="${texts[currentLanguage].cases[0].url}" target="_blank">${texts[currentLanguage].case1Teaser.cta}</a>`;
+      // insertamos el bloque justo debajo del botón del Caso 1
+      caseBtn.insertAdjacentElement('afterend', block);
 
-        linkMsg.appendChild(avatar);
-        linkMsg.appendChild(bubble);
-        chatContainer.appendChild(linkMsg);
-        scrollToBottom();
-      }, 1400);
+      // animación/scroll centrado al primer bubble
+      scrollToElement(m1);
 
       updateCasesButtons();
     }
@@ -902,7 +929,7 @@
         }
         if (key === "case1Bullets") {
           const bubble = el.querySelector(".bubble");
-          if (bubble) bubble.innerText = texts[currentLanguage].case1Teaser.bullets;
+          if (bubble) bubble.innerHTML = texts[currentLanguage].case1Teaser.bullets.replace(/\n/g,'<br>');
         }
         if (key === "case1Link") {
           const bubble = el.querySelector(".bubble");
@@ -934,7 +961,7 @@
           btn.innerText = buttonText;
         }
         if (key && key.startsWith("case-")) {
-          const idx = +key.split("-")[1];
+          const idx = +key.split("-')[1];
           let label = texts[currentLanguage].cases[idx].text;
           if (idx === 0 && contentState.case1Shown) {
             label += texts[currentLanguage].alreadyShown;
@@ -997,8 +1024,3 @@
   </script>
 </body>
 </html>
-
-      
-      
-      
-
