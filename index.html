@@ -155,7 +155,7 @@
     }
     .close-section:hover { color: #666; }
 
-    /* 👉 Asegura ancho completo para los dividers de casos dentro del contenedor de botones */
+    /* Asegura ancho completo para dividers insertados dentro del contenedor de botones */
     .buttons-container > .section-divider { width: 100%; align-self: stretch; }
 
     @media screen and (max-width: 480px) {
@@ -177,7 +177,7 @@
       100% { background-color: transparent; }
     }
 
-    /* Datos de contacto compactos + copiar */
+    /* Datos de contacto */
     .contact-list { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
     .contact-row {
       display: grid; grid-template-columns: auto 1fr auto;
@@ -317,8 +317,8 @@
           cta: "View full case"
         },
         blogPosts: [
-          { text: "📝 Post 1: Microinteractions that matter", url: "https://uxfol.io/p/josecarlos-design/post1" },
-          { text: "🎯 Post 2: Prioritizing accessibility", url: "https://uxfol.io/p/josecarlos-design/post2" },
+          { text: "📝 Microinteractions that matter", url: "https://uxfol.io/p/josecarlos-design/post1" },
+          { text: "🎯 Prioritizing accessibility", url: "https://uxfol.io/p/josecarlos-design/post2" },
           { text: "📐 Metrics-driven design", url: "https://uxfol.io/p/josecarlos-design/post3" },
           { text: "🔎 View all posts together", url: "https://uxfol.io/p/josecarlos-design/blog" }
         ],
@@ -455,12 +455,13 @@
         contentState[sectionType + 'Shown'] = false;
       }
 
+      // Si cierro "Casos de estudio", eliminar también cualquier teaser inline abierto (casos 1–4)
       if (sectionType === 'cases') {
-        // resetea “(ya mostrado)” de todos los casos
-        contentState.case1Shown = false;
-        contentState.case2Shown = false;
-        contentState.case3Shown = false;
-        contentState.case4Shown = false;
+        ['case1','case2','case3','case4'].forEach((k)=>{
+          const d = document.getElementById(k+'Divider'); if (d) d.remove();
+          const b = document.getElementById(k+'TeaserBlock'); if (b) b.remove();
+          contentState[k+'Shown'] = false;
+        });
       }
 
       updateOptionsButtons();
@@ -543,8 +544,7 @@
           } else if (index === 3) {
             button.onclick = showCase4;
           } else {
-            // index 4 "Ver todos los casos juntos" -> no hacer nada por ahora
-            button.onclick = () => {};
+            button.onclick = () => {}; // no hacer nada por ahora
           }
 
           buttonsContainer.appendChild(button);
@@ -814,45 +814,48 @@
     }
     // -------- /CONTACTO --------
 
-    /* ========== CASO 1: Teaser inline con DIVIDER debajo del botón 1 ========== */
-    function showCase1() {
-      const existingBlock = document.getElementById('case1TeaserBlock');
-      const existingDivider = document.getElementById('case1Divider');
+    /* ===== Helper común para renderizar teaser inline por caso ===== */
+    function renderCaseInline({caseIdx, key}) {
+      const caseBtn = document.querySelector(`.bot-button[data-key="case-${caseIdx}"]`);
+      if (!caseBtn) return;
+
+      // Si ya está, toggle -> cerrar
+      const existingBlock = document.getElementById(`${key}TeaserBlock`);
+      const existingDivider = document.getElementById(`${key}Divider`);
       if (existingBlock || existingDivider) {
         if (existingBlock) existingBlock.remove();
         if (existingDivider) existingDivider.remove();
-        contentState.case1Shown = false;
+        contentState[key + 'Shown'] = false;
         updateCasesButtons();
         return;
       }
 
-      const caseBtn = document.querySelector('.bot-button[data-key="case-0"]');
-      if (!caseBtn) return;
+      // Abrir
+      contentState[key + 'Shown'] = true;
 
-      contentState.case1Shown = true;
-
+      // Divider (igual a los demás)
       const divider = document.createElement('div');
       divider.className = 'section-divider';
-      divider.dataset.section = 'case1';
-      divider.id = 'case1Divider';
+      divider.dataset.section = key;
+      divider.id = `${key}Divider`;
 
       const dividerLine = document.createElement('div');
       dividerLine.className = 'divider-line';
 
       const sectionTitle = document.createElement('span');
       sectionTitle.className = 'section-title';
-      sectionTitle.textContent = texts[currentLanguage].sectionTitles['case1'];
+      sectionTitle.textContent = texts[currentLanguage].sectionTitles[key];
 
       const closeButton = document.createElement('button');
       closeButton.className = 'close-section';
       closeButton.innerHTML = texts[currentLanguage].close;
       closeButton.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
       closeButton.onclick = function () {
-        const blk = document.getElementById('case1TeaserBlock');
-        const div = document.getElementById('case1Divider');
+        const blk = document.getElementById(`${key}TeaserBlock`);
+        const div = document.getElementById(`${key}Divider`);
         if (blk) blk.remove();
         if (div) div.remove();
-        contentState.case1Shown = false;
+        contentState[key + 'Shown'] = false;
         updateCasesButtons();
       };
 
@@ -860,22 +863,28 @@
       divider.appendChild(sectionTitle);
       divider.appendChild(closeButton);
 
+      // Bloque de burbujas
       const block = document.createElement('div');
-      block.id = 'case1TeaserBlock';
+      block.id = `${key}TeaserBlock`;
       block.style.width = '100%';
 
+      // Insertar justo después del botón del caso
       caseBtn.insertAdjacentElement('afterend', divider);
       divider.insertAdjacentElement('afterend', block);
 
-      // Bubbles progresivos sin highlight/rebote
+      // Datos del teaser según idioma
+      const teaser = texts[currentLanguage][`${key}Teaser`];
+      const url = texts[currentLanguage].cases[caseIdx].url;
+
+      // Bubbles progresivos (sin highlight extra)
       setTimeout(() => {
         const m1 = document.createElement('div');
         m1.className = 'bot-message';
-        m1.dataset.key = 'case1Hook';
-        m1.id = 'case1Hook';
+        m1.dataset.key = `${key}Hook`;
+        m1.id = `${key}Hook`;
         m1.innerHTML = `
           <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble">${texts[currentLanguage].case1Teaser.hook}</div>
+          <div class="bubble">${teaser.hook}</div>
         `;
         block.appendChild(m1);
         scrollToBottom();
@@ -884,11 +893,11 @@
       setTimeout(() => {
         const m2 = document.createElement('div');
         m2.className = 'bot-message';
-        m2.dataset.key = 'case1Bullets';
-        m2.id = 'case1Bullets';
+        m2.dataset.key = `${key}Bullets`;
+        m2.id = `${key}Bullets`;
         m2.innerHTML = `
           <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble">${texts[currentLanguage].case1Teaser.bullets}</div>
+          <div class="bubble">${teaser.bullets}</div>
         `;
         block.appendChild(m2);
         scrollToBottom();
@@ -897,11 +906,11 @@
       setTimeout(() => {
         const m3 = document.createElement('div');
         m3.className = 'bot-message';
-        m3.dataset.key = 'case1Link';
-        m3.id = 'case1Link';
+        m3.dataset.key = `${key}Link`;
+        m3.id = `${key}Link`;
         m3.innerHTML = `
           <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble"><a href="${texts[currentLanguage].cases[0].url}" target="_blank">${texts[currentLanguage].case1Teaser.cta}</a></div>
+          <div class="bubble"><a href="${url}" target="_blank">${teaser.cta}</a></div>
         `;
         block.appendChild(m3);
         scrollToBottom();
@@ -910,290 +919,11 @@
       updateCasesButtons();
     }
 
-    /* ========== CASO 2 ========== */
-    function showCase2() {
-      const existingBlock = document.getElementById('case2TeaserBlock');
-      const existingDivider = document.getElementById('case2Divider');
-      if (existingBlock || existingDivider) {
-        if (existingBlock) existingBlock.remove();
-        if (existingDivider) existingDivider.remove();
-        contentState.case2Shown = false;
-        updateCasesButtons();
-        return;
-      }
-
-      const caseBtn = document.querySelector('.bot-button[data-key="case-1"]');
-      if (!caseBtn) return;
-
-      contentState.case2Shown = true;
-
-      const divider = document.createElement('div');
-      divider.className = 'section-divider';
-      divider.dataset.section = 'case2';
-      divider.id = 'case2Divider';
-
-      const dividerLine = document.createElement('div');
-      dividerLine.className = 'divider-line';
-
-      const sectionTitle = document.createElement('span');
-      sectionTitle.className = 'section-title';
-      sectionTitle.textContent = texts[currentLanguage].sectionTitles['case2'];
-
-      const closeButton = document.createElement('button');
-      closeButton.className = 'close-section';
-      closeButton.innerHTML = texts[currentLanguage].close;
-      closeButton.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
-      closeButton.onclick = function () {
-        const blk = document.getElementById('case2TeaserBlock');
-        const div = document.getElementById('case2Divider');
-        if (blk) blk.remove();
-        if (div) div.remove();
-        contentState.case2Shown = false;
-        updateCasesButtons();
-      };
-
-      divider.appendChild(dividerLine);
-      divider.appendChild(sectionTitle);
-      divider.appendChild(closeButton);
-
-      const block = document.createElement('div');
-      block.id = 'case2TeaserBlock';
-      block.style.width = '100%';
-
-      caseBtn.insertAdjacentElement('afterend', divider);
-      divider.insertAdjacentElement('afterend', block);
-
-      setTimeout(() => {
-        const m1 = document.createElement('div');
-        m1.className = 'bot-message';
-        m1.dataset.key = 'case2Hook';
-        m1.id = 'case2Hook';
-        m1.innerHTML = `
-          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble">${texts[currentLanguage].case2Teaser.hook}</div>
-        `;
-        block.appendChild(m1);
-        scrollToBottom();
-      }, 600);
-
-      setTimeout(() => {
-        const m2 = document.createElement('div');
-        m2.className = 'bot-message';
-        m2.dataset.key = 'case2Bullets';
-        m2.id = 'case2Bullets';
-        m2.innerHTML = `
-          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble">${texts[currentLanguage].case2Teaser.bullets}</div>
-        `;
-        block.appendChild(m2);
-        scrollToBottom();
-      }, 1000);
-
-      setTimeout(() => {
-        const m3 = document.createElement('div');
-        m3.className = 'bot-message';
-        m3.dataset.key = 'case2Link';
-        m3.id = 'case2Link';
-        m3.innerHTML = `
-          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble"><a href="${texts[currentLanguage].cases[1].url}" target="_blank">${texts[currentLanguage].case2Teaser.cta}</a></div>
-        `;
-        block.appendChild(m3);
-        scrollToBottom();
-      }, 1400);
-
-      updateCasesButtons();
-    }
-
-    /* ========== CASO 3 ========== */
-    function showCase3() {
-      const existingBlock = document.getElementById('case3TeaserBlock');
-      const existingDivider = document.getElementById('case3Divider');
-      if (existingBlock || existingDivider) {
-        if (existingBlock) existingBlock.remove();
-        if (existingDivider) existingDivider.remove();
-        contentState.case3Shown = false;
-        updateCasesButtons();
-        return;
-      }
-
-      const caseBtn = document.querySelector('.bot-button[data-key="case-2"]');
-      if (!caseBtn) return;
-
-      contentState.case3Shown = true;
-
-      const divider = document.createElement('div');
-      divider.className = 'section-divider';
-      divider.dataset.section = 'case3';
-      divider.id = 'case3Divider';
-
-      const dividerLine = document.createElement('div');
-      dividerLine.className = 'divider-line';
-
-      const sectionTitle = document.createElement('span');
-      sectionTitle.className = 'section-title';
-      sectionTitle.textContent = texts[currentLanguage].sectionTitles['case3'];
-
-      const closeButton = document.createElement('button');
-      closeButton.className = 'close-section';
-      closeButton.innerHTML = texts[currentLanguage].close;
-      closeButton.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
-      closeButton.onclick = function () {
-        const blk = document.getElementById('case3TeaserBlock');
-        const div = document.getElementById('case3Divider');
-        if (blk) blk.remove();
-        if (div) div.remove();
-        contentState.case3Shown = false;
-        updateCasesButtons();
-      };
-
-      divider.appendChild(dividerLine);
-      divider.appendChild(sectionTitle);
-      divider.appendChild(closeButton);
-
-      const block = document.createElement('div');
-      block.id = 'case3TeaserBlock';
-      block.style.width = '100%';
-
-      caseBtn.insertAdjacentElement('afterend', divider);
-      divider.insertAdjacentElement('afterend', block);
-
-      setTimeout(() => {
-        const m1 = document.createElement('div');
-        m1.className = 'bot-message';
-        m1.dataset.key = 'case3Hook';
-        m1.id = 'case3Hook';
-        m1.innerHTML = `
-          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble">${texts[currentLanguage].case3Teaser.hook}</div>
-        `;
-        block.appendChild(m1);
-        scrollToBottom();
-      }, 600);
-
-      setTimeout(() => {
-        const m2 = document.createElement('div');
-        m2.className = 'bot-message';
-        m2.dataset.key = 'case3Bullets';
-        m2.id = 'case3Bullets';
-        m2.innerHTML = `
-          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble">${texts[currentLanguage].case3Teaser.bullets}</div>
-        `;
-        block.appendChild(m2);
-        scrollToBottom();
-      }, 1000);
-
-      setTimeout(() => {
-        const m3 = document.createElement('div');
-        m3.className = 'bot-message';
-        m3.dataset.key = 'case3Link';
-        m3.id = 'case3Link';
-        m3.innerHTML = `
-          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble"><a href="${texts[currentLanguage].cases[2].url}" target="_blank">${texts[currentLanguage].case3Teaser.cta}</a></div>
-        `;
-        block.appendChild(m3);
-        scrollToBottom();
-      }, 1400);
-
-      updateCasesButtons();
-    }
-
-    /* ========== CASO 4 ========== */
-    function showCase4() {
-      const existingBlock = document.getElementById('case4TeaserBlock');
-      const existingDivider = document.getElementById('case4Divider');
-      if (existingBlock || existingDivider) {
-        if (existingBlock) existingBlock.remove();
-        if (existingDivider) existingDivider.remove();
-        contentState.case4Shown = false;
-        updateCasesButtons();
-        return;
-      }
-
-      const caseBtn = document.querySelector('.bot-button[data-key="case-3"]');
-      if (!caseBtn) return;
-
-      contentState.case4Shown = true;
-
-      const divider = document.createElement('div');
-      divider.className = 'section-divider';
-      divider.dataset.section = 'case4';
-      divider.id = 'case4Divider';
-
-      const dividerLine = document.createElement('div');
-      dividerLine.className = 'divider-line';
-
-      const sectionTitle = document.createElement('span');
-      sectionTitle.className = 'section-title';
-      sectionTitle.textContent = texts[currentLanguage].sectionTitles['case4'];
-
-      const closeButton = document.createElement('button');
-      closeButton.className = 'close-section';
-      closeButton.innerHTML = texts[currentLanguage].close;
-      closeButton.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
-      closeButton.onclick = function () {
-        const blk = document.getElementById('case4TeaserBlock');
-        const div = document.getElementById('case4Divider');
-        if (blk) blk.remove();
-        if (div) div.remove();
-        contentState.case4Shown = false;
-        updateCasesButtons();
-      };
-
-      divider.appendChild(dividerLine);
-      divider.appendChild(sectionTitle);
-      divider.appendChild(closeButton);
-
-      const block = document.createElement('div');
-      block.id = 'case4TeaserBlock';
-      block.style.width = '100%';
-
-      caseBtn.insertAdjacentElement('afterend', divider);
-      divider.insertAdjacentElement('afterend', block);
-
-      setTimeout(() => {
-        const m1 = document.createElement('div');
-        m1.className = 'bot-message';
-        m1.dataset.key = 'case4Hook';
-        m1.id = 'case4Hook';
-        m1.innerHTML = `
-          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble">${texts[currentLanguage].case4Teaser.hook}</div>
-        `;
-        block.appendChild(m1);
-        scrollToBottom();
-      }, 600);
-
-      setTimeout(() => {
-        const m2 = document.createElement('div');
-        m2.className = 'bot-message';
-        m2.dataset.key = 'case4Bullets';
-        m2.id = 'case4Bullets';
-        m2.innerHTML = `
-          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble">${texts[currentLanguage].case4Teaser.bullets}</div>
-        `;
-        block.appendChild(m2);
-        scrollToBottom();
-      }, 1000);
-
-      setTimeout(() => {
-        const m3 = document.createElement('div');
-        m3.className = 'bot-message';
-        m3.dataset.key = 'case4Link';
-        m3.id = 'case4Link';
-        m3.innerHTML = `
-          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble"><a href="${texts[currentLanguage].cases[3].url}" target="_blank">${texts[currentLanguage].case4Teaser.cta}</a></div>
-        `;
-        block.appendChild(m3);
-        scrollToBottom();
-      }, 1400);
-
-      updateCasesButtons();
-    }
+    /* ========== CASOS (handlers) ========== */
+    function showCase1(){ renderCaseInline({caseIdx:0, key:'case1'}); }
+    function showCase2(){ renderCaseInline({caseIdx:1, key:'case2'}); }
+    function showCase3(){ renderCaseInline({caseIdx:2, key:'case3'}); }
+    function showCase4(){ renderCaseInline({caseIdx:3, key:'case4'}); }
 
     function updateCasesButtons() {
       const caseButtons = document.querySelectorAll('.bot-button[data-key^="case-"]');
@@ -1289,25 +1019,15 @@
           }
         }
 
-        // Teasers casos 1-4
-        if (key === "case1Hook" && bubble) bubble.innerText = texts[currentLanguage].case1Teaser.hook;
-        if (key === "case1Bullets" && bubble) bubble.innerHTML = texts[currentLanguage].case1Teaser.bullets;
-        if (key === "case1Link" && bubble) bubble.innerHTML = `<a href="${texts[currentLanguage].cases[0].url}" target="_blank">${texts[currentLanguage].case1Teaser.cta}</a>`;
-
-        if (key === "case2Hook" && bubble) bubble.innerText = texts[currentLanguage].case2Teaser.hook;
-        if (key === "case2Bullets" && bubble) bubble.innerHTML = texts[currentLanguage].case2Teaser.bullets;
-        if (key === "case2Link" && bubble) bubble.innerHTML = `<a href="${texts[currentLanguage].cases[1].url}" target="_blank">${texts[currentLanguage].case2Teaser.cta}</a>`;
-
-        if (key === "case3Hook" && bubble) bubble.innerText = texts[currentLanguage].case3Teaser.hook;
-        if (key === "case3Bullets" && bubble) bubble.innerHTML = texts[currentLanguage].case3Teaser.bullets;
-        if (key === "case3Link" && bubble) bubble.innerHTML = `<a href="${texts[currentLanguage].cases[2].url}" target="_blank">${texts[currentLanguage].case3Teaser.cta}</a>`;
-
-        if (key === "case4Hook" && bubble) bubble.innerText = texts[currentLanguage].case4Teaser.hook;
-        if (key === "case4Bullets" && bubble) bubble.innerHTML = texts[currentLanguage].case4Teaser.bullets;
-        if (key === "case4Link" && bubble) bubble.innerHTML = `<a href="${texts[currentLanguage].cases[3].url}" target="_blank">${texts[currentLanguage].case4Teaser.cta}</a>`;
+        // Teasers casos 1-4 (actualiza textos si ya están visibles)
+        ['case1','case2','case3','case4'].forEach((k, i)=>{
+          if (key === `${k}Hook` && bubble) bubble.innerText = texts[currentLanguage][`${k}Teaser`].hook;
+          if (key === `${k}Bullets` && bubble) bubble.innerHTML = texts[currentLanguage][`${k}Teaser`].bullets;
+          if (key === `${k}Link` && bubble) bubble.innerHTML = `<a href="${texts[currentLanguage].cases[i].url}" target="_blank">${texts[currentLanguage][`${k}Teaser`].cta}</a>`;
+        });
       });
 
-      // Títulos de los dividers (incluye los inline 'case1..4' si están abiertos)
+      // Títulos de los dividers (incluye los inline 'case1..4')
       const titles = document.querySelectorAll(".section-title");
       titles.forEach(function(title){
         const section = title.parentElement && title.parentElement.dataset ? title.parentElement.dataset.section : null;
@@ -1337,7 +1057,7 @@
           btn.innerText = buttonText;
         }
         if (key && key.indexOf("case-") === 0) {
-          const idx = +key.split("-')[1];
+          const idx = +key.split("-")[1];
           let label = texts[currentLanguage].cases[idx].text;
           if (idx === 0 && contentState.case1Shown) label += texts[currentLanguage].alreadyShown;
           if (idx === 1 && contentState.case2Shown) label += texts[currentLanguage].alreadyShown;
@@ -1358,6 +1078,7 @@
       scrollToBottom();
     }
 
+    // Inicio
     addMessage("bot", texts[currentLanguage].greeting, "greeting");
     showOptions();
 
