@@ -127,6 +127,8 @@
       border-top: 1px solid #E2DBDB;
       position: absolute;
       top: 50%;
+      left: 0;             /* asegura el ancho completo */
+      right: 0;            /* asegura el ancho completo */
       width: 100%;
       transform: translateY(-50%);
       z-index: 1;
@@ -783,7 +785,7 @@
 
       contentState.case1Shown = true;
 
-      // Divider inline
+      // Divider inline (idéntico a los otros)
       const divider = document.createElement('div');
       divider.className = 'section-divider';
       divider.dataset.section = 'case1';
