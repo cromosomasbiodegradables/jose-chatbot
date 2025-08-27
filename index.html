@@ -263,7 +263,7 @@
         greeting: "👋 Hi! I'm Jose Carlos's assistant, senior UX/UI designer. What would you like to focus on today?",
         casesIntro: "Here are some projects where I solved real problems with user-centered design. Which one interests you?",
         blogIntro: "Here are some blog posts with ideas on UX, design and process. Which would you like to read?",
-        sectionTitles: { cases: "Case studies", case1: "Case 1", about: "About me", blog: "Blog", contact: "Contact" },
+        sectionTitles: { cases: "Case studies", case1: "User Case 1", about: "About me", blog: "Blog", contact: "Contact" },
         options: [
           { text: "🎨 Case studies", action: () => showCaseButtons() },
           { text: "👤 About me", action: () => showAboutMe() },
@@ -764,12 +764,14 @@
     }
     // -------- /CONTACTO --------
 
-    /* ========== CASO 1: Teaser inline debajo del botón 1 ========== */
+    /* ========== CASO 1: Teaser inline con DIVIDER debajo del botón 1 ========== */
     function showCase1() {
-      // Toggle: si ya existe, lo quita
-      const existing = document.getElementById('case1TeaserBlock');
-      if (existing) {
-        existing.remove();
+      // Si ya está abierto, cerramos (toggle)
+      const existingBlock = document.getElementById('case1TeaserBlock');
+      const existingDivider = document.getElementById('case1Divider');
+      if (existingBlock || existingDivider) {
+        if (existingBlock) existingBlock.remove();
+        if (existingDivider) existingDivider.remove();
         contentState.case1Shown = false;
         updateCasesButtons();
         return;
@@ -780,6 +782,37 @@
 
       contentState.case1Shown = true;
 
+      // Divider inline (igual estilo que el resto)
+      const divider = document.createElement('div');
+      divider.className = 'section-divider';
+      divider.dataset.section = 'case1';
+      divider.id = 'case1Divider';
+
+      const dividerLine = document.createElement('div');
+      dividerLine.className = 'divider-line';
+
+      const sectionTitle = document.createElement('span');
+      sectionTitle.className = 'section-title';
+      sectionTitle.textContent = texts[currentLanguage].sectionTitles['case1'];
+
+      const closeButton = document.createElement('button');
+      closeButton.className = 'close-section';
+      closeButton.innerHTML = texts[currentLanguage].close;
+      closeButton.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
+      closeButton.onclick = function () {
+        const blk = document.getElementById('case1TeaserBlock');
+        const div = document.getElementById('case1Divider');
+        if (blk) blk.remove();
+        if (div) div.remove();
+        contentState.case1Shown = false;
+        updateCasesButtons();
+      };
+
+      divider.appendChild(dividerLine);
+      divider.appendChild(sectionTitle);
+      divider.appendChild(closeButton);
+
+      // Bloque de mensajes del teaser
       const block = document.createElement('div');
       block.id = 'case1TeaserBlock';
 
@@ -805,7 +838,7 @@
       `;
       block.appendChild(m2);
 
-      // bubble 3: link (como “Sobre mí”)
+      // bubble 3: link
       const m3 = document.createElement('div');
       m3.className = 'bot-message';
       m3.dataset.key = 'case1Link';
@@ -816,8 +849,9 @@
       `;
       block.appendChild(m3);
 
-      // Inserta el bloque justo debajo del botón del Caso 1
-      caseBtn.insertAdjacentElement('afterend', block);
+      // Inserción inline: divider y luego bloque justo después del botón del Caso 1
+      caseBtn.insertAdjacentElement('afterend', divider);
+      divider.insertAdjacentElement('afterend', block);
 
       // Enfoca el primer bubble
       scrollToElement(m1);
@@ -935,6 +969,7 @@
         }
       });
 
+      // Títulos de los dividers (incluye el inline 'case1' si está abierto)
       document.querySelectorAll(".section-title").forEach(title => {
         const section = title.parentElement.dataset.section;
         title.textContent = texts[currentLanguage].sectionTitles[section];
@@ -959,7 +994,7 @@
           btn.innerText = buttonText;
         }
         if (key && key.startsWith("case-")) {
-          const idx = +key.split("-")[1];
+          const idx = +key.split("-')[1];
           let label = texts[currentLanguage].cases[idx].text;
           if (idx === 0 && contentState.case1Shown) {
             label += texts[currentLanguage].alreadyShown;
