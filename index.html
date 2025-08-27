@@ -122,13 +122,13 @@
       margin: 25px 0 15px 0;
       position: relative;
       text-align: center;
-      width: 100%;              /* asegura ancho completo incluso dentro de contenedores centrados */
+      width: 100%;
     }
     .divider-line {
       border-top: 1px solid #E2DBDB;
       position: absolute;
       top: 50%;
-      left: 0;                  /* línea realmente a ancho completo */
+      left: 0;
       right: 0;
       width: 100%;
       transform: translateY(-50%);
@@ -786,7 +786,7 @@
 
       contentState.case1Shown = true;
 
-      // Divider inline (igual a los otros) y estirado dentro del contenedor de botones
+      // Divider inline
       const divider = document.createElement('div');
       divider.className = 'section-divider';
       divider.dataset.section = 'case1';
@@ -836,7 +836,8 @@
           <div class="bubble">${texts[currentLanguage].case1Teaser.hook}</div>
         `;
         block.appendChild(m1);
-        scrollToElement(m1);
+        // 🔧 Cambio: scroll suave SIN resaltar (evita doble animación)
+        m1.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 600);
 
       setTimeout(() => {
