@@ -221,15 +221,15 @@
           { text: "📝 Blog", action: () => showBlogPosts() }
         ],
         cases: [
-          { text: "🧪 Caso 1: AI-Driven Live-Chat Design", url: "https://uxfol.io/p/josecarlos-design/275f9f2c" },
+          { text: "🧪 Caso 1: Diseño de Live-chat con IA", url: "https://uxfol.io/p/josecarlos-design/275f9f2c" },
           { text: "🛍️ Caso 2: Optimización UX para e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
           { text: "📱 Caso 3: Diseño de app de bienestar", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
         ],
         case1Teaser: {
-          hook: "Aumenté la conversión del chat en vivo con IA + UX pragmático.",
-          bullets: "• Embudos de conversación claros\n• Handoff humano sin fricción",
+          hook: "Rediseño del live-chat con IA para agentes: menos tiempo de respuesta y mayor satisfacción.",
+          bullets: "• Sugerencias «SmartReply» trazables al documento origen<br>• Hasta 3 opciones por turno, editables y posteables<br>• Feedback del agente para mejorar el modelo",
           cta: "Ver caso completo"
         },
         blogPosts: [
@@ -272,15 +272,15 @@
           { text: "📝 Blog", action: () => showBlogPosts() }
         ],
         cases: [
-          { text: "🧪 Case 1: AI-Driven Live-Chat Design", url: "https://uxfol.io/p/josecarlos-design/275f9f2c" },
+          { text: "🧪 Case 1: AI-Driven Live-chat Design", url: "https://uxfol.io/p/josecarlos-design/275f9f2c" },
           { text: "🛍️ Case 2: UX optimization for e-commerce", url: "https://uxfol.io/p/josecarlos-design/caso2" },
           { text: "📱 Case 3: Wellness app design", url: "https://uxfol.io/p/josecarlos-design/caso3" },
           { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔎 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
         ],
         case1Teaser: {
-          hook: "Boosted live-chat conversion with pragmatic AI + UX.",
-          bullets: "• Clear conversational funnels\n• Frictionless human handoff",
+          hook: "AI-assisted live-chat for agents: faster replies and higher CSAT.",
+          bullets: "• «SmartReply» suggestions with source traceability<br>• Up to 3 options per turn, editable & postable<br>• Agent feedback loop to improve the model",
           cta: "View full case"
         },
         blogPosts: [
@@ -419,9 +419,8 @@
         contentState[`${sectionType}Shown`] = false;
       }
 
-      // ✅ Si se cierra "Casos", también reseteamos el estado del teaser del Caso 1
       if (sectionType === 'cases') {
-        contentState.case1Shown = false;
+        contentState.case1Shown = false; // resetea “(ya mostrado)”
       }
 
       updateOptionsButtons();
@@ -767,7 +766,7 @@
 
     /* ========== CASO 1: Teaser inline debajo del botón 1 ========== */
     function showCase1() {
-      // Si ya existe el teaser, hace toggle (lo elimina)
+      // Toggle: si ya existe, lo quita
       const existing = document.getElementById('case1TeaserBlock');
       if (existing) {
         existing.remove();
@@ -781,7 +780,6 @@
 
       contentState.case1Shown = true;
 
-      // contenedor bloque para poder borrarlo fácil
       const block = document.createElement('div');
       block.id = 'case1TeaserBlock';
 
@@ -803,11 +801,11 @@
       m2.id = 'case1Bullets';
       m2.innerHTML = `
         <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-        <div class="bubble">${texts[currentLanguage].case1Teaser.bullets.replace(/\n/g,'<br>')}</div>
+        <div class="bubble">${texts[currentLanguage].case1Teaser.bullets}</div>
       `;
       block.appendChild(m2);
 
-      // bubble 3: link como en "Sobre mí"
+      // bubble 3: link (como “Sobre mí”)
       const m3 = document.createElement('div');
       m3.className = 'bot-message';
       m3.dataset.key = 'case1Link';
@@ -818,10 +816,10 @@
       `;
       block.appendChild(m3);
 
-      // insertamos el bloque justo debajo del botón del Caso 1
+      // Inserta el bloque justo debajo del botón del Caso 1
       caseBtn.insertAdjacentElement('afterend', block);
 
-      // animación/scroll centrado al primer bubble
+      // Enfoca el primer bubble
       scrollToElement(m1);
 
       updateCasesButtons();
@@ -929,7 +927,7 @@
         }
         if (key === "case1Bullets") {
           const bubble = el.querySelector(".bubble");
-          if (bubble) bubble.innerHTML = texts[currentLanguage].case1Teaser.bullets.replace(/\n/g,'<br>');
+          if (bubble) bubble.innerHTML = texts[currentLanguage].case1Teaser.bullets;
         }
         if (key === "case1Link") {
           const bubble = el.querySelector(".bubble");
@@ -961,7 +959,7 @@
           btn.innerText = buttonText;
         }
         if (key && key.startsWith("case-")) {
-          const idx = +key.split("-')[1];
+          const idx = +key.split("-")[1];
           let label = texts[currentLanguage].cases[idx].text;
           if (idx === 0 && contentState.case1Shown) {
             label += texts[currentLanguage].alreadyShown;
