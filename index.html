@@ -227,9 +227,10 @@
           { text: "🌍 Caso 4: Plataforma educativa inclusiva", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔍 Ver todos los casos juntos", url: "https://uxfol.io/p/josecarlos-design" }
         ],
+        /* 👉 Versión ultra-corta */
         case1Teaser: {
-          hook: "Aumenté la conversión del chat en vivo con IA + UX pragmático.",
-          bullets: "• Embudos de conversación claros\n• Handoff humano sin fricción",
+          hook: "Rediseñamos un chat en vivo con IA para que los agentes respondan más rápido y mejor.",
+          bullets: "• 35% menos tiempo de respuesta\n• +14% satisfacción de clientes\n• 90% adopción por los agentes",
           cta: "Ver caso completo"
         },
         blogPosts: [
@@ -278,9 +279,10 @@
           { text: "🌍 Case 4: Inclusive educational platform", url: "https://uxfol.io/p/josecarlos-design/caso4" },
           { text: "🔎 View all cases together", url: "https://uxfol.io/p/josecarlos-design" }
         ],
+        /* 👉 Ultra-short version */
         case1Teaser: {
-          hook: "Boosted live-chat conversion with pragmatic AI + UX.",
-          bullets: "• Clear conversational funnels\n• Frictionless human handoff",
+          hook: "We redesigned a live-chat system with AI so agents respond faster and better.",
+          bullets: "• 35% faster response time\n• +14% customer satisfaction\n• 90% agent adoption",
           cta: "View full case"
         },
         blogPosts: [
@@ -775,7 +777,7 @@
         addMessage("bot", texts[currentLanguage].case1Teaser.bullets, "case1Bullets");
       }, 1000);
 
-      // 👉 Reemplazo: en lugar de botón verde, bubble del bot con enlace (como "Sobre mí")
+      // Enlace como bubble (estilo "Sobre mí")
       setTimeout(() => {
         const linkMsg = document.createElement("div");
         linkMsg.className = "bot-message";
@@ -895,7 +897,7 @@
           }
         }
 
-        // 👉 Traducciones del teaser del caso 1
+        // Traducción del teaser del caso 1
         if (key === "case1Hook") {
           const bubble = el.querySelector(".bubble");
           if (bubble) bubble.innerText = texts[currentLanguage].case1Teaser.hook;
@@ -998,4 +1000,6 @@
 </body>
 </html>
 
-
+      
+      
+      
