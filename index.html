@@ -60,8 +60,7 @@
 
     .bot-message, .user-message {
       display: flex; align-items: flex-start; margin: 10px 0;
-      /* animación más lenta y uniforme */
-      animation: fadeIn 0.6s ease-out;
+      animation: fadeIn 0.6s ease-out; /* animación uniforme */
     }
     .avatar {
       width: 32px; height: 32px; border-radius: 50%;
@@ -211,9 +210,7 @@
   </div>
 
   <script>
-  // ✅ Esperar a que el DOM esté listo antes de acceder a elementos
   document.addEventListener('DOMContentLoaded', () => {
-
     const texts = {
       es: {
         greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
@@ -356,12 +353,10 @@
     const languageToggle = document.getElementById("language-toggle");
     const inputArea = document.getElementById("input-area");
 
-    // Si por cualquier motivo no existieran (seguridad extra), no seguimos
     if (!chatContainer || !restartButton || !userInput || !sendButton || !languageToggle || !inputArea) return;
 
-    // ⏱️ Timings globales unificados
-    const APPEAR_BASE = 1000;  // 1.0s
-    const APPEAR_STEP = 500;   // 0.5s
+    const APPEAR_BASE = 1000;
+    const APPEAR_STEP = 500;
 
     let currentLanguage = "es";
     let contentState = {
@@ -375,7 +370,6 @@
       case4Shown: false
     };
 
-    // ---- Estado Contacto (formulario) ----
     let contactFormActive = false;
     let contactFormStep = 0;
     let contactFormData = { name: "", company: "", message: "" };
@@ -387,13 +381,10 @@
         });
       });
     }
-
-    // 🔄 Scroll suave sin resaltado
     function scrollIntoViewSoft(element) {
       if (!element) return;
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-
     function scrollToElement(element) {
       if (!element) return;
       element.classList.add('highlighted');
@@ -472,7 +463,6 @@
         contentState[sectionType + 'Shown'] = false;
       }
 
-      // Si cierro "Casos de estudio", eliminar también cualquier teaser inline abierto (casos 1–4)
       if (sectionType === 'cases') {
         ['case1','case2','case3','case4'].forEach((k)=>{
           const d = document.getElementById(k+'Divider'); if (d) d.remove();
@@ -538,7 +528,8 @@
       if (casesSection) { scrollToElement(casesSection); return; }
       
       contentState.casesShown = true;
-      addSectionDivider("cases");
+      const divider = addSectionDivider("cases");
+      scrollIntoViewSoft(divider); /* 👈 centra la sección al abrirla */
       addMessage("bot", texts[currentLanguage].casesIntro, "casesIntro");
       
       const buttonsContainer = document.createElement("div");
@@ -579,7 +570,6 @@
       contentState.aboutMeShown = true;
       addSectionDivider("about");
       
-      // Foto (timing global)
       setTimeout(() => {
         const photoMsg = document.createElement("div");
         photoMsg.className = "bot-message";
@@ -660,13 +650,14 @@
       updateOptionsButtons();
     }
 
-    // ---------- CONTACTO ----------
+    /* ---------- CONTACTO ---------- */
     function showContact() {
       const contactSection = document.querySelector('.section-divider[data-section="contact"]');
       if (contactSection) { scrollToElement(contactSection); return; }
       contentState.contactShown = true;
 
-      addSectionDivider("contact");
+      const divider = addSectionDivider("contact");
+      scrollIntoViewSoft(divider);
 
       addMessage("bot", texts[currentLanguage].contactPrompt, "contactPrompt");
 
@@ -674,7 +665,6 @@
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
-      // timings globales
       setTimeout(() => {
         const btnWriteYou = document.createElement("button");
         btnWriteYou.className = "bot-button";
@@ -830,7 +820,7 @@
       inputArea.style.display = "none";
       document.body.classList.remove('has-input');
     }
-    // -------- /CONTACTO --------
+    /* ---------- /CONTACTO ---------- */
 
     /* ===== Helper común para renderizar teaser inline por caso ===== */
     function renderCaseInline({caseIdx, key}) {
@@ -890,14 +880,14 @@
       caseBtn.insertAdjacentElement('afterend', divider);
       divider.insertAdjacentElement('afterend', block);
 
-      // ⛔ Sin resaltado — scroll suave al divider del caso
+      // 👇 Mantener el foco en esta sección (no al final)
       scrollIntoViewSoft(divider);
 
       // Datos del teaser según idioma
       const teaser = texts[currentLanguage][`${key}Teaser`];
       const url = texts[currentLanguage].cases[caseIdx].url;
 
-      // Bubbles progresivos con timings unificados
+      // Bubbles progresivos con timings unificados (sin scrollToBottom)
       setTimeout(() => {
         const m1 = document.createElement('div');
         m1.className = 'bot-message';
@@ -908,7 +898,7 @@
           <div class="bubble">${teaser.hook}</div>
         `;
         block.appendChild(m1);
-        scrollToBottom();
+        scrollIntoViewSoft(m1);
       }, APPEAR_BASE);
 
       setTimeout(() => {
@@ -921,7 +911,7 @@
           <div class="bubble">${teaser.bullets}</div>
         `;
         block.appendChild(m2);
-        scrollToBottom();
+        scrollIntoViewSoft(m2);
       }, APPEAR_BASE + APPEAR_STEP);
 
       setTimeout(() => {
@@ -934,7 +924,7 @@
           <div class="bubble"><a href="${url}" target="_blank" rel="noopener noreferrer">${teaser.cta}</a></div>
         `;
         block.appendChild(m3);
-        scrollToBottom();
+        scrollIntoViewSoft(m3);
       }, APPEAR_BASE + 2 * APPEAR_STEP);
 
       updateCasesButtons();
@@ -1040,7 +1030,6 @@
           }
         }
 
-        // Teasers casos 1-4 (actualiza textos si ya están visibles)
         ['case1','case2','case3','case4'].forEach((k, i)=>{
           if (key === `${k}Hook` && bubble) bubble.innerText = texts[currentLanguage][`${k}Teaser`].hook;
           if (key === `${k}Bullets` && bubble) bubble.innerHTML = texts[currentLanguage][`${k}Teaser`].bullets;
@@ -1048,7 +1037,6 @@
         });
       });
 
-      // Títulos de los dividers (incluye los inline 'case1..4')
       const titles = document.querySelectorAll(".section-title");
       titles.forEach(function(title){
         const section = title.parentElement && title.parentElement.dataset ? title.parentElement.dataset.section : null;
@@ -1143,8 +1131,7 @@
       userInput.value = "";
       if (contactFormActive) handleContactInput(v);
     };
-
-  }); // ← DOMContentLoaded
+  });
   </script>
 </body>
 </html>
