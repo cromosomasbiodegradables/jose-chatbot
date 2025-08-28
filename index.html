@@ -118,10 +118,12 @@
       filter: drop-shadow(0 6px 14px rgba(0,0,0,0.18));
     }
 
+    /* Divider base */
     .section-divider {
       margin: 25px 0 15px 0;
       position: relative;
       text-align: center;
+      min-height: 28px; /* asegura espacio para el botón circular */
     }
     .divider-line {
       border-top: 1px solid #E2DBDB;
@@ -141,7 +143,7 @@
       color: rgba(0, 0, 0, 0.5);
     }
 
-    /* ⬇️ Botón circular para cerrar (X) */
+    /* Botón circular (X) */
     .close-section {
       position: absolute;
       right: 8px;
@@ -160,13 +162,18 @@
       line-height: 1;
       padding: 0;
       cursor: pointer;
-      z-index: 3; /* por encima de la línea y el título */
+      z-index: 3;
       box-shadow: 0 1px 2px rgba(0,0,0,0.06);
       transition: background 0.2s ease, color 0.2s ease, transform 0.12s ease;
     }
     .close-section:hover { background: #f5f5f5; color: #333; }
     .close-section:active { transform: translateY(-50%) scale(0.96); }
     .close-section:focus-visible { outline: 2px solid #99C2FF; outline-offset: 2px; }
+
+    /* Dividers dentro de la lista de casos: ocupar ancho y no montar el título con la X */
+    .buttons-container > .section-divider { width: 100%; align-self: stretch; }
+    .section-divider--inline { margin: 18px 0 10px; }
+    .section-divider--inline .section-title { padding-right: 44px; } /* reserva sitio para la X */
 
     @media screen and (max-width: 480px) {
       .bot-button { font-size: 13px; padding: 9px 12px; }
@@ -852,9 +859,9 @@
       // Abrir
       contentState[key + 'Shown'] = true;
 
-      // Divider (igual a los demás)
+      // Divider inline (con clase específica)
       const divider = document.createElement('div');
-      divider.className = 'section-divider';
+      divider.className = 'section-divider section-divider--inline';
       divider.dataset.section = key;
       divider.id = `${key}Divider`;
 
@@ -888,18 +895,18 @@
       block.id = `${key}TeaserBlock`;
       block.style.width = '100%';
 
-      // Inserción inline: divider y luego bloque justo después del botón del Caso
+      // Inserción inline
       caseBtn.insertAdjacentElement('afterend', divider);
       divider.insertAdjacentElement('afterend', block);
 
-      // 👇 Mantener el foco en esta sección (no al final)
+      // Centrar en vista
       scrollIntoViewSoft(divider);
 
-      // Datos del teaser según idioma
+      // Datos teaser
       const teaser = texts[currentLanguage][`${key}Teaser`];
       const url = texts[currentLanguage].cases[caseIdx].url;
 
-      // Bubbles progresivos con timings unificados (sin scrollToBottom)
+      // Mensajes progresivos (sin ir al final del chat)
       setTimeout(() => {
         const m1 = document.createElement('div');
         m1.className = 'bot-message';
@@ -1063,41 +1070,7 @@
         btn.setAttribute('aria-label', btn.title);
       });
 
-      const allButtons = document.querySelectorAll(".bot-button");
-      allButtons.forEach(function(btn){
-        const key = btn.dataset.key;
-        if (key && key.indexOf("option-") === 0) {
-          const idx = +key.split("-")[1];
-          const baseText = texts[currentLanguage].options[idx].text;
-          let buttonText = baseText;
-          if ((idx === 0 && contentState.casesShown) || 
-              (idx === 1 && contentState.aboutMeShown) || 
-              (idx === 3 && contentState.contactShown) ||
-              (idx === 4 && contentState.blogShown)) {
-            buttonText += texts[currentLanguage].alreadyShown;
-          }
-          btn.innerText = buttonText;
-        }
-        if (key && key.indexOf("case-") === 0) {
-          const idx = +key.split("-")[1];
-          let label = texts[currentLanguage].cases[idx].text;
-          if (idx === 0 && contentState.case1Shown) label += texts[currentLanguage].alreadyShown;
-          if (idx === 1 && contentState.case2Shown) label += texts[currentLanguage].alreadyShown;
-          if (idx === 2 && contentState.case3Shown) label += texts[currentLanguage].alreadyShown;
-          if (idx === 3 && contentState.case4Shown) label += texts[currentLanguage].alreadyShown;
-          btn.innerText = label;
-        }
-        if (key && key.indexOf("blog-") === 0) {
-          const idx = +key.split("-")[1];
-          btn.innerText = texts[currentLanguage].blogPosts[idx].text;
-        }
-        if (key === "contact-writeyou") btn.innerText = texts[currentLanguage].contactButtons.writeYou;
-        if (key === "contact-writeme") btn.innerText = texts[currentLanguage].contactButtons.writeMe;
-        if (key === "contact-send") btn.innerText = texts[currentLanguage].formSend;
-        if (key === "contact-cancel") btn.innerText = texts[currentLanguage].formCancel;
-      });
-
-      // (sin scrollToBottom para no mover la vista)
+      // sin scrollToBottom aquí para no mover la vista
     }
 
     // Inicio
