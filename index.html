@@ -60,7 +60,8 @@
 
     .bot-message, .user-message {
       display: flex; align-items: flex-start; margin: 10px 0;
-      animation: fadeIn 0.4s ease-in;
+      /* animación más lenta y uniforme */
+      animation: fadeIn 0.6s ease-out;
     }
     .avatar {
       width: 32px; height: 32px; border-radius: 50%;
@@ -352,6 +353,10 @@
     const languageToggle = document.getElementById("language-toggle");
     const inputArea = document.getElementById("input-area");
 
+    // ⏱️ Timings globales unificados
+    const APPEAR_BASE = 1000;  // 1.0s
+    const APPEAR_STEP = 500;   // 0.5s
+
     let currentLanguage = "es";
     let contentState = {
       casesShown: false,
@@ -512,7 +517,7 @@
 
           buttonsContainer.appendChild(button);
           scrollToBottom();
-        }, 800 + index * 400);
+        }, APPEAR_BASE + index * APPEAR_STEP);
       });
     }
 
@@ -550,7 +555,7 @@
           buttonsContainer.appendChild(button);
           scrollToBottom();
           updateCasesButtons();
-        }, 800 + index * 400);
+        }, APPEAR_BASE + index * APPEAR_STEP);
       });
       updateOptionsButtons();
     }
@@ -562,6 +567,7 @@
       contentState.aboutMeShown = true;
       addSectionDivider("about");
       
+      // Foto (timing global)
       setTimeout(() => {
         const photoMsg = document.createElement("div");
         photoMsg.className = "bot-message";
@@ -583,15 +589,15 @@
         photoMsg.appendChild(photoContainer);
         chatContainer.appendChild(photoMsg);
         scrollToBottom();
-      }, 600);
+      }, APPEAR_BASE);
 
       const full = texts[currentLanguage].aboutMeText;
       const parts = full.split(/\. +/);
       const firstSentence = parts[0] ? parts[0] + "." : full;
       const restText = full.slice(firstSentence.length).trim();
 
-      setTimeout(() => { addMessage("bot", firstSentence, "aboutMe1"); }, 1000);
-      if (restText) setTimeout(() => { addMessage("bot", restText, "aboutMe2"); }, 1400);
+      setTimeout(() => { addMessage("bot", firstSentence, "aboutMe1"); }, APPEAR_BASE + APPEAR_STEP);
+      if (restText) setTimeout(() => { addMessage("bot", restText, "aboutMe2"); }, APPEAR_BASE + 2*APPEAR_STEP);
 
       setTimeout(() => {
         const linkMsg = document.createElement("div");
@@ -612,7 +618,7 @@
         linkMsg.appendChild(bubble);
         chatContainer.appendChild(linkMsg);
         scrollToBottom();
-      }, restText ? 1800 : 1400);
+      }, restText ? (APPEAR_BASE + 3*APPEAR_STEP) : (APPEAR_BASE + 2*APPEAR_STEP));
       updateOptionsButtons();
     }
 
@@ -637,7 +643,7 @@
           button.onclick = () => window.open(item.url, "_blank");
           buttonsContainer.appendChild(button);
           scrollToBottom();
-        }, 800 + index * 400);
+        }, APPEAR_BASE + index * APPEAR_STEP);
       });
       updateOptionsButtons();
     }
@@ -656,6 +662,7 @@
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
+      // timings globales
       setTimeout(() => {
         const btnWriteYou = document.createElement("button");
         btnWriteYou.className = "bot-button";
@@ -664,7 +671,7 @@
         btnWriteYou.onclick = showMyContactData;
         buttonsContainer.appendChild(btnWriteYou);
         scrollToBottom();
-      }, 800);
+      }, APPEAR_BASE);
 
       setTimeout(() => {
         const btnWriteMe = document.createElement("button");
@@ -674,7 +681,7 @@
         btnWriteMe.onclick = startContactForm;
         buttonsContainer.appendChild(btnWriteMe);
         scrollToBottom();
-      }, 1200);
+      }, APPEAR_BASE + APPEAR_STEP);
 
       updateOptionsButtons();
     }
@@ -876,7 +883,7 @@
       const teaser = texts[currentLanguage][`${key}Teaser`];
       const url = texts[currentLanguage].cases[caseIdx].url;
 
-      // Bubbles progresivos con timings iguales que en otras secciones (800/1200/1600)
+      // Bubbles progresivos con timings unificados
       setTimeout(() => {
         const m1 = document.createElement('div');
         m1.className = 'bot-message';
@@ -888,7 +895,7 @@
         `;
         block.appendChild(m1);
         scrollToBottom();
-      }, 800);
+      }, APPEAR_BASE);
 
       setTimeout(() => {
         const m2 = document.createElement('div');
@@ -901,7 +908,7 @@
         `;
         block.appendChild(m2);
         scrollToBottom();
-      }, 1200);
+      }, APPEAR_BASE + APPEAR_STEP);
 
       setTimeout(() => {
         const m3 = document.createElement('div');
@@ -914,7 +921,7 @@
         `;
         block.appendChild(m3);
         scrollToBottom();
-      }, 1600);
+      }, APPEAR_BASE + 2 * APPEAR_STEP);
 
       updateCasesButtons();
     }
