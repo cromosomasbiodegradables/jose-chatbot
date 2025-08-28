@@ -371,7 +371,7 @@
     };
 
     let contactFormActive = false;
-    let contactFormStep = 0;
+       let contactFormStep = 0;
     let contactFormData = { name: "", company: "", message: "" };
 
     function scrollToBottom() {
@@ -1084,7 +1084,7 @@
         if (key === "contact-cancel") btn.innerText = texts[currentLanguage].formCancel;
       });
 
-      scrollToBottom();
+      // ❌ Antes aquí había scrollToBottom(); lo quitamos para no mover la vista al cambiar idioma.
     }
 
     // Inicio
@@ -1092,9 +1092,16 @@
     showOptions();
 
     languageToggle.onclick = () => {
+      // ✅ Preservar posición relativa de scroll al cambiar idioma
+      const maxScroll = chatContainer.scrollHeight - chatContainer.clientHeight;
+      const ratio = maxScroll > 0 ? chatContainer.scrollTop / maxScroll : 0;
+
       currentLanguage = currentLanguage === "es" ? "en" : "es";
       languageToggle.classList.toggle("active");
       translateUI();
+
+      const newMaxScroll = chatContainer.scrollHeight - chatContainer.clientHeight;
+      chatContainer.scrollTop = newMaxScroll > 0 ? newMaxScroll * ratio : 0;
     };
 
     restartButton.onclick = () => {
