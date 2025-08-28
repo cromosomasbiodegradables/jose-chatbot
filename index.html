@@ -60,8 +60,7 @@
 
     .bot-message, .user-message {
       display: flex; align-items: flex-start; margin: 10px 0;
-      /* animación más lenta y uniforme */
-      animation: fadeIn 0.6s ease-out;
+      animation: fadeIn 0.6s ease-out; /* más suave y uniforme */
     }
     .avatar {
       width: 32px; height: 32px; border-radius: 50%;
@@ -156,7 +155,7 @@
     }
     .close-section:hover { color: #666; }
 
-    /* Dividers inline a ancho completo dentro de contenedor de botones */
+    /* Los dividers inline ocupan ancho completo donde se pinten */
     .buttons-container > .section-divider { width: 100%; align-self: stretch; }
 
     @media screen and (max-width: 480px) {
@@ -170,7 +169,7 @@
       from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    
+
     .highlighted { animation: highlight 2s ease; }
     @keyframes highlight {
       0% { background-color: transparent; }
@@ -416,24 +415,24 @@
       const sectionDivider = document.createElement("div");
       sectionDivider.className = "section-divider";
       sectionDivider.dataset.section = sectionType;
-      
+
       const dividerLine = document.createElement("div");
       dividerLine.className = "divider-line";
-      
+
       const sectionTitle = document.createElement("span");
       sectionTitle.className = "section-title";
       sectionTitle.textContent = texts[currentLanguage].sectionTitles[sectionType];
-      
+
       const closeButton = document.createElement("button");
       closeButton.className = "close-section";
       closeButton.innerHTML = texts[currentLanguage].close;
       closeButton.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
       closeButton.onclick = function() { removeSection(sectionType); };
-      
+
       sectionDivider.appendChild(dividerLine);
       sectionDivider.appendChild(sectionTitle);
       sectionDivider.appendChild(closeButton);
-      
+
       chatContainer.appendChild(sectionDivider);
       return sectionDivider;
     }
@@ -441,16 +440,16 @@
     function removeSection(sectionType) {
       const sectionDivider = document.querySelector(`.section-divider[data-section="${sectionType}"]`);
       if (!sectionDivider) return;
-      
+
       let nextElement = sectionDivider.nextElementSibling;
       const elementsToRemove = [sectionDivider];
-      
+
       while (nextElement && !nextElement.classList.contains('section-divider')) {
         elementsToRemove.push(nextElement);
         nextElement = nextElement.nextElementSibling;
       }
-      elementsToRemove.forEach(function(el){ el.remove(); });
-      
+      elementsToRemove.forEach(el => el.remove());
+
       if (sectionType === 'about') {
         contentState.aboutMeShown = false;
       } else if (sectionType === 'contact') {
@@ -460,9 +459,8 @@
         contentState[sectionType + 'Shown'] = false;
       }
 
-      // Si cierro "Casos de estudio", eliminar también cualquier teaser inline abierto (casos 1–4)
       if (sectionType === 'cases') {
-        ['case1','case2','case3','case4'].forEach((k)=>{
+        ['case1','case2','case3','case4'].forEach(k=>{
           const d = document.getElementById(k+'Divider'); if (d) d.remove();
           const b = document.getElementById(k+'TeaserBlock'); if (b) b.remove();
           contentState[k+'Shown'] = false;
@@ -483,10 +481,10 @@
           const button = document.createElement("button");
           button.className = "bot-button";
           button.dataset.key = `option-${index}`;
-          
+
           let baseText = texts[currentLanguage].options[index].text;
-          if ((index === 0 && contentState.casesShown) || 
-              (index === 1 && contentState.aboutMeShown) || 
+          if ((index === 0 && contentState.casesShown) ||
+              (index === 1 && contentState.aboutMeShown) ||
               (index === 3 && contentState.contactShown) ||
               (index === 4 && contentState.blogShown)) {
             baseText += texts[currentLanguage].alreadyShown;
@@ -524,11 +522,11 @@
     function showCaseButtons() {
       const casesSection = document.querySelector('.section-divider[data-section="cases"]');
       if (casesSection) { scrollToElement(casesSection); return; }
-      
+
       contentState.casesShown = true;
       addSectionDivider("cases");
       addMessage("bot", texts[currentLanguage].casesIntro, "casesIntro");
-      
+
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
@@ -540,17 +538,11 @@
           button.dataset.key = `case-${index}`;
           button.innerText = texts[currentLanguage].cases[index].text;
 
-          if (index === 0) {
-            button.onclick = showCase1;
-          } else if (index === 1) {
-            button.onclick = showCase2;
-          } else if (index === 2) {
-            button.onclick = showCase3;
-          } else if (index === 3) {
-            button.onclick = showCase4;
-          } else {
-            button.onclick = () => {}; // no hacer nada por ahora
-          }
+          if (index === 0) button.onclick = showCase1;
+          else if (index === 1) button.onclick = showCase2;
+          else if (index === 2) button.onclick = showCase3;
+          else if (index === 3) button.onclick = showCase4;
+          else button.onclick = () => {}; // "ver todos los casos" -> no hacer nada por ahora
 
           buttonsContainer.appendChild(button);
           scrollToBottom();
@@ -563,11 +555,10 @@
     function showAboutMe() {
       const aboutSection = document.querySelector('.section-divider[data-section="about"]');
       if (aboutSection) { scrollToElement(aboutSection); return; }
-      
+
       contentState.aboutMeShown = true;
       addSectionDivider("about");
-      
-      // Foto (timing global)
+
       setTimeout(() => {
         const photoMsg = document.createElement("div");
         photoMsg.className = "bot-message";
@@ -625,11 +616,11 @@
     function showBlogPosts() {
       const blogSection = document.querySelector('.section-divider[data-section="blog"]');
       if (blogSection) { scrollToElement(blogSection); return; }
-      
+
       contentState.blogShown = true;
       addSectionDivider("blog");
       addMessage("bot", texts[currentLanguage].blogIntro, "blogIntro");
-      
+
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
@@ -655,14 +646,12 @@
       contentState.contactShown = true;
 
       addSectionDivider("contact");
-
       addMessage("bot", texts[currentLanguage].contactPrompt, "contactPrompt");
 
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "buttons-container";
       chatContainer.appendChild(buttonsContainer);
 
-      // timings globales
       setTimeout(() => {
         const btnWriteYou = document.createElement("button");
         btnWriteYou.className = "bot-button";
@@ -742,17 +731,16 @@
       message.appendChild(avatar);
       message.appendChild(bubble);
       chatContainer.appendChild(message);
+      scrollToBottom();
 
       const copyBtns = bubble.querySelectorAll(".copy-btn");
-      copyBtns.forEach(function(btn){
+      copyBtns.forEach(btn=>{
         btn.addEventListener("click", function(){
           const field = btn.getAttribute("data-copy");
           const valEl = bubble.querySelector('.contact-value[data-field="'+field+'"]');
           if (valEl) copyToClipboard(valEl.textContent.trim());
         });
       });
-
-      scrollToBottom();
     }
 
     function startContactForm() {
@@ -821,7 +809,7 @@
     }
     // -------- /CONTACTO --------
 
-    /* ===== Helper común para renderizar teaser inline por caso ===== */
+    /* ===== Teaser inline por caso (mantiene vista en el caso) ===== */
     function renderCaseInline({caseIdx, key}) {
       const caseBtn = document.querySelector(`.bot-button[data-key="case-${caseIdx}"]`);
       if (!caseBtn) return;
@@ -840,7 +828,7 @@
       // Abrir
       contentState[key + 'Shown'] = true;
 
-      // Divider (igual a los demás)
+      // Divider como en el resto
       const divider = document.createElement('div');
       divider.className = 'section-divider';
       divider.dataset.section = key;
@@ -879,24 +867,26 @@
       caseBtn.insertAdjacentElement('afterend', divider);
       divider.insertAdjacentElement('afterend', block);
 
-      // Datos del teaser según idioma
+      // Mantener la vista en el divider del caso
+      scrollToElement(divider);
+
+      // Datos segun idioma
       const teaser = texts[currentLanguage][`${key}Teaser`];
       const url = texts[currentLanguage].cases[caseIdx].url;
 
-      // ✅ Nuevo comportamiento: primer bubble inmediato, luego escalonados
-      // Bubble 1: inmediato
-      const m1 = document.createElement('div');
-      m1.className = 'bot-message';
-      m1.dataset.key = `${key}Hook`;
-      m1.id = `${key}Hook`;
-      m1.innerHTML = `
-        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-        <div class="bubble">${teaser.hook}</div>
-      `;
-      block.appendChild(m1);
-      scrollToBottom();
+      // Burbujas progresivas SIN scrollToBottom
+      setTimeout(() => {
+        const m1 = document.createElement('div');
+        m1.className = 'bot-message';
+        m1.dataset.key = `${key}Hook`;
+        m1.id = `${key}Hook`;
+        m1.innerHTML = `
+          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+          <div class="bubble">${teaser.hook}</div>
+        `;
+        block.appendChild(m1);
+      }, APPEAR_BASE);
 
-      // Bubble 2: a APPEAR_BASE
       setTimeout(() => {
         const m2 = document.createElement('div');
         m2.className = 'bot-message';
@@ -907,10 +897,8 @@
           <div class="bubble">${teaser.bullets}</div>
         `;
         block.appendChild(m2);
-        scrollToBottom();
-      }, APPEAR_BASE);
+      }, APPEAR_BASE + APPEAR_STEP);
 
-      // Bubble 3: a APPEAR_BASE + APPEAR_STEP
       setTimeout(() => {
         const m3 = document.createElement('div');
         m3.className = 'bot-message';
@@ -921,8 +909,7 @@
           <div class="bubble"><a href="${url}" target="_blank">${teaser.cta}</a></div>
         `;
         block.appendChild(m3);
-        scrollToBottom();
-      }, APPEAR_BASE + APPEAR_STEP);
+      }, APPEAR_BASE + 2 * APPEAR_STEP);
 
       updateCasesButtons();
     }
@@ -954,8 +941,8 @@
         const baseText = texts[currentLanguage].options[index].text;
         let buttonText = baseText;
 
-        if ((index === 0 && contentState.casesShown) || 
-            (index === 1 && contentState.aboutMeShown) || 
+        if ((index === 0 && contentState.casesShown) ||
+            (index === 1 && contentState.aboutMeShown) ||
             (index === 3 && contentState.contactShown) ||
             (index === 4 && contentState.blogShown)) {
           buttonText += texts[currentLanguage].alreadyShown;
@@ -1027,7 +1014,7 @@
           }
         }
 
-        // Teasers casos 1-4 (actualiza textos si ya están visibles)
+        // Teasers casos 1-4 (si están en pantalla)
         ['case1','case2','case3','case4'].forEach((k, i)=>{
           if (key === `${k}Hook` && bubble) bubble.innerText = texts[currentLanguage][`${k}Teaser`].hook;
           if (key === `${k}Bullets` && bubble) bubble.innerHTML = texts[currentLanguage][`${k}Teaser`].bullets;
@@ -1035,7 +1022,7 @@
         });
       });
 
-      // Títulos de los dividers (incluye los inline 'case1..4')
+      // Actualizar títulos de dividers (incluye case1..4)
       const titles = document.querySelectorAll(".section-title");
       titles.forEach(function(title){
         const section = title.parentElement && title.parentElement.dataset ? title.parentElement.dataset.section : null;
@@ -1044,11 +1031,13 @@
         }
       });
 
+      // Tooltips de cerrar
       const closeBtns = document.querySelectorAll(".close-section");
       closeBtns.forEach(function(btn){
         btn.title = currentLanguage === "es" ? "Cerrar sección" : "Close section";
       });
 
+      // Botones (opciones, casos y blog)
       const allButtons = document.querySelectorAll(".bot-button");
       allButtons.forEach(function(btn){
         const key = btn.dataset.key;
@@ -1056,8 +1045,8 @@
           const idx = +key.split("-")[1];
           const baseText = texts[currentLanguage].options[idx].text;
           let buttonText = baseText;
-          if ((idx === 0 && contentState.casesShown) || 
-              (idx === 1 && contentState.aboutMeShown) || 
+          if ((idx === 0 && contentState.casesShown) ||
+              (idx === 1 && contentState.aboutMeShown) ||
               (idx === 3 && contentState.contactShown) ||
               (idx === 4 && contentState.blogShown)) {
             buttonText += texts[currentLanguage].alreadyShown;
