@@ -883,20 +883,20 @@
       const teaser = texts[currentLanguage][`${key}Teaser`];
       const url = texts[currentLanguage].cases[caseIdx].url;
 
-      // Bubbles progresivos con timings unificados
-      setTimeout(() => {
-        const m1 = document.createElement('div');
-        m1.className = 'bot-message';
-        m1.dataset.key = `${key}Hook`;
-        m1.id = `${key}Hook`;
-        m1.innerHTML = `
-          <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble">${teaser.hook}</div>
-        `;
-        block.appendChild(m1);
-        scrollToBottom();
-      }, APPEAR_BASE);
+      // ✅ Nuevo comportamiento: primer bubble inmediato, luego escalonados
+      // Bubble 1: inmediato
+      const m1 = document.createElement('div');
+      m1.className = 'bot-message';
+      m1.dataset.key = `${key}Hook`;
+      m1.id = `${key}Hook`;
+      m1.innerHTML = `
+        <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
+        <div class="bubble">${teaser.hook}</div>
+      `;
+      block.appendChild(m1);
+      scrollToBottom();
 
+      // Bubble 2: a APPEAR_BASE
       setTimeout(() => {
         const m2 = document.createElement('div');
         m2.className = 'bot-message';
@@ -908,8 +908,9 @@
         `;
         block.appendChild(m2);
         scrollToBottom();
-      }, APPEAR_BASE + APPEAR_STEP);
+      }, APPEAR_BASE);
 
+      // Bubble 3: a APPEAR_BASE + APPEAR_STEP
       setTimeout(() => {
         const m3 = document.createElement('div');
         m3.className = 'bot-message';
@@ -921,7 +922,7 @@
         `;
         block.appendChild(m3);
         scrollToBottom();
-      }, APPEAR_BASE + 2 * APPEAR_STEP);
+      }, APPEAR_BASE + APPEAR_STEP);
 
       updateCasesButtons();
     }
