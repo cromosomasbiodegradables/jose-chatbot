@@ -211,9 +211,12 @@
   </div>
 
   <script>
+  // ✅ Esperar a que el DOM esté listo antes de acceder a elementos
+  document.addEventListener('DOMContentLoaded', () => {
+
     const texts = {
       es: {
-        greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarse hoy?",
+        greeting: "👋 ¡Hola! Soy el asistente de Jose Carlos, diseñador senior UX/UI. ¿En qué te gustaría enfocarte hoy?",
         casesIntro: "Aquí tienes algunos proyectos donde resolví problemas reales con diseño centrado en el usuario. ¿Cuál te interesa?",
         blogIntro: "Aquí tienes algunos posts del blog con ideas sobre UX, diseño y procesos. ¿Cuál te gustaría leer?",
         sectionTitles: { cases: "Casos de estudio", case1: "Caso 1", case2: "Caso 2", case3: "Caso 3", case4: "Caso 4", about: "Sobre mí", blog: "Blog", contact: "Contacto" },
@@ -352,6 +355,9 @@
     const sendButton = document.getElementById("send-button");
     const languageToggle = document.getElementById("language-toggle");
     const inputArea = document.getElementById("input-area");
+
+    // Si por cualquier motivo no existieran (seguridad extra), no seguimos
+    if (!chatContainer || !restartButton || !userInput || !sendButton || !languageToggle || !inputArea) return;
 
     // ⏱️ Timings globales unificados
     const APPEAR_BASE = 1000;  // 1.0s
@@ -507,7 +513,7 @@
                   const a = document.createElement("a");
                   a.href = item.url;
                   a.target = "_blank";
-                  a.rel = "noopener";
+                  a.rel = "noopener noreferrer";
                   a.download = "";
                   document.body.appendChild(a);
                   a.click();
@@ -515,7 +521,7 @@
                 }, 1200);
               };
             } else {
-              button.onclick = () => window.open(item.url, "_blank");
+              button.onclick = () => window.open(item.url, "_blank", "noopener,noreferrer");
             }
           } else if (item.action) {
             button.onclick = item.action;
@@ -555,7 +561,7 @@
           } else if (index === 3) {
             button.onclick = showCase4;
           } else {
-            button.onclick = () => {}; // no hacer nada por ahora
+            button.onclick = () => {};
           }
 
           buttonsContainer.appendChild(button);
@@ -618,7 +624,7 @@
 
         const bubble = document.createElement("div");
         bubble.className = "bubble";
-        bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank">${texts[currentLanguage].aboutMeLink}</a>`;
+        bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank" rel="noopener noreferrer">${texts[currentLanguage].aboutMeLink}</a>`;
 
         linkMsg.appendChild(avatar);
         linkMsg.appendChild(bubble);
@@ -646,7 +652,7 @@
           button.className = "bot-button";
           button.dataset.key = `blog-${index}`;
           button.innerText = texts[currentLanguage].blogPosts[index].text;
-          button.onclick = () => window.open(item.url, "_blank");
+          button.onclick = () => window.open(item.url, "_blank", "noopener,noreferrer");
           buttonsContainer.appendChild(button);
           scrollToBottom();
         }, APPEAR_BASE + index * APPEAR_STEP);
@@ -902,7 +908,7 @@
           <div class="bubble">${teaser.hook}</div>
         `;
         block.appendChild(m1);
-        scrollToBottom(); // 👈 seguir el contenido
+        scrollToBottom();
       }, APPEAR_BASE);
 
       setTimeout(() => {
@@ -915,7 +921,7 @@
           <div class="bubble">${teaser.bullets}</div>
         `;
         block.appendChild(m2);
-        scrollToBottom(); // 👈 seguir el contenido
+        scrollToBottom();
       }, APPEAR_BASE + APPEAR_STEP);
 
       setTimeout(() => {
@@ -925,10 +931,10 @@
         m3.id = `${key}Link`;
         m3.innerHTML = `
           <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble"><a href="${url}" target="_blank">${teaser.cta}</a></div>
+          <div class="bubble"><a href="${url}" target="_blank" rel="noopener noreferrer">${teaser.cta}</a></div>
         `;
         block.appendChild(m3);
-        scrollToBottom(); // 👈 seguir el contenido
+        scrollToBottom();
       }, APPEAR_BASE + 2 * APPEAR_STEP);
 
       updateCasesButtons();
@@ -992,7 +998,7 @@
           if (bubble) bubble.innerText = key === "aboutMe1" ? firstSentence : restText;
         }
         if (key === "aboutMeLink") {
-          if (bubble) bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank">${texts[currentLanguage].aboutMeLink}</a>`;
+          if (bubble) bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank" rel="noopener noreferrer">${texts[currentLanguage].aboutMeLink}</a>`;
         }
 
         if (key === "contactPrompt") {
@@ -1038,7 +1044,7 @@
         ['case1','case2','case3','case4'].forEach((k, i)=>{
           if (key === `${k}Hook` && bubble) bubble.innerText = texts[currentLanguage][`${k}Teaser`].hook;
           if (key === `${k}Bullets` && bubble) bubble.innerHTML = texts[currentLanguage][`${k}Teaser`].bullets;
-          if (key === `${k}Link` && bubble) bubble.innerHTML = `<a href="${texts[currentLanguage].cases[i].url}" target="_blank">${texts[currentLanguage][`${k}Teaser`].cta}</a>`;
+          if (key === `${k}Link` && bubble) bubble.innerHTML = `<a href="${texts[currentLanguage].cases[i].url}" target="_blank" rel="noopener noreferrer">${texts[currentLanguage][`${k}Teaser`].cta}</a>`;
         });
       });
 
@@ -1081,7 +1087,7 @@
           btn.innerText = label;
         }
         if (key && key.indexOf("blog-") === 0) {
-          const idx = +key.split("-')[1];
+          const idx = +key.split("-")[1];
           btn.innerText = texts[currentLanguage].blogPosts[idx].text;
         }
         if (key === "contact-writeyou") btn.innerText = texts[currentLanguage].contactButtons.writeYou;
@@ -1137,6 +1143,8 @@
       userInput.value = "";
       if (contactFormActive) handleContactInput(v);
     };
+
+  }); // ← DOMContentLoaded
   </script>
 </body>
 </html>
