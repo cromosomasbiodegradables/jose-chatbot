@@ -35,7 +35,11 @@
     .trio{display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin:12px 0 4px}
     @media (max-width: 880px){ .duo{grid-template-columns:1fr} .trio{grid-template-columns:1fr} }
     .caption{display:block; font-size:12px; color:var(--muted); padding:6px 2px 2px; text-align:left}
-    .fixed-16x9 img{aspect-ratio:16/9; object-fit:cover}
+
+    /* Mini-galería 16:9 SIN huecos (rellena el contenedor) */
+    .fixed-16x9{ aspect-ratio:16/9; }
+    .frame.fixed-16x9 img{ width:100%; height:100%; object-fit:cover; } /* <-- sobrescribe height:auto */
+
     .takeaway{margin:10px 2px 8px; font-size: clamp(16px, 2.6vw, 20px); line-height:1.45}
     .takeaway strong{color:#fff}
     details.more{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px}
@@ -131,12 +135,12 @@
         <div class="figcap">Design Focus • Methodology • Weekly Cadence</div>
       </div>
 
-      <!-- NUEVO: dos imágenes pequeñas bajo el hero -->
+      <!-- Dos imágenes pequeñas bajo el hero -->
       <div class="duo">
         <figure class="frame fixed-16x9">
           <img src="/jose-chatbot/assets/ai-assistant/approach-framing-1300.webp"
                alt="Design thinking loop diagram showing Empathize, Define, Ideate, Prototype, and Test" loading="lazy">
-          <figcaption class="caption">Human-in-the-loop design</figcaption>
+          <figcaption class="caption">Human-in-the-loop design.</figcaption>
         </figure>
         <figure class="frame fixed-16x9">
           <img src="/jose-chatbot/assets/ai-assistant/approach-cadence-1200.webp"
