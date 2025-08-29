@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI-Powered Assistant for Customer Service Teams — Case Study</title>
+  <meta name="description" content="Turning high‑volume conversations into structured, actionable knowledge while reducing manual effort in call workflows." />
+  <style>
+    :root{
+      --bg:#0b0e12; --ink:#e8edf7; --muted:#a4afc5; --brand:#47c9ff;
+      --card:#0f141b; --line:#1b2330; --radius:18px; --maxw:1080px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);} 
+    a{color:#bfe7ff;text-decoration:none} a:hover{text-decoration:underline}
+    .wrap{max-width:var(--maxw); margin:0 auto; padding:28px 16px 56px}
+    header.site{position:sticky; top:0; z-index:50; backdrop-filter: blur(8px);
+      background:linear-gradient(180deg, rgba(11,14,18,.85), rgba(11,14,18,.35) 60%, rgba(11,14,18,0));}
+    header .bar{display:flex;align-items:center;justify-content:space-between;max-width:var(--maxw);margin:0 auto;padding:14px 16px}
+    .brand{font-weight:700} .nav a{color:var(--muted);margin-left:14px}
+    .nav a:hover{color:var(--ink)}
+    .hero{margin:18px auto 24px; background:linear-gradient(180deg,#0e131a,#0b0f16);
+      border:1px solid var(--line); border-radius:28px; padding:28px 22px; box-shadow:0 30px 80px rgba(0,0,0,.45);} 
+    .hero h1{margin:0 0 8px; font-size: clamp(28px, 5vw, 48px); line-height:1.1}
+    .sub{color:var(--muted); margin:6px 0 12px; font-size:16px}
+    .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
+    .chip{background:rgba(71,201,255,.08); border:1px solid rgba(71,201,255,.35); color:#cfefff; padding:8px 12px; border-radius:999px; font-size:12px}
+    .slide{margin:36px 0 24px}
+    .slide h2{margin:0 0 8px; font-size: clamp(18px, 2.6vw, 24px)}
+    .frame{position:relative; border-radius:22px; overflow:hidden; border:1px solid var(--line); background:#0c1117; margin:8px 0 10px}
+    .frame img{display:block; width:100%; height:auto}
+    .figcap{position:absolute; left:12px; bottom:12px; background:rgba(0,0,0,.45); color:#dbe7ff; padding:6px 10px; border-radius:10px; font-size:12px; backdrop-filter: blur(6px)}
+    .takeaway{margin:10px 2px 8px; font-size: clamp(16px, 2.6vw, 20px); line-height:1.45}
+    .takeaway strong{color:#fff}
+    details.more{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px}
+    details.more > summary{cursor:pointer; color:#cfefff; outline:none}
+    details.more[open]{box-shadow:0 8px 30px rgba(0,0,0,.35)}
+    .more p{color:var(--ink); margin:6px 0}
+    .more ul{margin:8px 0 6px 18px; color:var(--ink)}
+    .note{color:var(--muted); font-size:13px}
+    .cta{margin:36px 0 10px; display:flex; gap:10px; flex-wrap:wrap}
+    .btn{background:#0d1621; color:#cfefff; border:1px solid var(--line); padding:10px 14px; border-radius:12px; text-decoration:none; font-weight:600}
+    .btn:hover{background:#0e1a27}
+    footer.site{color:var(--muted); text-align:center; margin-top:30px; font-size:13px}
+    hr{border:none; height:1px; background:linear-gradient(90deg, transparent, var(--line), transparent); margin:28px 0}
+    @media print{header.site{display:none} .wrap{padding:0} .hero{box-shadow:none} .figcap{position:static; background:none; padding:0} a:after{content:" (" attr(href) ")"}}
+  </style>
+</head>
+<body>
+  <header class="site" aria-label="Top bar">
+    <div class="bar">
+      <div class="brand">Jose Carlos — Case Study</div>
+      <nav class="nav" aria-label="Sections">
+        <a href="#overview">Overview</a>
+        <a href="#process">Process</a>
+        <a href="#research">User Research</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="top">
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="title">
+      <h1 id="title">AI-Powered Assistant for Customer Service Teams</h1>
+      <p class="sub">Turning high‑volume phone/chat conversations into structured, actionable knowledge while reducing manual effort.</p>
+      <div class="chips" role="list">
+        <span class="chip" role="listitem">Role: Senior UX/UI</span>
+        <span class="chip" role="listitem">Duration: [months]</span>
+        <span class="chip" role="listitem">Team: [PM, Engineering, Operations]</span>
+      </div>
+    </section>
+
+    <!-- OVERVIEW (Context + Problem + Goals + Design Focus) -->
+    <section class="slide" id="overview" aria-labelledby="h-overview">
+      <h2 id="h-overview">Overview</h2>
+      <div class="frame">
+        <!-- Replace with your image (e.g., assets/ai-assistant/overview.webp) -->
+        <img src="https://placehold.co/1600x900/0c1117/e8edf7?text=Overview" alt="High-level overview slide with context, problem and goals" loading="lazy" />
+        <div class="figcap">Context • Problem • Goals • Design Focus</div>
+      </div>
+      <p class="takeaway"><strong>Takeaway:</strong> A European insurer aims to turn daily conversations into structured, actionable knowledge—reducing manual entry, standardizing documentation and activating insights, without disrupting agent workflows.</p>
+      <details class="more">
+        <summary>View details</summary>
+        <div class="more">
+          <h3>Context of the project</h3>
+          <p>A European insurance company is exploring the integration of AI-driven solutions to improve its internal operations, with a particular focus on customer service. The company manages thousands of daily interactions via phone and chat with both policyholders and prospects. These conversations are key to resolving issues, handling claims, and building trust, yet the processes around them remain manual, slow, and inconsistent. The call center carries high operational costs, but also holds untapped potential, as each interaction contains valuable insights that are not being fully leveraged.</p>
+
+          <h3>Initial Problem Assessment</h3>
+          <p>The stakeholders flagged major inefficiencies in their call-handling system. Agents manually entered data during and after calls, leading to frequent errors, inconsistent records, and reduced productivity, all of which negatively affected service quality and operational costs. Much of the valuable call data went unanalyzed, missing opportunities to enhance case tracking, customer experience, and internal processes. Stakeholders showed strong interest in AI solutions to automate tasks and extract insights from conversations, citing successful implementations in other companies as proof of concept.</p>
+
+          <h3>Business Goals</h3>
+          <p>The goal was to enhance the call workflow by turning conversations into structured, actionable knowledge. By reducing manual effort and addressing key inefficiencies, the project aimed to cut costs and improve resource use across teams.</p>
+          <ul>
+            <li><strong>Operational Efficiency:</strong> Automate tasks during and after calls to reduce idle time, ease agent workload, and allow teams to focus on the customer interactions.</li>
+            <li><strong>Data Quality &amp; Consistency:</strong> Standardize post-call documentation and improve integration with systems like CRM to enhance case tracking, decision-making, and internal process design.</li>
+            <li><strong>Insight Activation:</strong> Detect recurring patterns, emotional signals, and key topics within calls that could benefit other departments, unlocking insights that previously went unused.</li>
+          </ul>
+
+          <h3>Design Focus</h3>
+          <p>We defined an initial challenge focused on improving both agent and customer experience without compromising operational efficiency. The guiding question was: 
+          <em>“How might we simplify access to call data for agents without disrupting their workflow, while also automating processes to enhance cost, quality, and service efficiency?”</em> 
+          While this framing provided initial direction, we recognized the need for user-centered research to validate real needs, understand the operational context, and refine the problem definition.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- PROCESS AT A GLANCE (Methodology) -->
+    <section class="slide" id="process" aria-labelledby="h-process">
+      <h2 id="h-process">Process at a Glance</h2>
+      <div class="frame">
+        <!-- Replace with your image (e.g., assets/ai-assistant/process.webp) -->
+        <img src="https://placehold.co/1600x900/0c1117/e8edf7?text=Process" alt="Weekly rhythm of mixed research, rapid prototyping and validation" loading="lazy" />
+        <div class="figcap">Mixed research • Rapid prototyping • Continuous validation (weekly sprints)</div>
+      </div>
+      <p class="takeaway"><strong>Approach:</strong> A user‑centered design methodology combining mixed research, rapid prototyping and continuous validation. Not strictly Scrum, but weekly sprints with ongoing stakeholder feedback.</p>
+    </section>
+
+    <!-- USER RESEARCH -->
+    <section class="slide" id="research" aria-labelledby="h-research">
+      <h2 id="h-research">User Research</h2>
+      <div class="frame">
+        <!-- Replace with your image (e.g., assets/ai-assistant/research.webp) -->
+        <img src="https://placehold.co/1600x900/0c1117/e8edf7?text=User+Research" alt="Research methods: live shadowing, interviews, metrics analysis and benchmarking" loading="lazy" />
+        <div class="figcap">Direct access to the call center and internal data enabled contextual, hands‑on research.</div>
+      </div>
+      <p class="takeaway"><strong>What we did:</strong> live shadowing, semi‑structured interviews, metrics analysis and competitive benchmarking.</p>
+      <details class="more">
+        <summary>View details</summary>
+        <div class="more">
+          <p>To gain a deep understanding of user needs, behaviors, and pain points, we applied a mixed‑method approach combining qualitative and quantitative techniques. Direct access to the call center and internal company data enabled us to conduct contextual, hands‑on research. The following actions were carried out:</p>
+          <ul>
+            <li>Live shadowing</li>
+            <li>Semi‑structured interviews</li>
+            <li>Metrics analysis</li>
+            <li>Competitive benchmarking</li>
+          </ul>
+          <p>Each of these actions will be detailed below. Additionally, unexpected insights emerged, such as the impact of workplace environment on end‑user experience and the need for more intuitive call management tools.</p>
+        </div>
+      </details>
+    </section>
+
+    <div class="cta">
+      <a class="btn" href="#top">↑ Back to top</a>
+      <a class="btn" href="mailto:jose.carlos.torres.sanchez@gmail.com">Contact</a>
+    </div>
+
+    <footer class="site">© Jose Carlos — Case Study</footer>
+  </main>
+</body>
+</html>
