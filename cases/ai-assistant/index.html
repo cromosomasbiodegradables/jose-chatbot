@@ -3,33 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Preview • Base H2 + Callout + View more (imágenes intercaladas)</title>
-  <meta name="description" content="Estado base: cada sección tiene H2, callout y View more con texto + imágenes intercaladas. Previews y hero opcionales se activan más tarde sin tocar el contenido." />
+  <title>Preview • Overview en dos columnas</title>
   <style>
-    :root{ --bg:#0b0e12; --ink:#e8edf7; --muted:#a4afc5; --brand:#47c9ff; --card:#0f141b; --line:#1b2330; --radius:18px; --maxw:1100px; }
+    :root{ --bg:#0b0e12; --ink:#e8edf7; --muted:#a4afc5; --brand:#47c9ff; --card:#0f141b; --line:#1b2330; --radius:16px; --maxw:1100px; }
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0}
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);} 
-    a{color:#bfe7ff;text-decoration:none} a:hover{text-decoration:underline}
-    .wrap{max-width:var(--maxw); margin:0 auto; padding:28px 16px 56px}
-    header.site{position:sticky; top:0; z-index:50; backdrop-filter: blur(8px);
-      background:linear-gradient(180deg, rgba(11,14,18,.85), rgba(11,14,18,.35) 60%, rgba(11,14,18,0));}
-    header .bar{display:flex;align-items:center;justify-content:space-between;max-width:var(--maxw);margin:0 auto;padding:14px 16px}
-    .brand{font-weight:700} .nav a{color:var(--muted);margin-left:14px}
-    .nav a:hover{color:var(--ink)}
+    html,body{margin:0}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    a{color:#bfe7ff;text-decoration:none}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 16px 64px}
 
-    /* ===== Sección compacta (sin hero por defecto) ===== */
+    /* Tarjeta de sección compacta */
     .section-min{margin:22px 0 28px;padding:18px 16px;background:var(--card);border:1px solid var(--line);border-radius:16px}
     .section-min header{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
-    .section-min .eyebrow{color:var(--muted);font-size:12px;letter-spacing:.02em;text-transform:uppercase}
+    .eyebrow{color:var(--muted);font-size:12px;letter-spacing:.02em;text-transform:uppercase}
     .section-min h2{margin:0;font-size:clamp(18px,2.4vw,22px)}
 
-    /* Slot opcional para hero (+ tarde) */
-    .hero-slot{margin:10px 0 12px}
-    .hero-slot[hidden]{display:none}
-
     /* Callout */
-    .callout{background:rgba(71,201,255,.08);border:1px solid rgba(71,201,255,.35);color:#dff3ff;padding:10px 12px;border-radius:12px;margin:8px 0 10px}
+    .callout{background:rgba(71,201,255,.08);border:1px solid rgba(71,201,255,.35);color:#dff3ff;padding:10px 12px;border-radius:12px;margin:8px 0 12px}
     .callout strong{color:#fff}
 
     /* details */
@@ -37,295 +27,93 @@
     details.more > summary::-webkit-details-marker{display:none}
     details.more > summary::before{content:'▸'; color:#9fdcff}
     details.more[open] > summary::before{content:'▾'}
-    details.more > summary::-webkit-details-marker{display:none}
-    .more p{color:var(--ink); margin:10px 0}
-    .more ul, .more ol{margin:8px 0 6px 18px; color:var(--ink)}
-    .note{color:var(--muted); font-size:13px}
 
-    /* Figuras intercaladas */
-    .frame{position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--line); background:#0c1117; margin:12px 0}
-    .frame img{display:block; width:100%; height:auto}
-    .caption{display:block; font-size:12px; color:#a4afc5; padding:6px 8px}
-    .fixed-16x9{aspect-ratio:16/9}
+    /* Marco imagen */
+    .frame{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#0c1117;margin:10px 0 0}
+    .frame.is-short{height:clamp(180px,22vw,220px)}
+    .frame.is-short img{width:100%;height:100%;object-fit:cover;display:block}
+    .frame .caption{position:absolute;left:8px;bottom:8px;background:rgba(0,0,0,.45);color:#dbe7ff;padding:6px 8px;border-radius:10px;font-size:12px;margin:0}
 
-    /* ===== Sidecar (texto + imagen a la derecha) ===== */
-    .sidecar{
-      display:grid;
-      grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); /* imagen un poco más ancha */
-      gap:12px;
-      align-items:start;
-      margin:12px 0;
-    }
-    @media (max-width: 900px){ .sidecar{grid-template-columns:1fr} }
+    /* GRID two-up: dos columnas iguales; texto arriba (measure), imagen debajo */
+    .two-up{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0 18px;align-items:start}
+    @media (max-width: 900px){ .two-up{grid-template-columns:1fr} }
+    .topic h3{margin:0 0 6px;font-size:clamp(16px,2.2vw,18px)}
+    .topic .body{max-width:58ch}
+    .topic .body p:first-of-type{margin-bottom:12px}
 
-    /* ===== Sidecar short (limita altura y recorta la imagen) ===== */
-    .sidecar.short .frame.is-short{
-      height: clamp(180px, 22vw, 220px);  /* ocupa un poco más */
-      margin: 0;
-    }
-    .sidecar.short .frame.is-short img{
-      width:100%; height:100%;
-      object-fit:cover;
-      object-position:center;
-    }
-    /* Caption overlay para no sumar alto */
-    .sidecar.short .frame.is-short .caption{
-      position:absolute; left:8px; bottom:8px;
-      background: rgba(0,0,0,.45);
-      color:#dbe7ff; padding:6px 8px; border-radius:10px;
-      font-size:12px; margin:0;
-    }
-    /* Texto más estrecho en sidecar (mejor control de saltos) */
-    .sidecar.short > div{ max-width:58ch; }
-    /* Más aire entre 1er y 2º párrafo del sidecar */
-    .sidecar.short > div p:first-of-type{ margin-bottom:16px; }
+    /* measure para Business Goals (coherencia de ancho) */
+    .measure{max-width:58ch}
+    @media (max-width:900px){ .measure{max-width:none} }
 
-    @media (max-width: 900px){
-      .sidecar.short .frame.is-short{ height: 190px; }
-      .sidecar.short > div{ max-width:none; }
-    }
-
-    /* ===== Previews automáticos (apagados por defecto) ===== */
-    .peek{display:none; grid-template-columns:repeat(12,1fr); gap:8px; margin:10px 0}
-    .peek-tile{grid-column:span 4; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#0c1117; aspect-ratio:16/10; cursor:pointer}
-    .peek-tile img{width:100%; height:100%; object-fit:cover; display:block}
-    @media (max-width: 900px){ .peek-tile{grid-column:span 12} }
-    body.enable-previews section[data-peek="auto"] > .peek{display:grid}
-
-    /* Lightbox */
-    #lb::backdrop{background:rgba(0,0,0,.75)}
-    #lb{border:none;padding:0;border-radius:18px;max-width:min(94vw,1200px);background:#0b0e12}
-    .lb-wrap{position:relative}
-    .lb-img{max-width:min(94vw,1200px);max-height:84vh;display:block}
-    .lb-cap{padding:10px 14px;color:#cfefff;font-size:13px}
-    .lb-close{position:absolute;top:8px;right:8px;border:none;background:rgba(0,0,0,.45);color:#fff;padding:8px 10px;border-radius:10px;cursor:pointer}
-    .lb-close:focus{outline:2px solid var(--brand)}
-
-    /* Chipbar (meta del proyecto) */
-    .chipbar{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0}
-    .chip{background:rgba(71,201,255,.08); border:1px solid rgba(71,201,255,.35); color:#cfefff; padding:8px 12px; border-radius:999px; font-size:12px}
-
-    footer.site{color:#a4afc5; text-align:center; margin-top:30px; font-size:13px}
-    /* Override: quitar flecha de la derecha */
-    details.more > summary::after { content: none !important; }
-    details.more[open] > summary::after { content: none !important; }
+    footer.site{color:#a4afc5;text-align:center;margin-top:30px;font-size:13px}
   </style>
 </head>
 <body>
-  <header class="site" aria-label="Top bar">
-    <div class="bar">
-      <div class="brand">Jose Carlos — Case Study (Base sin hero por sección)</div>
-      <nav class="nav" aria-label="Sections">
-        <a href="#overview">Overview</a>
-        <a href="#approach">Approach</a>
-        <a href="#research">Research</a>
-      </nav>
-    </div>
-  </header>
-
   <main class="wrap">
-    <!-- Meta del proyecto -->
-    <section class="section-min" aria-labelledby="h-intro">
-      <header>
-        <span class="eyebrow">Project</span>
-        <h2 id="h-intro">AI-Powered Assistant for Customer Service Teams</h2>
-      </header>
-      <p>Turning high-volume conversations into structured, actionable knowledge while reducing manual effort.</p>
-      <div class="chipbar">
-        <span class="chip">Role: Senior UX/UI</span>
-        <span class="chip">Duration: 10 semanas</span>
-        <span class="chip">Team: PM • Eng • Ops</span>
-      </div>
-    </section>
-
-    <!-- OVERVIEW -->
-    <section class="section-min" id="overview" aria-labelledby="h-overview" data-peek="auto">
+    <section class="section-min" id="overview">
       <header>
         <span class="eyebrow">Overview</span>
-        <h2 id="h-overview">Contexto, problema y objetivos</h2>
+        <h2>Contexto, problema y objetivos</h2>
       </header>
-      
-      <div class="hero-slot" hidden></div>
 
       <p class="callout"><strong>Takeaway:</strong> A European insurer aims to turn daily conversations into structured, actionable knowledge—reducing manual entry, standardizing documentation and activating insights, without disrupting agent workflows.</p>
 
-      <div class="peek" aria-hidden="true"></div>
-
-      <details class="more">
+      <details class="more" open>
         <summary>View more</summary>
         <div class="more">
-          <h3>Context of the project</h3>
 
-          <!-- SIDEACAR SHORT: texto (izq) + imagen (der, altura controlada) -->
-          <div class="sidecar short">
-            <div>
-              <p>A European insurance company manages thousands of daily interactions via phone<wbr> and&nbsp;chat with both policyholders and prospects.</p>
-              <p>These conversations are essential to resolve issues and build trust, yet surrounding processes are manual, slow, and inconsistent—driving operational cost and leaving<wbr> value&nbsp;untapped.</p>
-            </div>
-            <figure class="frame is-short" tabindex="0">
-              <img class="lazy"
-                   data-src="../../assets/ai-assistant/open-plan-callcenter-1200.webp"
-                   alt="Open-plan call center with cubicles and agents working; illustrates the project context.">
-              <figcaption class="caption">Customer service environment — volume, noise, and manual processes.</figcaption>
-            </figure>
+          <!-- DOS COLUMNAS: izquierda/derecha -->
+          <div class="two-up">
+            <!-- Columna izquierda -->
+            <article class="topic">
+              <h3>Context of the project</h3>
+              <div class="body">
+                <p>A European insurance company manages thousands of daily interactions via phone<wbr> and&nbsp;chat with both policyholders and prospects.</p>
+                <p>These conversations are essential to resolve issues and build trust, yet surrounding processes are manual, slow, and inconsistent—driving operational cost and leaving<wbr> value&nbsp;untapped.</p>
+              </div>
+              <figure class="frame is-short" tabindex="0">
+                <img class="lazy" src="../../assets/ai-assistant/open-plan-callcenter-1200.webp" alt="Open-plan call center with cubicles and agents working; illustrates the project context.">
+                <figcaption class="caption">Customer service environment — volume, noise, and manual processes.</figcaption>
+              </figure>
+            </article>
+
+            <!-- Columna derecha -->
+            <article class="topic">
+              <h3>Initial Problem Assessment</h3>
+              <div class="body">
+                <p>Agents manually enter data during/after calls, leading to errors, inconsistent records, and reduced productivity.</p>
+                <p>Valuable call data goes unanalyzed, missing opportunities to improve case tracking, customer experience, and internal processes.</p>
+              </div>
+              <figure class="frame is-short" tabindex="0">
+                <img class="lazy" src="../../assets/ai-assistant/problem-assessment-workshop-1200.webp" alt="Stakeholders discussing issues during a working session; illustrates the initial problem assessment.">
+                <figcaption class="caption">Initial problem assessment — manual capture, errors, inconsistency.</figcaption>
+              </figure>
+            </article>
           </div>
 
-          <h3>Initial Problem Assessment</h3>
-
-          <!-- SIDEACAR SHORT (2 párrafos + imagen) -->
-          <div class="sidecar short">
-            <div>
-              <p>Agents manually enter data during/after calls, leading to errors, inconsistent records, and reduced productivity.</p>
-              <p>Valuable call data goes unanalyzed, missing opportunities to improve case tracking, customer experience, and internal processes.</p>
-            </div>
-            <figure class="frame is-short" tabindex="0">
-              <img class="lazy"
-                   data-src="../../assets/ai-assistant/problem-assessment-workshop-1200.webp"
-                   alt="Stakeholders discussing issues during a working session; illustrates the initial problem assessment.">
-              <figcaption class="caption">Initial problem assessment — manual capture, errors, inconsistency.</figcaption>
-            </figure>
-          </div>
-
+          <!-- Debajo, Business Goals con ancho de lectura consistente -->
           <h3>Business Goals</h3>
-          <ul>
-            <li><strong>Operational Efficiency:</strong> Automate during and after calls to reduce idle time and agent workload.</li>
-            <li><strong>Data Quality &amp; Consistency:</strong> Standardize post-call documentation and integrate with CRM for reliable tracking and decisions.</li>
-            <li><strong>Insight Activation:</strong> Detect patterns, sentiment, and key topics to inform product, process, and service improvements.</li>
-          </ul>
+          <div class="measure">
+            <ul>
+              <li><strong>Operational Efficiency:</strong> Automate during and after calls to reduce idle time and agent workload.</li>
+              <li><strong>Data Quality &amp; Consistency:</strong> Standardize post-call documentation and integrate with CRM for reliable tracking and decisions.</li>
+              <li><strong>Insight Activation:</strong> Detect patterns, sentiment, and key topics to inform product, process, and service improvements.</li>
+            </ul>
+          </div>
         </div>
       </details>
     </section>
 
-    <!-- APPROACH -->
-    <section class="section-min" id="approach" aria-labelledby="h-approach" data-peek="auto">
-      <header>
-        <span class="eyebrow">Approach</span>
-        <h2 id="h-approach">Design & Cadence</h2>
-      </header>
-
-      <div class="hero-slot" hidden></div>
-
-      <p class="callout"><strong>How we worked:</strong> A user-centered design methodology combining mixed research, rapid prototyping, and continuous validation. Not strictly Scrum, but weekly sprints with ongoing stakeholder feedback.</p>
-
-      <div class="peek" aria-hidden="true"></div>
-
-      <details class="more">
-        <summary>View more</summary>
-        <div class="more">
-          <h3>Design Focus</h3>
-          <p>We defined an initial challenge focused on improving both agent and customer experience without compromising operational efficiency. The guiding question was: <em>“How might we simplify access to call data for agents without disrupting their workflow, while also automating processes to enhance cost, quality, and service efficiency?”</em> This framing provided initial direction, and we used user-centered research to validate needs, understand the operational context, and refine the problem definition.</p>
-
-          <h3>Methodology</h3>
-          <p>A user-centered design methodology was applied, combining mixed research, rapid prototyping, and continuous validation. While not strictly Scrum, the team worked in weekly sprints with ongoing stakeholder feedback.</p>
-        </div>
-      </details>
-    </section>
-
-    <!-- RESEARCH -->
-    <section class="section-min" id="research" aria-labelledby="h-research" data-peek="auto">
-      <header>
-        <span class="eyebrow">User Research</span>
-        <h2 id="h-research">Insights que movieron el diseño</h2>
-      </header>
-
-      <div class="hero-slot" hidden></div>
-
-      <p class="callout"><strong>What we did:</strong> live shadowing, semi-structured interviews, metrics analysis and competitive benchmarking.</p>
-
-      <div class="peek" aria-hidden="true"></div>
-
-      <details class="more">
-        <summary>View more</summary>
-        <div class="more">
-          <p>To gain a deep understanding of user needs, behaviors, and pain points, we applied a mixed-method approach combining qualitative and quantitative techniques. Direct access to the call center and internal company data enabled contextual, hands-on research. The following actions were carried out:</p>
-          <ul>
-            <li>Live shadowing</li>
-            <li>Semi-structured interviews</li>
-            <li>Metrics analysis</li>
-            <li>Competitive benchmarking</li>
-          </ul>
-          <p>Unexpected insights emerged, such as the impact of workplace environment on end-user experience and the need for more intuitive call management tools.</p>
-        </div>
-      </details>
-    </section>
-
-    <footer class="site">© Jose Carlos — Base lista para previews/hero opcionales</footer>
+    <footer class="site">© Preview</footer>
   </main>
 
-  <!-- Lightbox -->
-  <dialog id="lb" aria-label="Visor de imagen">
-    <div class="lb-wrap">
-      <img class="lb-img" id="lbImg" alt="" />
-      <div class="lb-cap" id="lbCap"></div>
-      <button class="lb-close" aria-label="Cerrar" id="lbClose">✕</button>
-    </div>
-  </dialog>
-
   <script>
-    // 1) Lazy-load dentro de View more (al abrir)
-    document.querySelectorAll('details.more').forEach(det => {
-      det.addEventListener('toggle', () => {
-        if (det.open) {
-          det.querySelectorAll('img.lazy').forEach(img => {
-            if (!img.src) { img.src = img.dataset.src; img.loading = 'lazy'; }
-          });
-          const pk = det.previousElementSibling; // .peek
-          if (pk && pk.classList.contains('peek')) pk.style.display = 'none';
-        } else {
-          const pk = det.previousElementSibling;
-          const section = det.closest('section.section-min');
-          const previewsOn = document.body.classList.contains('enable-previews') && section?.dataset.peek === 'auto';
-          if (pk && pk.classList.contains('peek')) pk.style.display = previewsOn ? 'grid' : 'none';
-        }
+    // Si el <details> está abierto desde inicio, asegura cargar imágenes lazy
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('details.more[open] img.lazy').forEach(img => {
+        if (!img.src && img.dataset.src) img.src = img.dataset.src;
       });
     });
-
-    // 2) Previews automáticos (solo si activas enable-previews en <body> o por sección más adelante)
-    function buildAutoPeek(section){
-      const det = section.querySelector('details.more');
-      if(!det) return;
-      const host = section.querySelector('.peek');
-      if(!host) return;
-      const imgs = Array.from(det.querySelectorAll('img.lazy')).slice(0,3);
-      if(!imgs.length){ host.remove(); return; }
-      host.innerHTML = '';
-      imgs.forEach(im => {
-        const btn = document.createElement('button');
-        btn.className = 'peek-tile';
-        const ph = document.createElement('img');
-        ph.src = im.dataset.src; ph.alt = im.alt || '';
-        btn.appendChild(ph);
-        btn.addEventListener('click', () => { det.open = true; setTimeout(()=> im.closest('figure')?.scrollIntoView({behavior:'smooth', block:'center'}), 60); });
-        host.appendChild(btn);
-      });
-      const previewsOn = document.body.classList.contains('enable-previews') && section.dataset.peek === 'auto';
-      host.style.display = previewsOn ? 'grid' : 'none';
-    }
-
-    document.querySelectorAll('section.section-min[data-peek]')
-      .forEach(buildAutoPeek);
-
-    // 3) Lightbox sencillo
-    (function(){
-      const lb = document.getElementById('lb');
-      const img = document.getElementById('lbImg');
-      const cap = document.getElementById('lbCap');
-      const closeBtn = document.getElementById('lbClose');
-      document.addEventListener('click', e => {
-        const fig = e.target.closest('figure.frame');
-        if(!fig) return;
-        const i = fig.querySelector('img');
-        if(!i) return;
-        img.src = i.currentSrc || i.src;
-        cap.textContent = (fig.querySelector('.caption')?.textContent || i.alt || '').trim();
-        if (typeof lb.showModal === 'function') lb.showModal(); else window.open(img.src, '_blank');
-      });
-      document.addEventListener('keydown', e => {
-        if(e.key === 'Escape' && lb.open) lb.close();
-      });
-      closeBtn.addEventListener('click', ()=> lb.close());
-      lb.addEventListener('click', (e)=>{ if(e.target===lb) lb.close(); });
-    })();
   </script>
 </body>
 </html>
