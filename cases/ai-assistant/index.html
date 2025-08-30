@@ -41,6 +41,8 @@
     .more p{color:var(--ink); margin:10px 0}
     .more ul, .more ol{margin:8px 0 6px 18px; color:var(--ink)}
     .note{color:var(--muted); font-size:13px}
+    /* Suavizar la negrita dentro de los párrafos del contenido */
+    .more p strong{ font-weight:600; }
 
     /* Figuras intercaladas */
     .frame{position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--line); background:#0c1117; margin:12px 0}
@@ -102,6 +104,7 @@
     .chip{background:rgba(71,201,255,.08); border:1px solid rgba(71,201,255,.35); color:#cfefff; padding:8px 12px; border-radius:999px; font-size:12px}
 
     footer.site{color:#a4afc5; text-align:center; margin-top:30px; font-size:13px}
+    /* Override: quitar flecha de la derecha */
     details.more > summary::after { content: none !important; }
     details.more[open] > summary::after { content: none !important; }
   </style>
@@ -154,8 +157,8 @@
           <!-- SIDEACAR SHORT: texto (izq) + imagen (der, altura controlada) -->
           <div class="sidecar short">
             <div>
-              <p>A European insurance company is exploring AI-driven solutions to improve internal operations in customer service. It manages thousands of daily interactions via phone<wbr> and&nbsp;chat with policyholders and prospects, where conversations are key to resolving issues, handling claims, and building trust.</p>
-              <p>Yet the surrounding processes remain manual, slow, and inconsistent. The call center carries high operational costs but also holds untapped potential—each interaction contains valuable insights that aren’t fully leveraged.</p>
+              <p>A European insurance company is exploring <strong>AI-driven solutions</strong> to improve internal operations in <strong>customer service</strong>. It manages <strong>thousands of daily interactions</strong> via phone<wbr> and&nbsp;chat with policyholders and prospects, where conversations are key to resolving issues, handling claims, and building trust.</p>
+              <p>Yet the surrounding processes remain <strong>manual, slow, and inconsistent</strong>. The call center carries high operational costs but also holds <strong>untapped potential</strong>—each interaction contains <strong>valuable insights</strong> that aren’t fully leveraged.</p>
             </div>
             <figure class="frame is-short" tabindex="0">
               <img class="lazy"
@@ -170,8 +173,8 @@
           <!-- SIDEACAR SHORT (texto + imagen) -->
           <div class="sidecar short">
             <div>
-              <p>Stakeholders flagged major inefficiencies in call handling: agents manually entered data during and after calls, causing frequent errors, inconsistent records, and lower productivity—hurting service quality and raising operational costs.</p>
-              <p>Much of the conversation data went unanalyzed, missing opportunities to improve case tracking, customer experience, and internal processes. Stakeholders therefore showed strong interest in AI to automate tasks and extract insights, citing successful implementations elsewhere as proof of concept.</p>
+              <p>Stakeholders flagged major <strong>inefficiencies</strong> in call handling: agents performed <strong>manual data entry</strong> during and after calls, causing errors, inconsistent records, and lower productivity—hurting service quality and raising <strong>operational costs</strong>.</p>
+              <p>Much of the conversation data went <strong>unanalyzed</strong>, missing opportunities to improve <strong>case tracking</strong>, customer experience, and internal processes. Stakeholders therefore showed strong interest in <strong>AI automation</strong> to <strong>extract insights</strong>, citing <strong>successful implementations</strong> elsewhere as proof of concept.</p>
             </div>
             <figure class="frame is-short" tabindex="0">
               <img class="lazy"
