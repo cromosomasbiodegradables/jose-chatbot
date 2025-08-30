@@ -60,7 +60,7 @@
 
     /* ===== Sidecar short (limita altura y recorta la imagen) ===== */
     .sidecar.short .frame.is-short{
-      height: clamp(180px, 22vw, 220px);
+      height: clamp(180px, 22vw, 220px);  /* ocupa un poco más */
       margin: 0;
     }
     .sidecar.short .frame.is-short img{
@@ -68,12 +68,16 @@
       object-fit:cover;
       object-position:center;
     }
+    /* Caption overlay para no sumar alto */
     .sidecar.short .frame.is-short .caption{
       position:absolute; left:8px; bottom:8px;
       background: rgba(0,0,0,.45);
-      color:#dbe7ff; padding:6px 8px; border-radius:10px; font-size:12px; margin:0;
+      color:#dbe7ff; padding:6px 8px; border-radius:10px;
+      font-size:12px; margin:0;
     }
+    /* Texto más estrecho en sidecar (mejor control de saltos) */
     .sidecar.short > div{ max-width:58ch; }
+    /* Más aire entre párrafos del sidecar */
     .sidecar.short > div p:first-of-type{ margin-bottom:16px; }
 
     @media (max-width: 900px){
@@ -102,6 +106,7 @@
     .chip{background:rgba(71,201,255,.08); border:1px solid rgba(71,201,255,.35); color:#cfefff; padding:8px 12px; border-radius:999px; font-size:12px}
 
     footer.site{color:#a4afc5; text-align:center; margin-top:30px; font-size:13px}
+    /* Override: quitar flecha de la derecha */
     details.more > summary::after { content: none !important; }
     details.more[open] > summary::after { content: none !important; }
   </style>
@@ -171,9 +176,8 @@
           <!-- SIDEACAR SHORT (texto + imagen) -->
           <div class="sidecar short">
             <div>
-              <p>The stakeholders flagged major inefficiencies in their call-handling system. Agents manually entered data during and after calls, leading to frequent errors, inconsistent records, and reduced productivity, all of which negatively affected service quality and operational costs.</p>
-              <p>Much of the valuable call data went unanalyzed, missing opportunities to enhance case tracking, customer experience, and internal processes.</p>
-              <p>Stakeholders showed strong interest in AI solutions to automate tasks and extract insights from conversations, citing successful implementations in other companies as proof of concept.</p>
+              <p>Stakeholders flagged major inefficiencies in call handling: agents manually entered data during and after calls, causing frequent errors, inconsistent records, and lower productivity—hurting service quality and raising operational costs.</p>
+              <p>Much of the conversation data went unanalyzed, missing opportunities to improve case tracking, customer experience, and internal processes. Stakeholders therefore showed strong interest in AI to automate tasks and extract insights, citing successful implementations elsewhere as proof of concept.</p>
             </div>
             <figure class="frame is-short" tabindex="0">
               <img class="lazy"
@@ -301,7 +305,7 @@
 
     document.querySelectorAll('section.section-min[data-peek]').forEach(buildAutoPeek);
 
-    // 3) Lightbox
+    // 3) Lightbox sencillo
     (function(){
       const lb = document.getElementById('lb');
       const img = document.getElementById('lbImg');
