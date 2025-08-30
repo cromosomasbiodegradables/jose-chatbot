@@ -52,12 +52,25 @@
     .sidecar{display:grid;grid-template-columns:1.6fr 1fr;gap:12px;align-items:start;margin:12px 0}
     @media (max-width: 900px){ .sidecar{grid-template-columns:1fr} }
 
+    /* ===== Sidecar short (limita altura y recorta la imagen) ===== */
+    .sidecar.short .frame.is-short{
+      height: clamp(210px, 26vw, 260px);  /* ~alto fijo, recortado */
+    }
+    .sidecar.short .frame.is-short img{
+      width:100%;
+      height:100%;
+      object-fit:cover;                   /* recorte agradable */
+      object-position:center;             /* centra el foco */
+    }
+    @media (max-width: 900px){
+      .sidecar.short .frame.is-short{ height: 200px; } /* más compacto en móvil */
+    }
+
     /* ===== Previews automáticos (apagados por defecto) ===== */
     .peek{display:none; grid-template-columns:repeat(12,1fr); gap:8px; margin:10px 0}
     .peek-tile{grid-column:span 4; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#0c1117; aspect-ratio:16/10; cursor:pointer}
     .peek-tile img{width:100%; height:100%; object-fit:cover; display:block}
     @media (max-width: 900px){ .peek-tile{grid-column:span 12} }
-    /* Si activas previews globales o por sección, se muestran */
     body.enable-previews section[data-peek="auto"] > .peek{display:grid}
 
     /* Lightbox */
@@ -73,7 +86,7 @@
     .chipbar{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0}
     .chip{background:rgba(71,201,255,.08); border:1px solid rgba(71,201,255,.35); color:#cfefff; padding:8px 12px; border-radius:999px; font-size:12px}
 
-    footer.site{color:var(--muted); text-align:center; margin-top:30px; font-size:13px}
+    footer.site{color:#a4afc5; text-align:center; margin-top:30px; font-size:13px}
     /* Override: quitar flecha de la derecha */
     details.more > summary::after { content: none !important; }
     details.more[open] > summary::after { content: none !important; }
@@ -124,15 +137,14 @@
         <div class="more">
           <h3>Context of the project</h3>
 
-          <!-- SIDEACAR: texto (izquierda) + imagen (derecha) -->
-          <div class="sidecar">
+          <!-- SIDEACAR SHORT: texto (izq) + imagen (der, altura controlada) -->
+          <div class="sidecar short">
             <div>
               <p>A European insurance company manages thousands of daily interactions via phone and chat with both policyholders and prospects. These conversations are essential to resolve issues and build trust, yet surrounding processes are manual, slow, and inconsistent—driving operational cost and leaving value untapped.</p>
             </div>
-            <figure class="frame fixed-16x9" tabindex="0">
-              <!-- Coloca aquí tu imagen -->
+            <figure class="frame is-short" tabindex="0">
               <img class="lazy"
-                   data-src="/jose-chatbot/assets/ai-assistant/open-plan-callcenter-1200.webp"
+                   data-src="../../assets/ai-assistant/context/open-plan-callcenter-1200.webp"
                    alt="Open-plan call center with cubicles and agents working; illustrates the project context.">
               <figcaption class="caption">Customer service environment — volume, noise, and manual processes.</figcaption>
             </figure>
