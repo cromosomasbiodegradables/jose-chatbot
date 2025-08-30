@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI-Powered Assistant for Customer Service Teams — Case Study</title>
-  <meta name="description" content="Turning high-volume conversations into structured, actionable knowledge while reducing manual effort in call workflows." />
+  <title>Preview • Base H2 + Callout + View more (imágenes intercaladas)</title>
+  <meta name="description" content="Estado base: cada sección tiene H2, callout y View more con texto + imágenes intercaladas. Previews y hero opcionales se activan más tarde sin tocar el contenido." />
   <style>
-    :root{
-      --bg:#0b0e12; --ink:#e8edf7; --muted:#a4afc5; --brand:#47c9ff;
-      --card:#0f141b; --line:#1b2330; --radius:18px; --maxw:1080px;
-    }
+    :root{ --bg:#0b0e12; --ink:#e8edf7; --muted:#a4afc5; --brand:#47c9ff; --card:#0f141b; --line:#1b2330; --radius:18px; --maxw:1100px; }
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
     body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);} 
@@ -20,180 +17,260 @@
     header .bar{display:flex;align-items:center;justify-content:space-between;max-width:var(--maxw);margin:0 auto;padding:14px 16px}
     .brand{font-weight:700} .nav a{color:var(--muted);margin-left:14px}
     .nav a:hover{color:var(--ink)}
-    .hero{margin:18px auto 24px; background:linear-gradient(180deg,#0e131a,#0b0f16);
-      border:1px solid var(--line); border-radius:28px; padding:28px 22px; box-shadow:0 30px 80px rgba(0,0,0,.45);} 
-    .hero h1{margin:0 0 8px; font-size: clamp(28px, 5vw, 48px); line-height:1.1}
-    .sub{color:var(--muted); margin:6px 0 12px; font-size:16px}
-    .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
-    .chip{background:rgba(71,201,255,.08); border:1px solid rgba(71,201,255,.35); color:#cfefff; padding:8px 12px; border-radius:999px; font-size:12px}
-    .slide{margin:36px 0 24px}
-    .slide h2{margin:0 0 8px; font-size: clamp(18px, 2.6vw, 24px)}
-    .frame{position:relative; border-radius:22px; overflow:hidden; border:1px solid var(--line); background:#0c1117; margin:8px 0 10px}
-    .frame img{display:block; width:100%; height:auto}
-    .figcap{position:absolute; left:12px; bottom:12px; background:rgba(0,0,0,.45); color:#dbe7ff; padding:6px 10px; border-radius:10px; font-size:12px; backdrop-filter: blur(6px)}
-    .duo{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0 4px}
-    .trio{display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin:12px 0 4px}
-    @media (max-width: 880px){ .duo{grid-template-columns:1fr} .trio{grid-template-columns:1fr} }
-    .caption{display:block; font-size:12px; color:var(--muted); padding:6px 2px 2px; text-align:left}
 
-    /* Mini-galería 16:9 SIN huecos (rellena el contenedor) */
-    .fixed-16x9{ aspect-ratio:16/9; }
-    .frame.fixed-16x9 img{ width:100%; height:100%; object-fit:cover; } /* <-- sobrescribe height:auto */
+    /* ===== Sección compacta (sin hero por defecto) ===== */
+    .section-min{margin:22px 0 28px;padding:18px 16px;background:var(--card);border:1px solid var(--line);border-radius:16px}
+    .section-min header{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
+    .section-min .eyebrow{color:var(--muted);font-size:12px;letter-spacing:.02em;text-transform:uppercase}
+    .section-min h2{margin:0;font-size:clamp(18px,2.4vw,22px)}
 
-    .takeaway{margin:10px 2px 8px; font-size: clamp(16px, 2.6vw, 20px); line-height:1.45}
-    .takeaway strong{color:#fff}
-    details.more{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px}
-    details.more > summary{cursor:pointer; color:#cfefff; outline:none}
-    details.more[open]{box-shadow:0 8px 30px rgba(0,0,0,.35)}
-    .more p{color:var(--ink); margin:6px 0}
-    .more ul{margin:8px 0 6px 18px; color:var(--ink)}
+    /* Slot opcional para hero (+ tarde) */
+    .hero-slot{margin:10px 0 12px}
+    .hero-slot[hidden]{display:none}
+
+    /* Callout */
+    .callout{background:rgba(71,201,255,.08);border:1px solid rgba(71,201,255,.35);color:#dff3ff;padding:10px 12px;border-radius:12px;margin:8px 0 10px}
+    .callout strong{color:#fff}
+
+    /* details */
+    details.more{background:#0d1621;border:1px solid var(--line);border-radius:14px;padding:12px}
+    details.more > summary{cursor:pointer; color:#cfefff; outline:none; list-style:none}
+    details.more > summary::-webkit-details-marker{display:none}
+    details.more > summary:after{content:'▾'; float:right; color:#9fdcff}
+    details.more[open] > summary:after{content:'▴'}
+    .more p{color:var(--ink); margin:10px 0}
+    .more ul, .more ol{margin:8px 0 6px 18px; color:var(--ink)}
     .note{color:var(--muted); font-size:13px}
-    .cta{margin:36px 0 10px; display:flex; gap:10px; flex-wrap:wrap}
-    .btn{background:#0d1621; color:#cfefff; border:1px solid var(--line); padding:10px 14px; border-radius:12px; text-decoration:none; font-weight:600}
-    .btn:hover{background:#0e1a27}
+
+    /* Figuras intercaladas */
+    .frame{position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--line); background:#0c1117; margin:12px 0}
+    .frame img{display:block; width:100%; height:auto}
+    .caption{display:block; font-size:12px; color:var(--muted); padding:6px 8px}
+    .fixed-16x9{aspect-ratio:16/9}
+
+    /* ===== Previews automáticos (apagados por defecto) ===== */
+    .peek{display:none; grid-template-columns:repeat(12,1fr); gap:8px; margin:10px 0}
+    .peek-tile{grid-column:span 4; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#0c1117; aspect-ratio:16/10; cursor:pointer}
+    .peek-tile img{width:100%; height:100%; object-fit:cover; display:block}
+    @media (max-width: 900px){ .peek-tile{grid-column:span 12} }
+    /* Si activas previews globales o por sección, se muestran */
+    body.enable-previews section[data-peek="auto"] > .peek{display:grid}
+
+    /* Lightbox */
+    #lb::backdrop{background:rgba(0,0,0,.75)}
+    #lb{border:none;padding:0;border-radius:18px;max-width:min(94vw,1200px);background:#0b0e12}
+    .lb-wrap{position:relative}
+    .lb-img{max-width:min(94vw,1200px);max-height:84vh;display:block}
+    .lb-cap{padding:10px 14px;color:#cfefff;font-size:13px}
+    .lb-close{position:absolute;top:8px;right:8px;border:none;background:rgba(0,0,0,.45);color:#fff;padding:8px 10px;border-radius:10px;cursor:pointer}
+    .lb-close:focus{outline:2px solid var(--brand)}
+
+    /* Chipbar (meta del proyecto) */
+    .chipbar{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0}
+    .chip{background:rgba(71,201,255,.08); border:1px solid rgba(71,201,255,.35); color:#cfefff; padding:8px 12px; border-radius:999px; font-size:12px}
+
     footer.site{color:var(--muted); text-align:center; margin-top:30px; font-size:13px}
-    hr{border:none; height:1px; background:linear-gradient(90deg, transparent, var(--line), transparent); margin:28px 0}
-    @media print{header.site{display:none} .wrap{padding:0} .hero{box-shadow:none} .figcap{position:static; background:none; padding:0} a:after{content:" (" attr(href) ")"}}
   </style>
 </head>
 <body>
   <header class="site" aria-label="Top bar">
     <div class="bar">
-      <div class="brand">Jose Carlos — Case Study</div>
+      <div class="brand">Jose Carlos — Case Study (Base sin hero por sección)</div>
       <nav class="nav" aria-label="Sections">
         <a href="#overview">Overview</a>
         <a href="#approach">Approach</a>
-        <a href="#research">User Research</a>
+        <a href="#research">Research</a>
       </nav>
     </div>
   </header>
 
-  <main class="wrap" id="top">
-    <!-- HERO -->
-    <section class="hero" aria-labelledby="title">
-      <h1 id="title">AI-Powered Assistant for Customer Service Teams</h1>
-      <p class="sub">Turning high-volume phone/chat conversations into structured, actionable knowledge while reducing manual effort.</p>
-      <div class="chips" role="list">
-        <span class="chip" role="listitem">Role: Senior UX/UI</span>
-        <span class="chip" role="listitem">Duration: [months]</span>
-        <span class="chip" role="listitem">Team: [PM, Engineering, Operations]</span>
+  <main class="wrap">
+    <!-- Meta del proyecto (no es hero grande; es información) -->
+    <section class="section-min" aria-labelledby="h-intro">
+      <header>
+        <span class="eyebrow">Project</span>
+        <h2 id="h-intro">AI‑Powered Assistant for Customer Service Teams</h2>
+      </header>
+      <p>Turning high‑volume conversations into structured, actionable knowledge while reducing manual effort.</p>
+      <div class="chipbar">
+        <span class="chip">Role: Senior UX/UI</span>
+        <span class="chip">Duration: 10 semanas</span>
+        <span class="chip">Team: PM • Eng • Ops</span>
       </div>
     </section>
 
     <!-- OVERVIEW -->
-    <section class="slide" id="overview" aria-labelledby="h-overview">
-      <h2 id="h-overview">Overview</h2>
+    <section class="section-min" id="overview" aria-labelledby="h-overview" data-peek="auto">
+      <header>
+        <span class="eyebrow">Overview</span>
+        <h2 id="h-overview">Contexto, problema y objetivos</h2>
+      </header>
+      
+      <!-- Slot opcional para hero; por defecto oculto -->
+      <div class="hero-slot" hidden></div>
 
-      <div class="frame">
-        <img src="/jose-chatbot/assets/ai-assistant/overview-office-1400.webp"
-             alt="Team working in open space customer support" loading="lazy" />
-        <div class="figcap">Context • Problem • Goals</div>
-      </div>
+      <p class="callout"><strong>Takeaway:</strong> estandarizamos documentación y activamos insights sin interferir en el flujo del agente.</p>
 
-      <div class="duo">
-        <figure class="frame fixed-16x9">
-          <img src="/jose-chatbot/assets/ai-assistant/overview-stakeholders-16x9-1200.webp"
-               alt="Stakeholder kickoff meeting aligning goals, scope, and success metrics." loading="lazy">
-          <figcaption class="caption">Kick-off: alignment on goals, risks, and success metrics.</figcaption>
-        </figure>
-
-        <figure class="frame fixed-16x9">
-          <img src="/jose-chatbot/assets/ai-assistant/overview-analytics-1600.webp"
-               alt="Analytics dashboard with a line chart and heat map, representing structured insights from calls."
-               loading="lazy">
-          <figcaption class="caption">From conversation to structured insight—standardized records and metrics ready for action.</figcaption>
-        </figure>
-      </div>
-
-      <p class="takeaway"><strong>Takeaway:</strong> A European insurer aims to turn daily conversations into structured, actionable knowledge—reducing manual entry, standardizing documentation and activating insights, without disrupting agent workflows.</p>
+      <!-- Peek (previews auto); se rellena por JS solo si habilitas previews -->
+      <div class="peek" aria-hidden="true"></div>
 
       <details class="more">
-        <summary>View details</summary>
+        <summary>View more</summary>
         <div class="more">
-          <h3>Context of the project</h3>
-          <p>A European insurance company manages thousands of daily interactions via phone and chat with both policyholders and prospects. These conversations are essential to resolve issues and build trust, yet surrounding processes are manual, slow, and inconsistent—driving operational cost and leaving value untapped.</p>
-
-          <h3>Initial Problem Assessment</h3>
-          <p>Agents manually enter data during/after calls, leading to errors, inconsistent records, and reduced productivity. Valuable call data goes unanalyzed, missing opportunities to improve case tracking, customer experience, and internal processes.</p>
-
-          <h3>Business Goals</h3>
-          <ul>
-            <li><strong>Operational Efficiency:</strong> Automate during and after calls to reduce idle time and agent workload.</li>
-            <li><strong>Data Quality &amp; Consistency:</strong> Standardize post-call documentation and integrate with CRM for reliable tracking and decisions.</li>
-            <li><strong>Insight Activation:</strong> Detect patterns, sentiment, and key topics to inform product, process, and service improvements.</li>
-          </ul>
+          <p>Una aseguradora europea gestiona miles de interacciones diarias. La documentación manual genera errores y coste.</p>
+          <figure class="frame fixed-16x9" tabindex="0">
+            <img class="lazy" data-src="https://picsum.photos/id/1011/1200/675" alt="Taller de stakeholders">
+            <figcaption class="caption">Kick‑off: objetivos, riesgos y métricas.</figcaption>
+          </figure>
+          <p>Buscamos reducir tiempo post‑llamada y mejorar consistencia de datos en CRM.</p>
+          <figure class="frame fixed-16x9" tabindex="0">
+            <img class="lazy" data-src="https://picsum.photos/id/1015/1200/675" alt="Panel de analítica con líneas y heatmap">
+            <figcaption class="caption">De conversación a insight estructurado.</figcaption>
+          </figure>
         </div>
       </details>
     </section>
 
     <!-- APPROACH -->
-    <section class="slide" id="approach" aria-labelledby="h-approach">
-      <h2 id="h-approach">Approach</h2>
-      <div class="frame">
-        <img src="/jose-chatbot/assets/ai-assistant/approach-hero-walls-io-1600.webp"
-             alt="Two teammates aligning at a whiteboard with sticky notes—setting goals, constraints and success metrics before research" loading="lazy" />
-        <div class="figcap">Design Focus • Methodology • Weekly Cadence</div>
-      </div>
+    <section class="section-min" id="approach" aria-labelledby="h-approach" data-peek="auto">
+      <header>
+        <span class="eyebrow">Approach</span>
+        <h2 id="h-approach">Design & Cadence</h2>
+      </header>
 
-      <!-- Dos imágenes pequeñas bajo el hero -->
-      <div class="duo">
-        <figure class="frame fixed-16x9">
-          <img src="/jose-chatbot/assets/ai-assistant/approach-framing-1300.webp"
-               alt="Design thinking loop diagram showing Empathize, Define, Ideate, Prototype, and Test" loading="lazy">
-          <figcaption class="caption">Human-in-the-loop design.</figcaption>
-        </figure>
-        <figure class="frame fixed-16x9">
-          <img src="/jose-chatbot/assets/ai-assistant/approach-flow-16x9-1601.webp"
-               alt="Call-handling flowchart from greeting to post-call, with manual capture/hold steps highlighted and the final record summary." loading="lazy">
-          <figcaption class="caption">Current call workflow — manual capture and post-call documentation are the main friction points.</figcaption>
-        </figure>
-      </div>
+      <div class="hero-slot" hidden></div>
 
-      <p class="takeaway"><strong>How we worked:</strong> A user-centered design methodology combining mixed research, rapid prototyping, and continuous validation. Not strictly Scrum, but weekly sprints with ongoing stakeholder feedback.</p>
+      <p class="callout"><strong>How we worked:</strong> user‑centered, investigación mixta y prototipado rápido; sprints semanales con feedback continuo.</p>
+
+      <div class="peek" aria-hidden="true"></div>
 
       <details class="more">
-        <summary>View details</summary>
+        <summary>View more</summary>
         <div class="more">
-          <h3>Design Focus</h3>
-          <p>We defined an initial challenge focused on improving both agent and customer experience without compromising operational efficiency. The guiding question was: <em>“How might we simplify access to call data for agents without disrupting their workflow, while also automating processes to enhance cost, quality, and service efficiency?”</em> This framing provided initial direction, and we used user-centered research to validate needs, understand the operational context, and refine the problem definition.</p>
-
-          <h3>Methodology</h3>
-          <p>A user-centered design methodology was applied, combining mixed research, rapid prototyping, and continuous validation. While not strictly Scrum, the team worked in weekly sprints with ongoing stakeholder feedback.</p>
+          <p>Priorizamos impacto y validación con acceso directo al call center.</p>
+          <figure class="frame fixed-16x9" tabindex="0">
+            <img class="lazy" data-src="https://picsum.photos/id/1040/1200/675" alt="Flujo actual con fricciones">
+            <figcaption class="caption">Fricciones durante y post‑llamada.</figcaption>
+          </figure>
+          <p>Iteramos prototipos en flujo real y validamos con operaciones.</p>
+          <figure class="frame fixed-16x9" tabindex="0">
+            <img class="lazy" data-src="https://picsum.photos/id/1050/1200/675" alt="Prototipo en alta fidelidad">
+            <figcaption class="caption">Prototipo en entorno real.</figcaption>
+          </figure>
         </div>
       </details>
     </section>
 
-    <!-- USER RESEARCH -->
-    <section class="slide" id="research" aria-labelledby="h-research">
-      <h2 id="h-research">User Research</h2>
-      <div class="frame">
-        <img src="/jose-chatbot/assets/ai-assistant/research-hero-workshop-1600.webp"
-             alt="Hands collaborating over wireframes and sticky notes during a UX research workshop—sketching flows and annotating findings." loading="lazy" />
-        <div class="figcap">Contextual inquiry and rapid synthesis — mapping flows, notes and early hypotheses.</div>
-      </div>
+    <!-- RESEARCH -->
+    <section class="section-min" id="research" aria-labelledby="h-research" data-peek="auto">
+      <header>
+        <span class="eyebrow">User Research</span>
+        <h2 id="h-research">Insights que movieron el diseño</h2>
+      </header>
 
-      <p class="takeaway"><strong>What we did:</strong> live shadowing, semi-structured interviews, metrics analysis and competitive benchmarking.</p>
+      <div class="hero-slot" hidden></div>
+
+      <p class="callout"><strong>What we did:</strong> shadowing, entrevistas, métricas y benchmark.</p>
+
+      <div class="peek" aria-hidden="true"></div>
+
       <details class="more">
-        <summary>View details</summary>
+        <summary>View more</summary>
         <div class="more">
-          <p>To gain a deep understanding of user needs, behaviors, and pain points, we applied a mixed-method approach combining qualitative and quantitative techniques. Direct access to the call center and internal company data enabled contextual, hands-on research. The following actions were carried out:</p>
-          <ul>
-            <li>Live shadowing</li>
-            <li>Semi-structured interviews</li>
-            <li>Metrics analysis</li>
-            <li>Competitive benchmarking</li>
-          </ul>
-          <p>Unexpected insights emerged, such as the impact of workplace environment on end-user experience and the need for more intuitive call management tools.</p>
+          <p>La entrada manual post‑llamada es el principal foco de variabilidad.</p>
+          <figure class="frame fixed-16x9" tabindex="0">
+            <img class="lazy" data-src="https://picsum.photos/id/1039/1200/675" alt="Tabla de fricciones">
+            <figcaption class="caption">Picos = tareas manuales.</figcaption>
+          </figure>
+          <p>Oportunidad: plantillas + IA con revisión del agente.</p>
+          <figure class="frame fixed-16x9" tabindex="0">
+            <img class="lazy" data-src="https://picsum.photos/id/1035/1200/675" alt="KPIs y tendencias">
+            <figcaption class="caption">Delta y tendencias.</figcaption>
+          </figure>
         </div>
       </details>
     </section>
 
-    <div class="cta">
-      <a class="btn" href="#top">↑ Back to top</a>
-      <a class="btn" href="mailto:jose.carlos.torres.sanchez@gmail.com">Contact</a>
-    </div>
-
-    <footer class="site">© Jose Carlos — Case Study</footer>
+    <footer class="site">© Jose Carlos — Base lista para previews/hero opcionales</footer>
   </main>
+
+  <!-- Lightbox -->
+  <dialog id="lb" aria-label="Visor de imagen">
+    <div class="lb-wrap">
+      <img class="lb-img" id="lbImg" alt="" />
+      <div class="lb-cap" id="lbCap"></div>
+      <button class="lb-close" aria-label="Cerrar" id="lbClose">✕</button>
+    </div>
+  </dialog>
+
+  <script>
+    // 1) Lazy-load dentro de View more (al abrir)
+    document.querySelectorAll('details.more').forEach(det => {
+      det.addEventListener('toggle', () => {
+        if (det.open) {
+          det.querySelectorAll('img.lazy').forEach(img => {
+            if (!img.src) { img.src = img.dataset.src; img.loading = 'lazy'; }
+          });
+          const pk = det.previousElementSibling; // .peek
+          if (pk && pk.classList.contains('peek')) pk.style.display = 'none';
+        } else {
+          const pk = det.previousElementSibling;
+          const section = det.closest('section.section-min');
+          const previewsOn = document.body.classList.contains('enable-previews') && section?.dataset.peek === 'auto';
+          if (pk && pk.classList.contains('peek')) pk.style.display = previewsOn ? 'grid' : 'none';
+        }
+      });
+    });
+
+    // 2) Previews automáticos (solo si activas enable-previews en <body> o por sección más adelante)
+    function buildAutoPeek(section){
+      const det = section.querySelector('details.more');
+      if(!det) return;
+      const host = section.querySelector('.peek');
+      if(!host) return;
+      // Coge las primeras 3 imágenes declaradas en el contenido (data-src)
+      const imgs = Array.from(det.querySelectorAll('img.lazy')).slice(0,3);
+      if(!imgs.length){ host.remove(); return; }
+      host.innerHTML = '';
+      imgs.forEach(im => {
+        const btn = document.createElement('button');
+        btn.className = 'peek-tile';
+        const ph = document.createElement('img');
+        ph.src = im.dataset.src; ph.alt = im.alt || '';
+        btn.appendChild(ph);
+        btn.addEventListener('click', () => { det.open = true; setTimeout(()=> im.closest('figure')?.scrollIntoView({behavior:'smooth', block:'center'}), 60); });
+        host.appendChild(btn);
+      });
+      // Mostrar u ocultar según flags
+      const previewsOn = document.body.classList.contains('enable-previews') && section.dataset.peek === 'auto';
+      host.style.display = previewsOn ? 'grid' : 'none';
+    }
+
+    // Prepara todas las secciones (pero por defecto, previews ocultas)
+    document.querySelectorAll('section.section-min[data-peek]')
+      .forEach(buildAutoPeek);
+
+    // 3) Lightbox sencillo
+    (function(){
+      const lb = document.getElementById('lb');
+      const img = document.getElementById('lbImg');
+      const cap = document.getElementById('lbCap');
+      const closeBtn = document.getElementById('lbClose');
+      document.addEventListener('click', e => {
+        const fig = e.target.closest('figure.frame');
+        if(!fig) return;
+        const i = fig.querySelector('img');
+        if(!i) return;
+        img.src = i.currentSrc || i.src;
+        cap.textContent = (fig.querySelector('.caption')?.textContent || i.alt || '').trim();
+        if (typeof lb.showModal === 'function') lb.showModal(); else window.open(img.src, '_blank');
+      });
+      document.addEventListener('keydown', e => {
+        if(e.key === 'Escape' && lb.open) lb.close();
+      });
+      closeBtn.addEventListener('click', ()=> lb.close());
+      lb.addEventListener('click', (e)=>{ if(e.target===lb) lb.close(); });
+    })();
+  </script>
 </body>
 </html>
