@@ -38,8 +38,6 @@
     details.more > summary::before{content:'▸'; color:#9fdcff}
     details.more[open] > summary::before{content:'▾'}
     details.more > summary::-webkit-details-marker{display:none}
-    
-    
     .more p{color:var(--ink); margin:10px 0}
     .more ul, .more ol{margin:8px 0 6px 18px; color:var(--ink)}
     .note{color:var(--muted); font-size:13px}
@@ -47,8 +45,12 @@
     /* Figuras intercaladas */
     .frame{position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--line); background:#0c1117; margin:12px 0}
     .frame img{display:block; width:100%; height:auto}
-    .caption{display:block; font-size:12px; color:var(--muted); padding:6px 8px}
+    .caption{display:block; font-size:12px; color:#a4afc5; padding:6px 8px}
     .fixed-16x9{aspect-ratio:16/9}
+
+    /* ===== Sidecar (texto + imagen a la derecha) ===== */
+    .sidecar{display:grid;grid-template-columns:1.6fr 1fr;gap:12px;align-items:start;margin:12px 0}
+    @media (max-width: 900px){ .sidecar{grid-template-columns:1fr} }
 
     /* ===== Previews automáticos (apagados por defecto) ===== */
     .peek{display:none; grid-template-columns:repeat(12,1fr); gap:8px; margin:10px 0}
@@ -72,7 +74,7 @@
     .chip{background:rgba(71,201,255,.08); border:1px solid rgba(71,201,255,.35); color:#cfefff; padding:8px 12px; border-radius:999px; font-size:12px}
 
     footer.site{color:var(--muted); text-align:center; margin-top:30px; font-size:13px}
-  /* Override: quitar flecha de la derecha */
+    /* Override: quitar flecha de la derecha */
     details.more > summary::after { content: none !important; }
     details.more[open] > summary::after { content: none !important; }
   </style>
@@ -90,13 +92,13 @@
   </header>
 
   <main class="wrap">
-    <!-- Meta del proyecto (no es hero grande; es información) -->
+    <!-- Meta del proyecto -->
     <section class="section-min" aria-labelledby="h-intro">
       <header>
         <span class="eyebrow">Project</span>
-        <h2 id="h-intro">AI‑Powered Assistant for Customer Service Teams</h2>
+        <h2 id="h-intro">AI-Powered Assistant for Customer Service Teams</h2>
       </header>
-      <p>Turning high‑volume conversations into structured, actionable knowledge while reducing manual effort.</p>
+      <p>Turning high-volume conversations into structured, actionable knowledge while reducing manual effort.</p>
       <div class="chipbar">
         <span class="chip">Role: Senior UX/UI</span>
         <span class="chip">Duration: 10 semanas</span>
@@ -121,7 +123,20 @@
         <summary>View more</summary>
         <div class="more">
           <h3>Context of the project</h3>
-          <p>A European insurance company manages thousands of daily interactions via phone and chat with both policyholders and prospects. These conversations are essential to resolve issues and build trust, yet surrounding processes are manual, slow, and inconsistent—driving operational cost and leaving value untapped.</p>
+
+          <!-- SIDEACAR: texto (izquierda) + imagen (derecha) -->
+          <div class="sidecar">
+            <div>
+              <p>A European insurance company manages thousands of daily interactions via phone and chat with both policyholders and prospects. These conversations are essential to resolve issues and build trust, yet surrounding processes are manual, slow, and inconsistent—driving operational cost and leaving value untapped.</p>
+            </div>
+            <figure class="frame fixed-16x9" tabindex="0">
+              <!-- Coloca aquí tu imagen -->
+              <img class="lazy"
+                   data-src="/jose-chatbot/assets/ai-assistant/context/open-plan-callcenter-1200.webp"
+                   alt="Open-plan call center con cubículos y agentes trabajando; ilustra el contexto del proyecto.">
+              <figcaption class="caption">Entorno de atención — volumen, ruido y procesos manuales.</figcaption>
+            </figure>
+          </div>
 
           <h3>Initial Problem Assessment</h3>
           <p>Agents manually enter data during/after calls, leading to errors, inconsistent records, and reduced productivity. Valuable call data goes unanalyzed, missing opportunities to improve case tracking, customer experience, and internal processes.</p>
@@ -226,7 +241,6 @@
       if(!det) return;
       const host = section.querySelector('.peek');
       if(!host) return;
-      // Coge las primeras 3 imágenes declaradas en el contenido (data-src)
       const imgs = Array.from(det.querySelectorAll('img.lazy')).slice(0,3);
       if(!imgs.length){ host.remove(); return; }
       host.innerHTML = '';
@@ -239,12 +253,10 @@
         btn.addEventListener('click', () => { det.open = true; setTimeout(()=> im.closest('figure')?.scrollIntoView({behavior:'smooth', block:'center'}), 60); });
         host.appendChild(btn);
       });
-      // Mostrar u ocultar según flags
       const previewsOn = document.body.classList.contains('enable-previews') && section.dataset.peek === 'auto';
       host.style.display = previewsOn ? 'grid' : 'none';
     }
 
-    // Prepara todas las secciones (pero por defecto, previews ocultas)
     document.querySelectorAll('section.section-min[data-peek]')
       .forEach(buildAutoPeek);
 
@@ -263,9 +275,7 @@
         cap.textContent = (fig.querySelector('.caption')?.textContent || i.alt || '').trim();
         if (typeof lb.showModal === 'function') lb.showModal(); else window.open(img.src, '_blank');
       });
-      document.addEventListener('keydown', e => {
-        if(e.key === 'Escape' && lb.open) lb.close();
-      });
+      document.addEventListener('keydown', e => { if(e.key === 'Escape' && lb.open) lb.close(); });
       closeBtn.addEventListener('click', ()=> lb.close());
       lb.addEventListener('click', (e)=>{ if(e.target===lb) lb.close(); });
     })();
