@@ -37,12 +37,11 @@
     details.more > summary::-webkit-details-marker{display:none}
     details.more > summary::before{content:'▸'; color:#9fdcff}
     details.more[open] > summary::before{content:'▾'}
-    details.more > summary::-webkit-details-marker{display:none}
     .more p{color:var(--ink); margin:10px 0}
     .more ul, .more ol{margin:8px 0 6px 18px; color:var(--ink)}
     .note{color:var(--muted); font-size:13px}
-    /* Suavizar la negrita dentro de los párrafos del contenido */
-    .more p strong{ font-weight:600; }
+    /* Negrita un poco más marcada dentro del contenido */
+    .more p strong{ font-weight:700; color:#fff; }
 
     /* Figuras intercaladas */
     .frame{position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--line); background:#0c1117; margin:12px 0}
@@ -83,25 +82,18 @@
       .sidecar.short > div{ max-width:none; }
     }
 
-    /* ===== Previews automáticos (apagados por defecto) ===== */
-    .peek{display:none; grid-template-columns:repeat(12,1fr); gap:8px; margin:10px 0}
-    .peek-tile{grid-column:span 4; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:#0c1117; aspect-ratio:16/10; cursor:pointer}
-    .peek-tile img{width:100%; height:100%; object-fit:cover; display:block}
-    @media (max-width: 900px){ .peek-tile{grid-column:span 12} }
-    body.enable-previews section[data-peek="auto"] > .peek{display:grid}
-
-    /* Lightbox */
-    #lb::backdrop{background:rgba(0,0,0,.75)}
-    #lb{border:none;padding:0;border-radius:18px;max-width:min(94vw,1200px);background:#0b0e12}
-    .lb-wrap{position:relative}
-    .lb-img{max-width:min(94vw,1200px);max-height:84vh;display:block}
-    .lb-cap{padding:10px 14px;color:#cfefff;font-size:13px}
-    .lb-close{position:absolute;top:8px;right:8px;border:none;background:rgba(0,0,0,.45);color:#fff;padding:8px 10px;border-radius:10px;cursor:pointer}
-    .lb-close:focus{outline:2px solid var(--brand)}
-
-    /* Chipbar (meta del proyecto) */
-    .chipbar{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0}
-    .chip{background:rgba(71,201,255,.08); border:1px solid rgba(71,201,255,.35); color:#cfefff; padding:8px 12px; border-radius:999px; font-size:12px}
+    /* ===== Business Goals con iconos ===== */
+    .goals{ list-style:none; padding:0; margin: 0 0 6px; }
+    .goals li{
+      display:grid;
+      grid-template-columns: 28px 1fr;
+      gap:10px;
+      align-items:start;
+      margin:10px 0 12px;
+    }
+    .goal-ico{ width:28px; height:28px; border-radius:8px; background:rgba(71,201,255,.08); border:1px solid rgba(71,201,255,.35); display:grid; place-items:center; }
+    .goal-ico img{ width:18px; height:18px; display:block; }
+    .goal-copy strong{ color:#fff; }
 
     footer.site{color:#a4afc5; text-align:center; margin-top:30px; font-size:13px}
     /* Override: quitar flecha de la derecha */
@@ -154,7 +146,7 @@
         <div class="more">
           <h3>Context of the project</h3>
 
-          <!-- SIDEACAR SHORT: texto (izq) + imagen (der, altura controlada) -->
+          <!-- SIDEACAR SHORT: texto (izq) + imagen (der) -->
           <div class="sidecar short">
             <div>
               <p>A European insurance company is exploring <strong>AI-driven solutions</strong> to improve internal operations in <strong>customer service</strong>. It manages <strong>thousands of daily interactions</strong> via phone<wbr> and&nbsp;chat with policyholders and prospects, where conversations are key to resolving issues, handling claims, and building trust.</p>
@@ -185,10 +177,31 @@
           </div>
 
           <h3>Business Goals</h3>
-          <ul>
-            <li><strong>Operational Efficiency:</strong> Automate during and after calls to reduce idle time and agent workload.</li>
-            <li><strong>Data Quality &amp; Consistency:</strong> Standardize post-call documentation and integrate with CRM for reliable tracking and decisions.</li>
-            <li><strong>Insight Activation:</strong> Detect patterns, sentiment, and key topics to inform product, process, and service improvements.</li>
+          <ul class="goals">
+            <li>
+              <div class="goal-ico" aria-hidden="true">
+                <img src="../../assets/ai-assistant/goal-operational.svg" alt="">
+              </div>
+              <div class="goal-copy">
+                <strong>Operational Efficiency:</strong> Automate during and after calls to reduce idle time and agent workload.
+              </div>
+            </li>
+            <li>
+              <div class="goal-ico" aria-hidden="true">
+                <img src="../../assets/ai-assistant/goal-data.svg" alt="">
+              </div>
+              <div class="goal-copy">
+                <strong>Data Quality &amp; Consistency:</strong> Standardize post-call documentation and integrate with CRM for reliable tracking and decisions.
+              </div>
+            </li>
+            <li>
+              <div class="goal-ico" aria-hidden="true">
+                <img src="../../assets/ai-assistant/goal-insight.svg" alt="">
+              </div>
+              <div class="goal-copy">
+                <strong>Insight Activation:</strong> Detect patterns, sentiment, and key topics to inform product, process, and service improvements.
+              </div>
+            </li>
           </ul>
         </div>
       </details>
