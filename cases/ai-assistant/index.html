@@ -60,7 +60,7 @@
 
     /* ===== Sidecar short (limita altura y recorta la imagen) ===== */
     .sidecar.short .frame.is-short{
-      height: clamp(180px, 22vw, 220px);
+      height: clamp(180px, 22vw, 220px);  /* ocupa un poco más */
       margin: 0;
     }
     .sidecar.short .frame.is-short img{
@@ -75,8 +75,11 @@
       color:#dbe7ff; padding:6px 8px; border-radius:10px;
       font-size:12px; margin:0;
     }
-    /* Texto más estrecho en sidecar de contexto (mejor control de saltos) */
+    /* Texto más estrecho en sidecar (mejor control de saltos) */
     .sidecar.short > div{ max-width:58ch; }
+    /* Más aire entre 1er y 2º párrafo del sidecar */
+    .sidecar.short > div p:first-of-type{ margin-bottom:16px; }
+
     @media (max-width: 900px){
       .sidecar.short .frame.is-short{ height: 190px; }
       .sidecar.short > div{ max-width:none; }
@@ -169,10 +172,11 @@
 
           <h3>Initial Problem Assessment</h3>
 
-          <!-- NUEVO SIDEACAR SHORT para esta subsección -->
+          <!-- SIDEACAR SHORT (2 párrafos + imagen) -->
           <div class="sidecar short">
             <div>
-              <p>Agents manually enter data during/after calls, leading to errors, inconsistent records, and reduced productivity. Valuable call data goes unanalyzed, missing opportunities to improve case tracking, customer experience, and internal processes.</p>
+              <p>Agents manually enter data during/after calls, leading to errors, inconsistent records, and reduced productivity.</p>
+              <p>Valuable call data goes unanalyzed, missing opportunities to improve case tracking, customer experience, and internal processes.</p>
             </div>
             <figure class="frame is-short" tabindex="0">
               <img class="lazy"
