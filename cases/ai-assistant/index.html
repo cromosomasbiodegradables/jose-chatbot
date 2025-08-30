@@ -51,7 +51,7 @@
     /* ===== Sidecar (texto + imagen a la derecha) ===== */
     .sidecar{
       display:grid;
-      grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr); /* imagen un poco más ancha */
       gap:12px;
       align-items:start;
       margin:12px 0;
@@ -154,7 +154,7 @@
           <!-- SIDEACAR SHORT: texto (izq) + imagen (der, altura controlada) -->
           <div class="sidecar short">
             <div>
-              <p>A European insurance company is exploring AI-driven solutions to improve internal operations in customer service. It manages thousands of daily interactions via phone<wbr> and&nbsp;chat with policyholders and prospects.</p>
+              <p>A European insurance company is exploring AI-driven solutions to improve internal operations in customer service. It manages thousands of daily interactions via phone and chat with policyholders and prospects.</p>
               <p>These conversations are key to resolving issues, handling claims, and building trust, yet the processes around them remain manual, slow, and inconsistent.</p>
               <p>The call center carries high operational costs but also holds untapped potential—each interaction contains valuable insights that aren’t fully leveraged.</p>
             </div>
@@ -168,11 +168,12 @@
 
           <h3>Initial Problem Assessment</h3>
 
-          <!-- SIDEACAR SHORT (2 párrafos + imagen) -->
+          <!-- SIDEACAR SHORT (texto + imagen) -->
           <div class="sidecar short">
             <div>
-              <p>Agents manually enter data during/after calls, leading to errors, inconsistent records, and reduced productivity.</p>
-              <p>Valuable call data goes unanalyzed, missing opportunities to improve case tracking, customer experience, and internal processes.</p>
+              <p>The stakeholders flagged major inefficiencies in their call-handling system. Agents manually entered data during and after calls, leading to frequent errors, inconsistent records, and reduced productivity, all of which negatively affected service quality and operational costs.</p>
+              <p>Much of the valuable call data went unanalyzed, missing opportunities to enhance case tracking, customer experience, and internal processes.</p>
+              <p>Stakeholders showed strong interest in AI solutions to automate tasks and extract insights from conversations, citing successful implementations in other companies as proof of concept.</p>
             </div>
             <figure class="frame is-short" tabindex="0">
               <img class="lazy"
