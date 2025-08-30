@@ -60,13 +60,13 @@
 
     /* ===== Sidecar short (limita altura y recorta la imagen) ===== */
     .sidecar.short .frame.is-short{
-      height: clamp(180px, 22vw, 220px);  /* ocupa un poco más que antes */
+      height: clamp(180px, 22vw, 220px);
       margin: 0;
     }
     .sidecar.short .frame.is-short img{
       width:100%; height:100%;
-      object-fit:cover;                   
-      object-position:center;             
+      object-fit:cover;
+      object-position:center;
     }
     /* Caption overlay para no sumar alto */
     .sidecar.short .frame.is-short .caption{
@@ -75,11 +75,11 @@
       color:#dbe7ff; padding:6px 8px; border-radius:10px;
       font-size:12px; margin:0;
     }
-    /* Un poco más de aire entre los 2 párrafos del sidecar */
-    .sidecar.short > div p:first-of-type{ margin-bottom:16px; }
-
+    /* Texto más estrecho en sidecar de contexto (mejor control de saltos) */
+    .sidecar.short > div{ max-width:58ch; }
     @media (max-width: 900px){
       .sidecar.short .frame.is-short{ height: 190px; }
+      .sidecar.short > div{ max-width:none; }
     }
 
     /* ===== Previews automáticos (apagados por defecto) ===== */
@@ -156,8 +156,8 @@
           <!-- SIDEACAR SHORT: texto (izq) + imagen (der, altura controlada) -->
           <div class="sidecar short">
             <div>
-              <p>A European insurance company manages thousands of daily interactions via phone and chat with both policyholders and prospects.</p>
-              <p>These conversations are essential to resolve issues and build trust, yet surrounding processes are manual, slow, and inconsistent—driving operational cost and leaving value untapped.</p>
+              <p>A European insurance company manages thousands of daily interactions via phone<wbr> and&nbsp;chat with both policyholders and prospects.</p>
+              <p>These conversations are essential to resolve issues and build trust, yet surrounding processes are manual, slow, and inconsistent—driving operational cost and leaving<wbr> value&nbsp;untapped.</p>
             </div>
             <figure class="frame is-short" tabindex="0">
               <img class="lazy"
@@ -168,7 +168,19 @@
           </div>
 
           <h3>Initial Problem Assessment</h3>
-          <p>Agents manually enter data during/after calls, leading to errors, inconsistent records, and reduced productivity. Valuable call data goes unanalyzed, missing opportunities to improve case tracking, customer experience, and internal processes.</p>
+
+          <!-- NUEVO SIDEACAR SHORT para esta subsección -->
+          <div class="sidecar short">
+            <div>
+              <p>Agents manually enter data during/after calls, leading to errors, inconsistent records, and reduced productivity. Valuable call data goes unanalyzed, missing opportunities to improve case tracking, customer experience, and internal processes.</p>
+            </div>
+            <figure class="frame is-short" tabindex="0">
+              <img class="lazy"
+                   data-src="../../assets/ai-assistant/problem-assessment-workshop-1200.webp"
+                   alt="Stakeholders discussing issues during a working session; illustrates the initial problem assessment.">
+              <figcaption class="caption">Initial problem assessment — manual capture, errors, inconsistency.</figcaption>
+            </figure>
+          </div>
 
           <h3>Business Goals</h3>
           <ul>
@@ -304,7 +316,9 @@
         cap.textContent = (fig.querySelector('.caption')?.textContent || i.alt || '').trim();
         if (typeof lb.showModal === 'function') lb.showModal(); else window.open(img.src, '_blank');
       });
-      document.addEventListener('keydown', e => { if(e.key === 'Escape' && lb.open) lb.close(); });
+      document.addEventListener('keydown', e => {
+        if(e.key === 'Escape' && lb.open) lb.close();
+      });
       closeBtn.addEventListener('click', ()=> lb.close());
       lb.addEventListener('click', (e)=>{ if(e.target===lb) lb.close(); });
     })();
