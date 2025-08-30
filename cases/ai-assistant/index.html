@@ -33,8 +33,10 @@
     .callout strong{color:#fff}
 
     /* details */
-    details.more{background:#0d1621;border:1px solid var(--line);border-radius:14px;padding:12px}
-    details.more > summary{cursor:pointer; color:#cfefff; outline:none; list-style:none}
+    details.more > summary{display:flex;align-items:center;gap:8px;cursor:pointer;color:#cfefff;outline:none;list-style:none}
+    details.more > summary::-webkit-details-marker{display:none}
+    details.more > summary::before{content:'▸'; color:#9fdcff}
+    details.more[open] > summary::before{content:'▾'}
     details.more > summary::-webkit-details-marker{display:none}
     details.more > summary:after{content:'▾'; float:right; color:#9fdcff}
     details.more[open] > summary:after{content:'▴'}
@@ -106,27 +108,27 @@
         <h2 id="h-overview">Contexto, problema y objetivos</h2>
       </header>
       
-      <!-- Slot opcional para hero; por defecto oculto -->
       <div class="hero-slot" hidden></div>
 
-      <p class="callout"><strong>Takeaway:</strong> estandarizamos documentación y activamos insights sin interferir en el flujo del agente.</p>
+      <p class="callout"><strong>Takeaway:</strong> A European insurer aims to turn daily conversations into structured, actionable knowledge—reducing manual entry, standardizing documentation and activating insights, without disrupting agent workflows.</p>
 
-      <!-- Peek (previews auto); se rellena por JS solo si habilitas previews -->
       <div class="peek" aria-hidden="true"></div>
 
       <details class="more">
         <summary>View more</summary>
         <div class="more">
-          <p>Una aseguradora europea gestiona miles de interacciones diarias. La documentación manual genera errores y coste.</p>
-          <figure class="frame fixed-16x9" tabindex="0">
-            <img class="lazy" data-src="https://picsum.photos/id/1011/1200/675" alt="Taller de stakeholders">
-            <figcaption class="caption">Kick‑off: objetivos, riesgos y métricas.</figcaption>
-          </figure>
-          <p>Buscamos reducir tiempo post‑llamada y mejorar consistencia de datos en CRM.</p>
-          <figure class="frame fixed-16x9" tabindex="0">
-            <img class="lazy" data-src="https://picsum.photos/id/1015/1200/675" alt="Panel de analítica con líneas y heatmap">
-            <figcaption class="caption">De conversación a insight estructurado.</figcaption>
-          </figure>
+          <h3>Context of the project</h3>
+          <p>A European insurance company manages thousands of daily interactions via phone and chat with both policyholders and prospects. These conversations are essential to resolve issues and build trust, yet surrounding processes are manual, slow, and inconsistent—driving operational cost and leaving value untapped.</p>
+
+          <h3>Initial Problem Assessment</h3>
+          <p>Agents manually enter data during/after calls, leading to errors, inconsistent records, and reduced productivity. Valuable call data goes unanalyzed, missing opportunities to improve case tracking, customer experience, and internal processes.</p>
+
+          <h3>Business Goals</h3>
+          <ul>
+            <li><strong>Operational Efficiency:</strong> Automate during and after calls to reduce idle time and agent workload.</li>
+            <li><strong>Data Quality &amp; Consistency:</strong> Standardize post-call documentation and integrate with CRM for reliable tracking and decisions.</li>
+            <li><strong>Insight Activation:</strong> Detect patterns, sentiment, and key topics to inform product, process, and service improvements.</li>
+          </ul>
         </div>
       </details>
     </section>
@@ -140,23 +142,18 @@
 
       <div class="hero-slot" hidden></div>
 
-      <p class="callout"><strong>How we worked:</strong> user‑centered, investigación mixta y prototipado rápido; sprints semanales con feedback continuo.</p>
+      <p class="callout"><strong>How we worked:</strong> A user-centered design methodology combining mixed research, rapid prototyping, and continuous validation. Not strictly Scrum, but weekly sprints with ongoing stakeholder feedback.</p>
 
       <div class="peek" aria-hidden="true"></div>
 
       <details class="more">
         <summary>View more</summary>
         <div class="more">
-          <p>Priorizamos impacto y validación con acceso directo al call center.</p>
-          <figure class="frame fixed-16x9" tabindex="0">
-            <img class="lazy" data-src="https://picsum.photos/id/1040/1200/675" alt="Flujo actual con fricciones">
-            <figcaption class="caption">Fricciones durante y post‑llamada.</figcaption>
-          </figure>
-          <p>Iteramos prototipos en flujo real y validamos con operaciones.</p>
-          <figure class="frame fixed-16x9" tabindex="0">
-            <img class="lazy" data-src="https://picsum.photos/id/1050/1200/675" alt="Prototipo en alta fidelidad">
-            <figcaption class="caption">Prototipo en entorno real.</figcaption>
-          </figure>
+          <h3>Design Focus</h3>
+          <p>We defined an initial challenge focused on improving both agent and customer experience without compromising operational efficiency. The guiding question was: <em>“How might we simplify access to call data for agents without disrupting their workflow, while also automating processes to enhance cost, quality, and service efficiency?”</em> This framing provided initial direction, and we used user-centered research to validate needs, understand the operational context, and refine the problem definition.</p>
+
+          <h3>Methodology</h3>
+          <p>A user-centered design methodology was applied, combining mixed research, rapid prototyping, and continuous validation. While not strictly Scrum, the team worked in weekly sprints with ongoing stakeholder feedback.</p>
         </div>
       </details>
     </section>
@@ -170,23 +167,21 @@
 
       <div class="hero-slot" hidden></div>
 
-      <p class="callout"><strong>What we did:</strong> shadowing, entrevistas, métricas y benchmark.</p>
+      <p class="callout"><strong>What we did:</strong> live shadowing, semi-structured interviews, metrics analysis and competitive benchmarking.</p>
 
       <div class="peek" aria-hidden="true"></div>
 
       <details class="more">
         <summary>View more</summary>
         <div class="more">
-          <p>La entrada manual post‑llamada es el principal foco de variabilidad.</p>
-          <figure class="frame fixed-16x9" tabindex="0">
-            <img class="lazy" data-src="https://picsum.photos/id/1039/1200/675" alt="Tabla de fricciones">
-            <figcaption class="caption">Picos = tareas manuales.</figcaption>
-          </figure>
-          <p>Oportunidad: plantillas + IA con revisión del agente.</p>
-          <figure class="frame fixed-16x9" tabindex="0">
-            <img class="lazy" data-src="https://picsum.photos/id/1035/1200/675" alt="KPIs y tendencias">
-            <figcaption class="caption">Delta y tendencias.</figcaption>
-          </figure>
+          <p>To gain a deep understanding of user needs, behaviors, and pain points, we applied a mixed-method approach combining qualitative and quantitative techniques. Direct access to the call center and internal company data enabled contextual, hands-on research. The following actions were carried out:</p>
+          <ul>
+            <li>Live shadowing</li>
+            <li>Semi-structured interviews</li>
+            <li>Metrics analysis</li>
+            <li>Competitive benchmarking</li>
+          </ul>
+          <p>Unexpected insights emerged, such as the impact of workplace environment on end-user experience and the need for more intuitive call management tools.</p>
         </div>
       </details>
     </section>
