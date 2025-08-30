@@ -49,21 +49,35 @@
     .fixed-16x9{aspect-ratio:16/9}
 
     /* ===== Sidecar (texto + imagen a la derecha) ===== */
-    .sidecar{display:grid;grid-template-columns:1.6fr 1fr;gap:12px;align-items:start;margin:12px 0}
+    .sidecar{
+      display:grid;
+      grid-template-columns: minmax(0, 1.9fr) minmax(0, .85fr); /* más estrecha la imagen */
+      gap:12px;
+      align-items:start;
+      margin:12px 0;
+    }
     @media (max-width: 900px){ .sidecar{grid-template-columns:1fr} }
 
     /* ===== Sidecar short (limita altura y recorta la imagen) ===== */
     .sidecar.short .frame.is-short{
-      height: clamp(210px, 26vw, 260px);  /* ~alto fijo, recortado */
+      height: clamp(160px, 20vw, 190px);  /* más bajo que antes */
+      margin: 0;                          /* elimina margen extra del figure */
     }
     .sidecar.short .frame.is-short img{
       width:100%;
       height:100%;
-      object-fit:cover;                   /* recorte agradable */
-      object-position:center;             /* centra el foco */
+      object-fit:cover;                   
+      object-position:center;             
+    }
+    /* Caption overlay para no sumar alto */
+    .sidecar.short .frame.is-short .caption{
+      position:absolute; left:8px; bottom:8px;
+      background: rgba(0,0,0,.45);
+      color:#dbe7ff; padding:6px 8px; border-radius:10px;
+      font-size:12px; margin:0;
     }
     @media (max-width: 900px){
-      .sidecar.short .frame.is-short{ height: 200px; } /* más compacto en móvil */
+      .sidecar.short .frame.is-short{ height: 180px; }
     }
 
     /* ===== Previews automáticos (apagados por defecto) ===== */
