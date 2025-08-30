@@ -38,8 +38,8 @@
     details.more > summary::before{content:'▸'; color:#9fdcff}
     details.more[open] > summary::before{content:'▾'}
     details.more > summary::-webkit-details-marker{display:none}
-    details.more > summary:after{content:'▾'; float:right; color:#9fdcff}
-    details.more[open] > summary:after{content:'▴'}
+    
+    
     .more p{color:var(--ink); margin:10px 0}
     .more ul, .more ol{margin:8px 0 6px 18px; color:var(--ink)}
     .note{color:var(--muted); font-size:13px}
@@ -72,6 +72,9 @@
     .chip{background:rgba(71,201,255,.08); border:1px solid rgba(71,201,255,.35); color:#cfefff; padding:8px 12px; border-radius:999px; font-size:12px}
 
     footer.site{color:var(--muted); text-align:center; margin-top:30px; font-size:13px}
+  /* Override: quitar flecha de la derecha */
+    details.more > summary::after { content: none !important; }
+    details.more[open] > summary::after { content: none !important; }
   </style>
 </head>
 <body>
