@@ -1,5 +1,5 @@
 
-      <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -7,6 +7,9 @@
   <title>Chatbot de Jose</title>
   <style>
     * { box-sizing: border-box; }
+
+    /* 🔧 Fix: impedir scroll del documento y mantener header visible */
+    html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -22,6 +25,8 @@
       display: flex; justify-content: space-between; align-items: center;
       padding: 12px 20px; background-color: #ffffff;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1); flex: 0 0 auto;
+      /* 🔧 Fix: barra siempre visible */
+      position: sticky; top: 0; z-index: 1000;
     }
     #header h1 { margin: 0; font-size: 18px; color: #333; }
     #header-controls { display: flex; align-items: center; gap: 10px; }
@@ -283,7 +288,6 @@
           linkedinText: "https://www.linkedin.com/in/jose-carlos-torres-sanchez/",
           wechat: "JCTS1986"
         },
-        /* ORDEN NUEVO: nombre → email (obligatorio) → empresa → mensaje */
         formQuestions: ["¿Cuál es tu nombre?", "¿Cuál es tu email?", "¿De qué empresa vienes?", "¿Cuál es tu mensaje?"],
         formSummaryTitle: "Perfecto, recibí tus datos:",
         formSend: "✅ Enviar", formCancel: "❌ Cancelar",
@@ -352,7 +356,6 @@
           linkedinText: "https://www.linkedin.com/in/jose-carlos-torres-sanchez/",
           wechat: "JCTS1986"
         },
-        /* NEW ORDER: name → email (required) → company → message */
         formQuestions: ["What's your name?","What's your email?","Which company are you from?","What's your message?"],
         formSummaryTitle: "Great, I received your details:",
         formSend: "✅ Send", formCancel: "❌ Cancel",
@@ -397,7 +400,6 @@
     // Reflejar inglés por defecto en el switch
     languageToggle.classList.add("active");
 
-    // Estado de envío del botón "Send"
     function setSendingState(sending){
       const btn = document.querySelector('.bot-button[data-key="contact-send"]');
       if (btn) {
@@ -805,7 +807,6 @@
       const questions = texts[currentLanguage].formQuestions;
       if (contactFormStep < questions.length) {
         addMessage("bot", questions[contactFormStep], `contactQ${contactFormStep}`);
-        // Ayuda bajo la pregunta de email (paso 1)
         if (contactFormStep === 1) {
           addMessage("bot", texts[currentLanguage].emailHelp, "contactEmailHelp");
         }
@@ -852,10 +853,9 @@
         contactFormData.name = text;
         contactFormStep++;
       } else if (contactFormStep === 1) {
-        // email obligatorio + validación
         if (!isValidEmail(text)) {
           addMessage("bot", texts[currentLanguage].emailInvalid, "contactEmailInvalid");
-          return; // no avanzamos hasta que sea válido
+          return;
         }
         contactFormData.email = text;
         contactFormStep++;
@@ -869,13 +869,12 @@
       askNextContactQuestion();
     }
 
-    // Envío real con FormSubmit (sin abrir cliente de correo)
     async function sendContactForm() {
       const FORM_ENDPOINT = "https://formsubmit.co/ajax/jose.carlos.torres.sanchez@gmail.com";
       const payload = {
         name: contactFormData.name,
-        email: contactFormData.email,     // en cuerpo
-        _replyto: contactFormData.email,  // como Reply-To
+        email: contactFormData.email,
+        _replyto: contactFormData.email,
         company: contactFormData.company,
         message: contactFormData.message,
         _subject: currentLanguage === "es"
@@ -1057,7 +1056,6 @@
       });
     }
 
-    // refresca botones contacto/blog al cambiar idioma
     function updateContactButtons() {
       const btnWriteYou = document.querySelector('.bot-button[data-key="contact-writeyou"]');
       if (btnWriteYou) btnWriteYou.innerText = texts[currentLanguage].contactButtons.writeYou;
@@ -1183,10 +1181,7 @@
       updateBlogButtons();
     }
 
-    // Inicializar UI en inglés
     translateUI();
-
-    // Mensaje inicial + opciones
     addMessage("bot", texts[currentLanguage].greeting, "greeting");
     showOptions();
 
