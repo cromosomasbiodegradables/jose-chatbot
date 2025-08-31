@@ -375,7 +375,8 @@
     const APPEAR_BASE = 1000;
     const APPEAR_STEP = 500;
 
-    let currentLanguage = "es";
+    let currentLanguage = "en"; // ✅ Default to English
+
     let contentState = {
       casesShown: false,
       aboutMeShown: false,
@@ -390,6 +391,9 @@
     let contactFormActive = false;
     let contactFormStep = 0;
     let contactFormData = { name: "", company: "", message: "" };
+
+    // ✅ Reflect default English in UI on load
+    languageToggle.classList.add("active");
 
     function scrollToBottom() {
       requestAnimationFrame(() => {
@@ -1072,6 +1076,9 @@
 
       // sin scrollToBottom aquí para no mover la vista
     }
+
+    // Asegura que la UI inicial esté en inglés
+    translateUI();
 
     // Inicio
     addMessage("bot", texts[currentLanguage].greeting, "greeting");
