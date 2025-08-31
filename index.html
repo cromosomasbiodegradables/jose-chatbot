@@ -60,7 +60,7 @@
 
     .bot-message, .user-message {
       display: flex; align-items: flex-start; margin: 10px 0;
-      animation: fadeIn 0.6s ease-out; /* animación uniforme */
+      animation: fadeIn 0.6s ease-out;
     }
     .avatar {
       width: 32px; height: 32px; border-radius: 50%;
@@ -118,12 +118,11 @@
       filter: drop-shadow(0 6px 14px rgba(0,0,0,0.18));
     }
 
-    /* Divider base */
     .section-divider {
       margin: 25px 0 15px 0;
       position: relative;
       text-align: center;
-      min-height: 28px; /* asegura espacio para el botón circular */
+      min-height: 28px;
     }
     .divider-line {
       border-top: 1px solid #E2DBDB;
@@ -143,7 +142,6 @@
       color: rgba(0, 0, 0, 0.5);
     }
 
-    /* Botón circular (X) */
     .close-section {
       position: absolute;
       right: 8px;
@@ -170,10 +168,9 @@
     .close-section:active { transform: translateY(-50%) scale(0.96); }
     .close-section:focus-visible { outline: 2px solid #99C2FF; outline-offset: 2px; }
 
-    /* Dividers dentro de la lista de casos: ocupar ancho y no montar el título con la X */
     .buttons-container > .section-divider { width: 100%; align-self: stretch; }
     .section-divider--inline { margin: 18px 0 10px; }
-    .section-divider--inline .section-title { padding-right: 44px; } /* reserva sitio para la X */
+    .section-divider--inline .section-title { padding-right: 44px; }
 
     @media screen and (max-width: 480px) {
       .bot-button { font-size: 13px; padding: 9px 12px; }
@@ -194,7 +191,6 @@
       100% { background-color: transparent; }
     }
 
-    /* Datos de contacto */
     .contact-list { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
     .contact-row {
       display: grid; grid-template-columns: auto 1fr auto;
@@ -375,7 +371,7 @@
     const APPEAR_BASE = 1000;
     const APPEAR_STEP = 500;
 
-    let currentLanguage = "en"; // ✅ Default to English
+    let currentLanguage = "en"; // Default a inglés
 
     let contentState = {
       casesShown: false,
@@ -392,7 +388,7 @@
     let contactFormStep = 0;
     let contactFormData = { name: "", company: "", message: "" };
 
-    // ✅ Reflect default English in UI on load
+    // Reflejar inglés por defecto en el switch
     languageToggle.classList.add("active");
 
     function scrollToBottom() {
@@ -844,12 +840,10 @@
     }
     /* ---------- /CONTACTO ---------- */
 
-    /* ===== Helper común para renderizar teaser inline por caso ===== */
     function renderCaseInline({caseIdx, key}) {
       const caseBtn = document.querySelector(`.bot-button[data-key="case-${caseIdx}"]`);
       if (!caseBtn) return;
 
-      // Toggle: cerrar si ya está abierto
       const existingBlock = document.getElementById(`${key}TeaserBlock`);
       const existingDivider = document.getElementById(`${key}Divider`);
       if (existingBlock || existingDivider) {
@@ -860,10 +854,8 @@
         return;
       }
 
-      // Abrir
       contentState[key + 'Shown'] = true;
 
-      // Divider inline (con clase específica)
       const divider = document.createElement('div');
       divider.className = 'section-divider section-divider--inline';
       divider.dataset.section = key;
@@ -894,23 +886,18 @@
       divider.appendChild(sectionTitle);
       divider.appendChild(closeButton);
 
-      // Bloque de burbujas
       const block = document.createElement('div');
       block.id = `${key}TeaserBlock`;
       block.style.width = '100%';
 
-      // Inserción inline
       caseBtn.insertAdjacentElement('afterend', divider);
       divider.insertAdjacentElement('afterend', block);
 
-      // Centrar en vista
       scrollIntoViewSoft(divider);
 
-      // Datos teaser
       const teaser = texts[currentLanguage][`${key}Teaser`];
       const url = texts[currentLanguage].cases[caseIdx].url;
 
-      // Mensajes progresivos (sin ir al final del chat)
       setTimeout(() => {
         const m1 = document.createElement('div');
         m1.className = 'bot-message';
@@ -953,7 +940,6 @@
       updateCasesButtons();
     }
 
-    /* ========== CASOS (handlers) ========== */
     function showCase1(){ renderCaseInline({caseIdx:0, key:'case1'}); }
     function showCase2(){ renderCaseInline({caseIdx:1, key:'case2'}); }
     function showCase3(){ renderCaseInline({caseIdx:2, key:'case3'}); }
@@ -971,7 +957,6 @@
         btn.innerText = label;
       });
     }
-    /* ========== /CASOS ========== */
 
     function updateOptionsButtons() {
       const optionButtons = document.querySelectorAll('.bot-button[data-key^="option-"]');
@@ -987,6 +972,32 @@
           buttonText += texts[currentLanguage].alreadyShown;
         }
         button.innerText = buttonText;
+      });
+    }
+
+    // ✅ NUEVO: actualizar botones de contacto al cambiar idioma
+    function updateContactButtons() {
+      const btnWriteYou = document.querySelector('.bot-button[data-key="contact-writeyou"]');
+      if (btnWriteYou) btnWriteYou.innerText = texts[currentLanguage].contactButtons.writeYou;
+
+      const btnWriteMe = document.querySelector('.bot-button[data-key="contact-writeme"]');
+      if (btnWriteMe) btnWriteMe.innerText = texts[currentLanguage].contactButtons.writeMe;
+
+      const sendBtn = document.querySelector('.bot-button[data-key="contact-send"]');
+      if (sendBtn) sendBtn.innerText = texts[currentLanguage].formSend;
+
+      const cancelBtn = document.querySelector('.bot-button[data-key="contact-cancel"]');
+      if (cancelBtn) cancelBtn.innerText = texts[currentLanguage].formCancel;
+    }
+
+    // ✅ NUEVO: actualizar botones de posts del blog
+    function updateBlogButtons() {
+      const blogButtons = document.querySelectorAll('.bot-button[data-key^="blog-"]');
+      blogButtons.forEach((button) => {
+        const idx = parseInt(button.dataset.key.split('-')[1], 10);
+        if (!isNaN(idx) && texts[currentLanguage].blogPosts[idx]) {
+          button.innerText = texts[currentLanguage].blogPosts[idx].text;
+        }
       });
     }
 
@@ -1074,18 +1085,21 @@
         btn.setAttribute('aria-label', btn.title);
       });
 
-      // sin scrollToBottom aquí para no mover la vista
+      // ✅ actualizar listas de botones visibles
+      updateOptionsButtons();
+      updateCasesButtons();
+      updateContactButtons();
+      updateBlogButtons();
     }
 
-    // Asegura que la UI inicial esté en inglés
+    // Inicializar UI en inglés
     translateUI();
 
-    // Inicio
+    // Mensaje inicial + opciones
     addMessage("bot", texts[currentLanguage].greeting, "greeting");
     showOptions();
 
     languageToggle.onclick = () => {
-      // Preserva la posición relativa de scroll al cambiar idioma
       const maxScroll = chatContainer.scrollHeight - chatContainer.clientHeight;
       const ratio = maxScroll > 0 ? chatContainer.scrollTop / maxScroll : 0;
 
@@ -1112,6 +1126,8 @@
       resetContactForm();
       addMessage("bot", texts[currentLanguage].greeting, "greeting");
       showOptions();
+      // asegurar que los botones recién creados reflejan el idioma actual
+      updateOptionsButtons();
     };
 
     userInput.addEventListener("keydown", (e) => {
