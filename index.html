@@ -392,6 +392,7 @@
     const APPEAR_STEP = 500;
 
     let currentLanguage = "en"; // Default a inglés
+    document.documentElement.setAttribute('lang', currentLanguage); // <-- sincroniza lang al iniciar
     let contentState = {
       casesShown: false,
       aboutMeShown: false,
@@ -507,6 +508,7 @@
         if (!s || (Date.now() - (s.ts || 0) > 3 * 60 * 60 * 1000)) return false;
 
         currentLanguage = s.lang || currentLanguage;
+        document.documentElement.setAttribute('lang', currentLanguage); // <-- sincroniza al restaurar
         if (currentLanguage === 'en') languageToggle.classList.add('active');
         else languageToggle.classList.remove('active');
 
@@ -1332,6 +1334,8 @@
 
       // Asegura que los enlaces dinámicos usen openLinkSmart
       rebindDynamicButtons();
+
+      document.documentElement.setAttribute('lang', currentLanguage); // <-- asegura lang tras traducir
     }
 
     // ======= Arranque: intenta restaurar si el usuario vuelve con "Atrás" =======
@@ -1347,6 +1351,7 @@
       const ratio = maxScroll > 0 ? chatContainer.scrollTop / maxScroll : 0;
 
       currentLanguage = currentLanguage === "es" ? "en" : "es";
+      document.documentElement.setAttribute('lang', currentLanguage); // <-- sincroniza al cambiar idioma
       languageToggle.classList.toggle("active");
       translateUI();
 
