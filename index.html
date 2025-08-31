@@ -58,6 +58,18 @@
       overflow-y: auto; display: flex; flex-direction: column;
       overscroll-behavior: contain; scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
+
+      /* 👇 Nuevo: colchón inferior para que no se corte la última línea */
+      scroll-padding-bottom: 56px;
+      position: relative;
+    }
+
+    /* 👇 Nuevo: espaciador visual al final del chat */
+    #chat-container::after {
+      content: "";
+      display: block;
+      height: calc(36px + env(safe-area-inset-bottom, 0px));
+      flex: 0 0 auto;
     }
 
     body.has-input #chat-container { margin-bottom: 0; }
