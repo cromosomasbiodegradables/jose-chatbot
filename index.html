@@ -410,6 +410,118 @@
     // Switch en inglés por defecto
     languageToggle.classList.add("active");
 
+    // ====== Persistencia + apertura de enlaces en MISMA pestaña con Back ======
+    const STATE_KEY = 'chatbot_state_v1';
+    const PREF_KEY  = 'link_open_pref_v1'; // 'same' | 'newtab' (default: same)
+
+    function serializeChat() {
+      return {
+        lang: currentLanguage,
+        contentState,
+        contactFormActive,
+        contactFormStep,
+        contactFormData,
+        chatHTML: chatContainer.innerHTML,
+        scrollTop: chatContainer.scrollTop,
+        ts: Date.now()
+      };
+    }
+    function saveState() {
+      try { sessionStorage.setItem(STATE_KEY, JSON.stringify(serializeChat())); } catch {}
+    }
+    function getOpenPref(){ try { return localStorage.getItem(PREF_KEY) || 'same'; } catch { return 'same'; } }
+    function openLinkSmart(url){
+      saveState();
+      const pref = getOpenPref();
+      if (pref === 'newtab') { window.open(url, '_blank', 'noopener,noreferrer'); return; }
+      window.location.href = url;
+    }
+    function rebindDynamicButtons() {
+      // Opciones principales (urls y acciones)
+      document.querySelectorAll('.bot-button[data-key^="option-"]').forEach(button => {
+        const index = parseInt(button.dataset.key.split('-')[1], 10);
+        const item = texts[currentLanguage].options[index];
+        if (!item) return;
+        if (item.url) {
+          if (/cv/i.test(item.text)) {
+            button.onclick = () => {
+              addMessage("bot", texts[currentLanguage].downloadingCV, "downloadingCV");
+              setTimeout(() => {
+                const a = document.createElement("a");
+                a.href = item.url;
+                a.target = "_blank";
+                a.rel = "noopener noreferrer";
+                a.download = "";
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+              }, 1200);
+            };
+          } else {
+            button.onclick = () => openLinkSmart(item.url);
+          }
+        } else if (item.action) {
+          button.onclick = item.action;
+        }
+      });
+
+      // Casos
+      const caseHandlers = [showCase1, showCase2, showCase3, showCase4];
+      document.querySelectorAll('.bot-button[data-key^="case-"]').forEach(btn => {
+        const idx = parseInt(btn.dataset.key.split('-')[1], 10);
+        if (caseHandlers[idx]) btn.onclick = caseHandlers[idx];
+      });
+
+      // Blog
+      document.querySelectorAll('.bot-button[data-key^="blog-"]').forEach(btn => {
+        const idx = parseInt(btn.dataset.key.split('-')[1], 10);
+        const item = texts[currentLanguage].blogPosts[idx];
+        if (item) btn.onclick = () => openLinkSmart(item.url);
+      });
+
+      // Contacto
+      const sendBtn = document.querySelector('.bot-button[data-key="contact-send"]');
+      if (sendBtn) sendBtn.onclick = sendContactForm;
+      const cancelBtn = document.querySelector('.bot-button[data-key="contact-cancel"]');
+      if (cancelBtn) cancelBtn.onclick = resetContactForm;
+      const writeYou = document.querySelector('.bot-button[data-key="contact-writeyou"]');
+      if (writeYou) writeYou.onclick = showMyContactData;
+      const writeMe = document.querySelector('.bot-button[data-key="contact-writeme"]');
+      if (writeMe) writeMe.onclick = startContactForm;
+
+      // Enlaces dentro de burbujas (about/cases link)
+      document.querySelectorAll('[data-key$="Link"] a, #aboutMeLink a').forEach(a => {
+        const href = a.getAttribute('href');
+        if (!href) return;
+        a.removeAttribute('target'); a.removeAttribute('rel');
+        a.onclick = (e) => { e.preventDefault(); openLinkSmart(href); };
+      });
+    }
+    function restoreState(){
+      try{
+        const raw = sessionStorage.getItem(STATE_KEY);
+        if (!raw) return false;
+        const s = JSON.parse(raw);
+        if (!s || (Date.now() - (s.ts || 0) > 3 * 60 * 60 * 1000)) return false;
+
+        currentLanguage = s.lang || currentLanguage;
+        if (currentLanguage === 'en') languageToggle.classList.add('active');
+        else languageToggle.classList.remove('active');
+
+        chatContainer.innerHTML = s.chatHTML || '';
+        contentState = s.contentState || contentState;
+        contactFormActive = !!s.contactFormActive;
+        contactFormStep = s.contactFormStep || 0;
+        contactFormData = s.contactFormData || { name:"", email:"", company:"", message:"" };
+
+        translateUI();      // actualiza header/labels
+        rebindDynamicButtons();
+        requestAnimationFrame(() => { chatContainer.scrollTop = s.scrollTop || 0; });
+        return true;
+      } catch { return false; }
+    }
+    // ====== /Persistencia ======
+
     function setSendingState(sending){
       const btn = document.querySelector('.bot-button[data-key="contact-send"]');
       if (btn) {
@@ -575,7 +687,7 @@
                 }, 1200);
               };
             } else {
-              button.onclick = () => window.open(item.url, "_blank", "noopener,noreferrer");
+              button.onclick = () => openLinkSmart(item.url);
             }
           } else if (item.action) {
             button.onclick = item.action;
@@ -678,11 +790,16 @@
 
         const bubble = document.createElement("div");
         bubble.className = "bubble";
-        bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank" rel="noopener noreferrer">${texts[currentLanguage].aboutMeLink}</a>`;
+        bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about">${texts[currentLanguage].aboutMeLink}</a>`;
 
         linkMsg.appendChild(avatar);
         linkMsg.appendChild(bubble);
         chatContainer.appendChild(linkMsg);
+
+        // Rebind para abrir en misma pestaña guardando estado
+        const a = linkMsg.querySelector('a');
+        if (a) a.onclick = (e) => { e.preventDefault(); openLinkSmart(a.href); };
+
         scrollToBottom();
       }, restText ? (APPEAR_BASE + 3*APPEAR_STEP) : (APPEAR_BASE + 2*APPEAR_STEP));
       updateOptionsButtons();
@@ -706,7 +823,7 @@
           button.className = "bot-button";
           button.dataset.key = `blog-${index}`;
           button.innerText = texts[currentLanguage].blogPosts[index].text;
-          button.onclick = () => window.open(item.url, "_blank", "noopener,noreferrer");
+          button.onclick = () => openLinkSmart(item.url);
           buttonsContainer.appendChild(button);
           scrollToBottom();
         }, APPEAR_BASE + index * APPEAR_STEP);
@@ -1038,9 +1155,14 @@
         m3.id = `${key}Link`;
         m3.innerHTML = `
           <img src="https://cdn-icons-png.flaticon.com/512/10479/10479785.png" class="avatar" alt="bot">
-          <div class="bubble"><a href="${url}" target="_blank" rel="noopener noreferrer">${teaser.cta}</a></div>
+          <div class="bubble"><a href="${url}">${teaser.cta}</a></div>
         `;
         block.appendChild(m3);
+
+        // Enlace abre en misma pestaña con estado guardado
+        const a = m3.querySelector('a');
+        if (a) a.onclick = (e) => { e.preventDefault(); openLinkSmart(url); };
+
         scrollIntoViewSoft(m3);
       }, APPEAR_BASE + 2 * APPEAR_STEP);
 
@@ -1127,7 +1249,7 @@
           if (bubble) bubble.innerText = key === "aboutMe1" ? firstSentence : restText;
         }
         if (key === "aboutMeLink") {
-          if (bubble) bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about" target="_blank" rel="noopener noreferrer">${texts[currentLanguage].aboutMeLink}</a>`;
+          if (bubble) bubble.innerHTML = `<a href="https://uxfol.io/p/josecarlos-design/about">${texts[currentLanguage].aboutMeLink}</a>`;
         }
 
         if (key === "contactPrompt") {
@@ -1183,7 +1305,7 @@
         ['case1','case2','case3','case4'].forEach((k, i)=>{
           if (key === `${k}Hook` && bubble) bubble.innerText = texts[currentLanguage][`${k}Teaser`].hook;
           if (key === `${k}Bullets` && bubble) bubble.innerHTML = texts[currentLanguage][`${k}Teaser`].bullets;
-          if (key === `${k}Link` && bubble) bubble.innerHTML = `<a href="${texts[currentLanguage].cases[i].url}" target="_blank" rel="noopener noreferrer">${texts[currentLanguage][`${k}Teaser`].cta}</a>`;
+          if (key === `${k}Link` && bubble) bubble.innerHTML = `<a href="${texts[currentLanguage].cases[i].url}">${texts[currentLanguage][`${k}Teaser`].cta}</a>`;
         });
       });
 
@@ -1205,11 +1327,18 @@
       updateCasesButtons();
       updateContactButtons();
       updateBlogButtons();
+
+      // Asegura que los enlaces dinámicos usen openLinkSmart
+      rebindDynamicButtons();
     }
 
-    translateUI();
-    addMessage("bot", texts[currentLanguage].greeting, "greeting");
-    showOptions();
+    // ======= Arranque: intenta restaurar si el usuario vuelve con "Atrás" =======
+    const restored = restoreState();
+    if (!restored) {
+      translateUI();
+      addMessage("bot", texts[currentLanguage].greeting, "greeting");
+      showOptions();
+    }
 
     languageToggle.onclick = () => {
       const maxScroll = chatContainer.scrollHeight - chatContainer.clientHeight;
