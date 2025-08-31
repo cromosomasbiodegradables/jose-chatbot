@@ -391,6 +391,18 @@
     // Reflejar inglés por defecto en el switch
     languageToggle.classList.add("active");
 
+    // ===== util: estado de envío del botón "Send" =====
+    function setSendingState(sending){
+      const btn = document.querySelector('.bot-button[data-key="contact-send"]');
+      if (btn) {
+        btn.disabled = sending;
+        btn.style.opacity = sending ? '0.6' : '';
+        btn.innerText = sending
+          ? (currentLanguage === 'es' ? 'Enviando…' : 'Sending…')
+          : texts[currentLanguage].formSend;
+      }
+    }
+
     function scrollToBottom() {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -823,12 +835,48 @@
       askNextContactQuestion();
     }
 
-    function sendContactForm() {
-      const d = texts[currentLanguage].contactMyData;
-      const subject = encodeURIComponent(`Contacto de ${contactFormData.name} (${contactFormData.company})`);
-      const body = encodeURIComponent(contactFormData.message);
-      window.location.href = `mailto:${d.email}?subject=${subject}&body=${body}`;
-      resetContactForm();
+    // === ENVÍO REAL SIN ABRIR EL CLIENTE DE CORREO ===
+    // Usa FormSubmit (gratuito). Primera vez te pedirá verificar por email.
+    async function sendContactForm() {
+      const FORM_ENDPOINT = "https://formsubmit.co/ajax/jose.carlos.torres.sanchez@gmail.com";
+      const payload = {
+        name: contactFormData.name,
+        company: contactFormData.company,
+        message: contactFormData.message,
+        _subject: currentLanguage === "es"
+          ? `Contacto de ${contactFormData.name} (${contactFormData.company})`
+          : `Contact from ${contactFormData.name} (${contactFormData.company})`,
+        _template: "table",
+        _captcha: "false"
+      };
+
+      try {
+        setSendingState(true);
+        const res = await fetch(FORM_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error("Network response was not ok");
+        // éxito
+        addMessage(
+          "bot",
+          currentLanguage === "es"
+            ? "✅ ¡Listo! Tu mensaje ha sido enviado. Te responderé en breve."
+            : "✅ Done! Your message has been sent. I’ll get back to you soon.",
+          "contactSent"
+        );
+        resetContactForm();
+      } catch (e) {
+        addMessage(
+          "bot",
+          currentLanguage === "es"
+            ? "❌ No se pudo enviar ahora. Por favor, escríbeme a jose.carlos.torres.sanchez@gmail.com."
+            : "❌ Couldn’t send right now. Please email me at jose.carlos.torres.sanchez@gmail.com.",
+          "contactError"
+        );
+        setSendingState(false);
+      }
     }
 
     function resetContactForm() {
@@ -975,7 +1023,7 @@
       });
     }
 
-    // ✅ NUEVO: actualizar botones de contacto al cambiar idioma
+    // también refresca botones de contacto/blog al cambiar idioma
     function updateContactButtons() {
       const btnWriteYou = document.querySelector('.bot-button[data-key="contact-writeyou"]');
       if (btnWriteYou) btnWriteYou.innerText = texts[currentLanguage].contactButtons.writeYou;
@@ -984,13 +1032,12 @@
       if (btnWriteMe) btnWriteMe.innerText = texts[currentLanguage].contactButtons.writeMe;
 
       const sendBtn = document.querySelector('.bot-button[data-key="contact-send"]');
-      if (sendBtn) sendBtn.innerText = texts[currentLanguage].formSend;
+      if (sendBtn && !sendBtn.disabled) sendBtn.innerText = texts[currentLanguage].formSend;
 
       const cancelBtn = document.querySelector('.bot-button[data-key="contact-cancel"]');
       if (cancelBtn) cancelBtn.innerText = texts[currentLanguage].formCancel;
     }
 
-    // ✅ NUEVO: actualizar botones de posts del blog
     function updateBlogButtons() {
       const blogButtons = document.querySelectorAll('.bot-button[data-key^="blog-"]');
       blogButtons.forEach((button) => {
@@ -1085,7 +1132,6 @@
         btn.setAttribute('aria-label', btn.title);
       });
 
-      // ✅ actualizar listas de botones visibles
       updateOptionsButtons();
       updateCasesButtons();
       updateContactButtons();
@@ -1126,7 +1172,6 @@
       resetContactForm();
       addMessage("bot", texts[currentLanguage].greeting, "greeting");
       showOptions();
-      // asegurar que los botones recién creados reflejan el idioma actual
       updateOptionsButtons();
     };
 
