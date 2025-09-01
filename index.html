@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Chatbot de Jose</title>
+  <title>Jose Carlos — UX/UI Portfolio Chatbot</title>
   <style>
     * { box-sizing: border-box; }
 
@@ -1336,6 +1336,11 @@
       rebindDynamicButtons();
 
       document.documentElement.setAttribute('lang', currentLanguage); // <-- asegura lang tras traducir
+
+      // ⬇️ Actualiza el título de la pestaña según el idioma
+      document.title = currentLanguage === 'es'
+        ? 'Jose Carlos — Chatbot de portafolio UX/UI'
+        : 'Jose Carlos — UX/UI Portfolio Chatbot';
     }
 
     // ======= Arranque: intenta restaurar si el usuario vuelve con "Atrás" =======
